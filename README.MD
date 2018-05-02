@@ -55,7 +55,7 @@ The best place to start is the generated Java docs.
 
 # Building From Source
 
-Load up the code in your favorite IDE and make sure you reference the `\lib` sub-directory of your Nuix install.
+Load up the code in your favorite IDE and make sure you reference the `\lib\*.jar` from your Nuix install in the build path.
 
 # License
 
