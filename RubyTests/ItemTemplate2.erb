@@ -1,0 +1,24 @@
+<html>
+<head>
+	<style>
+		.value { display: inline; }
+	</style>
+</head>
+<body>
+Item Name: <%= item.getLocalisedName %>
+
+<table>
+<tr>
+	<th>Name</th>
+	<th>Value</th>
+</tr>
+<% item.getProperties.each do |k,v| %>
+	<tr>
+		<td><%= h(k) %></td>
+		<td><pre class="value"><%= h(v) %></pre></td>
+	</tr>
+<% end %>
+</table>
+
+</body>
+</html>

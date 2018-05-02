@@ -1,0 +1,5 @@
+Item Name: <%= item.getLocalisedName %>
+Properties:
+<% item.getProperties.each do |k,v| %>
+	<%= k %>: <%= v %>
+<% end %>
