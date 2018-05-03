@@ -3,7 +3,7 @@ SuperUtilities
 
 ![Last tested in Nuix 7.4](https://img.shields.io/badge/Nuix-7.4-green.svg)
 
-View the GitHub project [here](https://github.com/Nuix/SuperUtilities) or download the latest release [here](https://github.com/Nuix/SuperUtilities).
+View the GitHub project [here](https://github.com/Nuix/SuperUtilities) or download the latest release [here](https://github.com/Nuix/SuperUtilities/releases).
 
 # Overview
 
