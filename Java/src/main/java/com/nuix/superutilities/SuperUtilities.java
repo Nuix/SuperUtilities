@@ -24,6 +24,7 @@ import com.nuix.superutilities.misc.FreeSpaceMonitor;
 import com.nuix.superutilities.misc.NuixVersion;
 import com.nuix.superutilities.regex.RegexScanner;
 
+import nuix.BulkAnnotater;
 import nuix.Case;
 import nuix.Utilities;
 
@@ -238,5 +239,9 @@ public class SuperUtilities{
 	public CaseHistoryHelper createCaseHistoryHelper(Case nuixCase, List<String> eventTypes, DateTime minStart, DateTime maxStart)
 			throws Exception{
 		return new CaseHistoryHelper(nuixCase,eventTypes,minStart,maxStart);
+	}
+	
+	public static BulkAnnotater getBulkAnnotater(){
+		return getInstance().getNuixUtilities().getBulkAnnotater();
 	}
 }
