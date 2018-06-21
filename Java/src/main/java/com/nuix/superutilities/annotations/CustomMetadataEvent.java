@@ -18,6 +18,7 @@ public class CustomMetadataEvent extends AnnotationEvent {
 	String valueType = null;
 	String valueTimeZone = null;
 	Long valueLong = null;
+	Double valueFloat = null;
 	String valueText = null;
 	byte[] valueBinary = null;
 	
@@ -68,12 +69,8 @@ public class CustomMetadataEvent extends AnnotationEvent {
 		}
 	}
 	
-	public Float getValueAsFloat(){
-		if(valueType.contentEquals("float")){
-			return Float.parseFloat(valueText);
-		} else {
-			return null;
-		}
+	public Double getValueAsDouble(){
+		return valueFloat;
 	}
 	
 	public byte[] getValueAsByteArray(){
@@ -100,7 +97,7 @@ public class CustomMetadataEvent extends AnnotationEvent {
 		} else if(valueType.contentEquals("integer")){
 			return getValueAsInteger();
 		} else if(valueType.contentEquals("float")){
-			return getValueAsFloat();
+			return getValueAsDouble();
 		} else if(valueType.contentEquals("binary")){
 			return getValueAsByteArray();
 		} else if(valueType.contentEquals("text")){

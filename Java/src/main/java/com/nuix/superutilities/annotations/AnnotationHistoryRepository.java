@@ -26,6 +26,8 @@ import org.roaringbitmap.RoaringBitmap;
 import org.sqlite.SQLiteConfig;
 import org.sqlite.SQLiteConfig.JournalMode;
 import org.sqlite.SQLiteConfig.LockingMode;
+import org.sqlite.SQLiteConfig.SynchronousMode;
+import org.sqlite.SQLiteConfig.TransactionMode;
 
 import com.google.common.collect.BiMap;
 import com.google.common.collect.HashBiMap;
@@ -38,6 +40,7 @@ import nuix.Case;
 import nuix.HistoryEvent;
 import nuix.Item;
 import nuix.ItemSet;
+import nuix.ProductionSet;
 
 /***
  * Class for recording annotation in a source case and replaying thing on a destination case.  GUID is used to record
@@ -55,45 +58,70 @@ public class AnnotationHistoryRepository implements Closeable{
 			"CREATE UNIQUE INDEX IF NOT EXISTS IDX_GUID_Unique ON GUIDRef (GUID)";
 	
 	private static final String sqlCreateTagEventTable =
-			"CREATE TABLE IF NOT EXISTS TagEvent (TimeStamp INTEGER, Tag Text, Added INTEGER, SerializedBitmap BLOB, ItemCount INTEGER)";
+			"CREATE TABLE IF NOT EXISTS TagEvent "+
+			"(TimeStamp INTEGER, Tag Text, Added INTEGER, SerializedBitmap BLOB, ItemCount INTEGER)";
 	
 	private static final String sqlCreateCmEventTable =
-			"CREATE TABLE IF NOT EXISTS CustomMetadataEvent (TimeStamp INTEGER, Added INTEGER, FieldName TEXT, ValueType TEXT, ValueTimeZone TEXT, ValueInteger INTEGER, ValueText TEXT, ValueBinary BLOB, SerializedBitmap BLOB, ItemCount INTEGER)";
+			"CREATE TABLE IF NOT EXISTS CustomMetadataEvent (TimeStamp INTEGER, Added INTEGER, FieldName TEXT, "+
+			"ValueType TEXT, ValueTimeZone TEXT, ValueInteger INTEGER, ValueFloat REAL, ValueText TEXT, ValueBinary BLOB, "+
+			"SerializedBitmap BLOB, ItemCount INTEGER)";
 	
 	private static final String sqlCreateItemSetEventTable =
-			"CREATE TABLE IF NOT EXISTS ItemSetEvent (TimeStamp INTEGER, Added INTEGER, Settings TEXT, ItemSetName Text, BatchName TEXT, Description TEXT, SerializedBitmap BLOB, ItemCount INTEGER)";
+			"CREATE TABLE IF NOT EXISTS ItemSetEvent "+
+			"(TimeStamp INTEGER, Added INTEGER, Settings TEXT, ItemSetName Text, BatchName TEXT, Description TEXT, "+
+			"SerializedBitmap BLOB, ItemCount INTEGER)";
 	
 	private static final String sqlCreateExclusionEventTable =
-			"CREATE TABLE IF NOT EXISTS ExclusionEvent (TimeStamp INTEGER, Excluded INTEGER, ExclusionName TEXT, SerializedBitmap BLOB, ItemCount INTEGER)";
+			"CREATE TABLE IF NOT EXISTS ExclusionEvent "+
+			"(TimeStamp INTEGER, Excluded INTEGER, ExclusionName TEXT, SerializedBitmap BLOB, ItemCount INTEGER)";
 	
 	private static final String sqlCreateCustodianEventTable = 
-			"CREATE TABLE IF NOT EXISTS CustodianEvent (TimeStamp INTEGER, Assigned INTEGER, Custodian TEXT, SerializedBitmap BLOB, ItemCount INTEGER)";
+			"CREATE TABLE IF NOT EXISTS CustodianEvent "+
+			"(TimeStamp INTEGER, Assigned INTEGER, Custodian TEXT, SerializedBitmap BLOB, ItemCount INTEGER)";
 	
-	private static final String sqlCreateAdditionalInfoTable =
-			"CREATE TABLE IF NOT EXISTS AdditionalInfo (Name TEXT, ValueText TEXT, ValueInt INTEGER)";
+	private static final String sqlCreateProductionSetEventTable =
+			"CREATE TABLE IF NOT EXISTS ProductionSetEvent "+
+			"(TimeStamp INTEGER, Added INTEGER, Created INTEGER, ProductionSetSettings TEXT, "+
+			"ProductionSetName TEXT, SerializedBitmap BLOB, ItemCount INTEGER)";
+	
+	private static final String sqlCreateTextInfoTable =
+			"CREATE TABLE IF NOT EXISTS TextInfo (Name TEXT, ValueText TEXT)";
+	
+	private static final String sqlCreateIntegerInfoTable =
+			"CREATE TABLE IF NOT EXISTS IntegerInfo (Name TEXT, ValueInteger TEXT)";
 	
 	
 	private static final String sqlInsertTagEvent =
-			"INSERT INTO TagEvent (TimeStamp,Tag,Added,SerializedBitmap,ItemCount) VALUES (?,?,?,?,?)";
+			"INSERT INTO TagEvent "+
+			"(TimeStamp,Tag,Added,SerializedBitmap,ItemCount) VALUES (?,?,?,?,?)";
 	
 	private static final String sqlInsertCustomMetadataEvent =
-			"INSERT INTO CustomMetadataEvent (TimeStamp,Added,FieldName,ValueType,ValueTimeZone,ValueInteger,ValueText,ValueBinary,SerializedBitmap,ItemCount) VALUES (?,?,?,?,?,?,?,?,?,?)";
+			"INSERT INTO CustomMetadataEvent "+
+			"(TimeStamp,Added,FieldName,ValueType,ValueTimeZone,ValueInteger,ValueFloat,ValueText,"+
+			"ValueBinary,SerializedBitmap,ItemCount) VALUES (?,?,?,?,?,?,?,?,?,?,?)";
 	
 	private static final String sqlInsertItemSetEvent =
-			"INSERT INTO ItemSetEvent (TimeStamp,Added,Settings,ItemSetName,BatchName,Description,SerializedBitmap,ItemCount) VALUES (?,?,?,?,?,?,?,?)";
+			"INSERT INTO ItemSetEvent "+
+			"(TimeStamp,Added,Settings,ItemSetName,BatchName,Description,SerializedBitmap,ItemCount) "+
+			"VALUES (?,?,?,?,?,?,?,?)";
 	
 	private static final String sqlInsertExclusionEvent =
-			"INSERT INTO ExclusionEvent (TimeStamp,Excluded,ExclusionName,SerializedBitmap,ItemCount) VALUES (?,?,?,?,?)";
+			"INSERT INTO ExclusionEvent "+
+			"(TimeStamp,Excluded,ExclusionName,SerializedBitmap,ItemCount) VALUES (?,?,?,?,?)";
 	
 	private static final String sqlInsertCustodianEvent = 
-			"INSERT INTO CustodianEvent (TimeStamp,Assigned,Custodian,ItemCount) VALUES (?,?,?,?)";
+			"INSERT INTO CustodianEvent (TimeStamp,Assigned,Custodian,SerializedBitmap,ItemCount) VALUES (?,?,?,?,?)";
+	
+	private static final String sqlInsertProductionSetEvent =
+			"INSERT INTO ProductionSetEvent (TimeStamp,Added,Created,ProductionSetSettings,ProductionSetName,"+
+			"SerializedBitmap,ItemCount) VALUES(?,?,?,?,?,?,?)";
 	
 	
 	private static final String sqlSelectFromTagEvent =
 			"SELECT TimeStamp,Tag,Added,SerializedBitmap,ItemCount FROM TagEvent WHERE TimeStamp >= ? ORDER BY TimeStamp ASC";
 	
 	private static final String sqlSelectFromCustomMetadataEvent =
-			"SELECT TimeStamp,Added,FieldName,ValueType,ValueTimeZone,ValueInteger,ValueText,ValueBinary,SerializedBitmap,ItemCount FROM CustomMetadataEvent WHERE TimeStamp >= ? ORDER BY TimeStamp ASC";
+			"SELECT TimeStamp,Added,FieldName,ValueType,ValueTimeZone,ValueInteger,ValueFloat,ValueText,ValueBinary,SerializedBitmap,ItemCount FROM CustomMetadataEvent WHERE TimeStamp >= ? ORDER BY TimeStamp ASC";
 	
 	private static final String sqlSelectFromItemSetEvent =
 			"SELECT TimeStamp,Added,Settings,ItemSetName,BatchName,Description,SerializedBitmap,ItemCount FROM ItemSetEvent WHERE TimeStamp > ? ORDER BY TimeStamp ASC";
@@ -108,12 +136,17 @@ public class AnnotationHistoryRepository implements Closeable{
 	private boolean snapshotFirstSync = true;
 	private Connection persistentConnection = null;
 	
+	// Sync operation can pre index all guids => indices meaning you pay for the cost of the work only once
+	// up front, this bool hints that this has been done to other methods so they may skip work
+	private boolean allItemsPreIndexed = false;
+	
 	private String[] eventTableNames = new String[]{
 		"TagEvent",
 		"CustomMetadataEvent",
 		"ItemSetEvent",
 		"ExclusionEvent",
 		"CustodianEvent",
+		"ProductionSetEvent",
 	};
 	
 	/***
@@ -127,10 +160,12 @@ public class AnnotationHistoryRepository implements Closeable{
 		this.databaseFile = databaseFile;
 		
 		SQLiteConfig config = new SQLiteConfig();
-		config.setCacheSize(8000);
-		config.setPageSize(4096);
+		config.setCacheSize(2000);
+		config.setPageSize(4096 * 10);
 		config.setJournalMode(JournalMode.WAL);
 		config.setLockingMode(LockingMode.EXCLUSIVE);
+		config.setTransactionMode(TransactionMode.EXCLUSIVE);
+		config.setSynchronous(SynchronousMode.OFF);
 		connectionProperties = config.toProperties();
 		
 		if(databaseFile.exists() == false){
@@ -164,9 +199,49 @@ public class AnnotationHistoryRepository implements Closeable{
 		executeUpdate(sqlCreateItemSetEventTable);
 		executeUpdate(sqlCreateExclusionEventTable);
 		executeUpdate(sqlCreateCustodianEventTable);
-		executeUpdate(sqlCreateAdditionalInfoTable);
+		executeUpdate(sqlCreateProductionSetEventTable);
+		executeUpdate(sqlCreateTextInfoTable);
+		executeUpdate(sqlCreateIntegerInfoTable);
 		
-		executeUpdate("INSERT INTO AdditionalInfo (Name,ValueInt) VALUES (?,?)","SyncPoint",0);
+		setIntegerInfo("SyncPointTimeStamp", 0L);
+	}
+	
+	private boolean integerInfoExists(String name) throws SQLException{
+		return executeLongScalar("SELECT COUNT(*) FROM IntegerInfo WHERE Name = ?",name) > 0;
+	}
+	
+	private boolean textInfoExists(String name) throws SQLException{
+		return executeLongScalar("SELECT COUNT(*) FROM TextInfo WHERE Name = ?",name) > 0;
+	}
+	
+	public Long getIntegerInfo(String name) throws SQLException {
+		return executeLongScalar("SELECT ValueInteger FROM IntegerInfo WHERE Name = ?", name);
+	}
+	
+	public void setIntegerInfo(String name,Long value) throws SQLException {
+		logger.info(String.format("Recording IntegerInfo: %s => %s",name,value));
+		if(integerInfoExists(name)){
+			executeUpdate("UPDATE OR IGNORE IntegerInfo SET ValueInteger = ? WHERE Name = ?",value,name);	
+		} else {
+			executeInsert("INSERT INTO IntegerInfo (Name,ValueInteger) VALUES (?,?)",name,value);
+		}
+	}
+	
+	public String getTextInfo(String name) throws SQLException {
+		return executeStringScalar("SELECT ValueText FROM TextInfo WHERE Name = ?", name);
+	}
+	
+	public void setTextInfo(String name,String value) throws SQLException {
+		logger.info(String.format("Recording TextInfo: %s => %s",name,value));
+		if(textInfoExists(name)){
+			executeUpdate("UPDATE OR IGNORE TextInfo SET ValueText = ? WHERE Name = ?",value,name);	
+		} else {
+			executeInsert("INSERT INTO TextInfo (Name,ValueText) VALUES (?,?)",name,value);
+		}
+	}
+	
+	public void setSyncPointToNow() throws SQLException{
+		setIntegerInfo("SyncPointTimeStamp", DateTime.now().getMillis());
 	}
 
 	/***
@@ -274,7 +349,10 @@ public class AnnotationHistoryRepository implements Closeable{
 	 * @throws SQLException If the SQL bits throw an error
 	 */
 	private List<Long> itemsToIndices(Collection<Item> items) throws SQLException{
-		indexItemGuids(items);
+		if(!allItemsPreIndexed){
+			indexItemGuids(items);
+		}
+		
 		List<Long> indices = new ArrayList<Long>();
 		for(Item item : items){
 			Long bitmapIndex = guidIndexLookup.get(item.getGuid().replace("-", "").toLowerCase());
@@ -377,7 +455,13 @@ public class AnnotationHistoryRepository implements Closeable{
 	
 	private Connection getConnection() throws SQLException {
 		if(persistentConnection == null){
+			logger.info("Building persistent connection...");
 			String connectionString = String.format("jdbc:sqlite:%s", databaseFile);
+			logger.info("└─ Connection String: "+connectionString);
+			logger.info("└─ Properties:");
+			for(Map.Entry<Object, Object> prop : connectionProperties.entrySet()){
+				logger.info(String.format(" └─ %s: %s",prop.getKey(),prop.getValue()));
+			}
 			persistentConnection = DriverManager.getConnection(connectionString, connectionProperties);
 		}
 		return persistentConnection;
@@ -459,13 +543,16 @@ public class AnnotationHistoryRepository implements Closeable{
 		}
 	}
 	
-	/***
-	 * Executes a query which is expected to return only a single numeric value
-	 * @param sql The SQL query to execute
-	 * @param data Optional list of associated data, can be null
-	 * @return The result of the query
-	 * @throws SQLException If the SQL bits throw an error
-	 */
+	public Long executeLongScalar(String sql, Object ...data) throws SQLException{
+		Connection conn = getConnection();
+		try(PreparedStatement statement = conn.prepareStatement(sql)){
+			if(data != null){ bindData(statement,data); }
+			try(ResultSet resultSet = statement.executeQuery()){
+				return resultSet.getLong(1);	
+			}
+		}
+	}
+	
 	public Long executeLongScalar(String sql, List<Object> data) throws SQLException{
 		Connection conn = getConnection();
 		try(PreparedStatement statement = conn.prepareStatement(sql)){
@@ -476,10 +563,38 @@ public class AnnotationHistoryRepository implements Closeable{
 		}
 	}
 	
+	public Long executeLongScalar(String sql) throws SQLException{
+		Connection conn = getConnection();
+		try(PreparedStatement statement = conn.prepareStatement(sql)){
+			try(ResultSet resultSet = statement.executeQuery()){
+				return resultSet.getLong(1);	
+			}
+		}
+	}
+	
+	public String executeStringScalar(String sql, Object ...data) throws SQLException{
+		Connection conn = getConnection();
+		try(PreparedStatement statement = conn.prepareStatement(sql)){
+			if(data != null){ bindData(statement,data); }
+			try(ResultSet resultSet = statement.executeQuery()){
+				return resultSet.getString(1);	
+			}
+		}
+	}
+	
 	public String executeStringScalar(String sql, List<Object> data) throws SQLException{
 		Connection conn = getConnection();
 		try(PreparedStatement statement = conn.prepareStatement(sql)){
 			if(data != null){ bindData(statement,data); }
+			try(ResultSet resultSet = statement.executeQuery()){
+				return resultSet.getString(1);	
+			}
+		}
+	}
+	
+	public String executeStringScalar(String sql) throws SQLException{
+		Connection conn = getConnection();
+		try(PreparedStatement statement = conn.prepareStatement(sql)){
 			try(ResultSet resultSet = statement.executeQuery()){
 				return resultSet.getString(1);	
 			}
@@ -522,10 +637,32 @@ public class AnnotationHistoryRepository implements Closeable{
 	public long getTotalEventCount() throws SQLException{
 		long sum = 0;
 		
-		long tagEventCount = executeLongScalar("SELECT COUNT(*) FROM TagEvent",null);
+		long tagEventCount = executeLongScalar("SELECT COUNT(*) FROM TagEvent");
 		sum += tagEventCount;
 		
 		return sum;
+	}
+	
+	public DateTime calculateLastDbEventStart() throws SQLException{
+		long dbLastTimeStamp = 0;
+		long lastDbTagEvent = executeLongScalar("SELECT MAX(TimeStamp) FROM TagEvent");
+		long lastCustomMetadataEvent = executeLongScalar("SELECT MAX(TimeStamp) FROM CustomMetadataEvent");
+		long lastItemSetEvent = executeLongScalar("SELECT MAX(TimeStamp) FROM ItemSetEvent");
+		long lastExclusionEvent = executeLongScalar("SELECT MAX(TimeStamp) FROM ExclusionEvent");
+		long lastCustodianEvent = executeLongScalar("SELECT MAX(TimeStamp) FROM CustodianEvent");
+		long lastProductionSetEvent = executeLongScalar("SELECT MAX(TimeStamp) FROM ProductionSetEvent");
+		long syncPoint = getIntegerInfo("SyncPointTimeStamp");
+		
+		if(lastDbTagEvent > dbLastTimeStamp){ dbLastTimeStamp = lastDbTagEvent; }
+		if(lastCustomMetadataEvent > dbLastTimeStamp){ dbLastTimeStamp = lastCustomMetadataEvent; }
+		if(lastItemSetEvent > dbLastTimeStamp){ dbLastTimeStamp = lastItemSetEvent; }
+		if(lastExclusionEvent > dbLastTimeStamp){ dbLastTimeStamp = lastExclusionEvent; }
+		if(lastCustodianEvent > dbLastTimeStamp){ dbLastTimeStamp = lastCustodianEvent; }
+		if(lastProductionSetEvent > dbLastTimeStamp){ dbLastTimeStamp = lastProductionSetEvent; }
+		if(syncPoint > dbLastTimeStamp){ dbLastTimeStamp = syncPoint; }
+		
+		DateTime lastDbEventStart = new DateTime(dbLastTimeStamp);
+		return lastDbEventStart;
 	}
 	
 	/***
@@ -543,89 +680,116 @@ public class AnnotationHistoryRepository implements Closeable{
 	 * @throws IOException If there is an error: creating snapshop, getting case history or converting items into bitamp byte array for DB
 	 * @throws SQLException If the SQL bits throw an error
 	 */
-	public void syncHistory(Case nuixCase) throws IOException, SQLException{
+	public void syncHistory(Case nuixCase, AnnotationSyncSettings settings) throws IOException, SQLException{
+		if(settings == null){
+			settings = new AnnotationSyncSettings();
+		}
+		
+		logger.info(String.format("Begging sync of case: %s", nuixCase.getLocation().getPath()));
+		logger.info("Settings: ");
+		logger.info(settings.buildSettingsSummary());
+		
 		boolean indicesDropped = false;
+		boolean snapshotTaken = false;
+		
+		allItemsPreIndexed = false;
+		logger.info("Pre-indexing all item GUIDs...");
+		indexItemGuids(nuixCase.search(""));
+		allItemsPreIndexed = true;
 		
 		long totalHistoryRecordMillis = 0;
 		long totalHistoryEventsRecorded = 0;
 		
+		DateTime lastDbEventStart = calculateLastDbEventStart();
+		
+		if(getTotalEventCount() < 1){
+			// Record info about the case we are syncing from
+			setTextInfo("SourceCaseName", nuixCase.getName());
+			setTextInfo("SourceCaseLocation", nuixCase.getLocation().getAbsolutePath());
+		}
+		
 		if(snapshotFirstSync && getTotalEventCount() < 1){
-			createInitialStateSnapshot(nuixCase);	
+			createInitialStateSnapshot(nuixCase,settings);
+			snapshotTaken = true;
+			settings.setSyncTagEvents(false);
+			settings.setSyncCustodianEvents(false);
+		} 
+		
+		if(snapshotTaken){
+			logger.info(String.format("Fetching remaining events after %s",lastDbEventStart));
 		} else {
-			long dbLastTimeStamp = 0;
-			long lastDbTagEvent = executeLongScalar("SELECT MAX(TimeStamp) FROM TagEvent", null);
-			long lastCustomMetadataEvent = executeLongScalar("SELECT MAX(TimeStamp) FROM CustomMetadataEvent", null);
-			long lastItemSetEvent = executeLongScalar("SELECT MAX(TimeStamp) FROM ItemSetEvent", null);
-			long lastExclusionEvent = executeLongScalar("SELECT MAX(TimeStamp) FROM ExclusionEvent", null);
+			logger.info(String.format("Fetching events after %s",lastDbEventStart));	
+		}
+		
+		Map<String,Object> retrievalSettings = new HashMap<String,Object>();
+		retrievalSettings.put("type", "annotation");
+		retrievalSettings.put("startDateAfter", lastDbEventStart);
+		
+		long lastProgressUpdate = System.currentTimeMillis();
+		long eventIndex = 0;
+		
+		for(HistoryEvent event : nuixCase.getHistory(retrievalSettings)){
+			eventIndex++;
 			
-			if(lastDbTagEvent > dbLastTimeStamp){ dbLastTimeStamp = lastDbTagEvent; }
-			if(lastCustomMetadataEvent > dbLastTimeStamp){ dbLastTimeStamp = lastCustomMetadataEvent; }
-			if(lastItemSetEvent > dbLastTimeStamp){ dbLastTimeStamp = lastItemSetEvent; }
-			if(lastExclusionEvent > dbLastTimeStamp){ dbLastTimeStamp = lastExclusionEvent; }
+			if(System.currentTimeMillis() - lastProgressUpdate >= 1 * 1000){
+				logger.info(String.format("Processing event %s", eventIndex));
+				lastProgressUpdate = System.currentTimeMillis();
+			}
 			
-			DateTime lastDbEventStart = new DateTime(dbLastTimeStamp);
-			
-			logger.info(String.format("Fetching events after %s",lastDbEventStart));
-			
-			Map<String,Object> retrievalSettings = new HashMap<String,Object>();
-			retrievalSettings.put("type", "annotation");
-			retrievalSettings.put("startDateAfter", lastDbEventStart);
-			
-			for(HistoryEvent event : nuixCase.getHistory(retrievalSettings)){
-				if(event.getTypeString().contentEquals("annotation") == false){
-					continue;
+			if(!indicesDropped){
+				// More efficient to rebuild indices from scratch than it is
+				// to update them as data is inserted
+				for (int i = 0; i < eventTableNames.length; i++) {
+					String tableName = eventTableNames[i];
+					logger.info(String.format("Dropping %s TimeStamp index...",tableName));
+					String indexSql = String.format("DROP INDEX IF EXISTS IDX_TimeStamp_%s", tableName);
+					executeUpdate(indexSql);
 				}
 				
-				if(!indicesDropped){
-					// More efficient to rebuild indices from scratch than it is
-					// to update them as data is inserted
-					for (int i = 0; i < eventTableNames.length; i++) {
-						String tableName = eventTableNames[i];
-						logger.info(String.format("Dropping %s TimeStamp index...",tableName));
-						String indexSql = String.format("DROP INDEX IF EXISTS IDX_TimeStamp_%s", tableName);
-						executeUpdate(indexSql);
-					}
-					
-					indicesDropped = true;
-				}
+				indicesDropped = true;
+			}
 
-				Map<String,Object> details = event.getDetails();
-				
-				long historyRecordStart = System.currentTimeMillis();
-				long historyRecordFinish = 0;
-				
-				// Tag Add/Remove events
-				if(details.get("tag") != null){
-					// Appears we have a tagging event
-					recordTagEvent(event, details);
-					historyRecordFinish = System.currentTimeMillis();
-					totalHistoryEventsRecorded++;
-					totalHistoryRecordMillis += historyRecordFinish - historyRecordStart;
-				} else if(details.get("fieldName") != null){
-					//Appears we have add remove custom metadata events
-					recordCustomMetadataEvent(nuixCase, event, details);
-					historyRecordFinish = System.currentTimeMillis();
-					totalHistoryEventsRecorded++;
-					totalHistoryRecordMillis += historyRecordFinish - historyRecordStart;
-				} else if(details.get("item-set") != null  && 
-						(details.containsKey("items-assigned-count") || details.containsKey("items-unassigned-count"))){
-					// Appears we have an item set event
-					recordItemSetEvent(nuixCase, event, details);
-					historyRecordFinish = System.currentTimeMillis();
-					totalHistoryEventsRecorded++;
-					totalHistoryRecordMillis += historyRecordFinish - historyRecordStart;
-				} else if(details.get("excluded") != null){
-					//Appears we have exclusion/inclusion event
-					recordExclusionEvent(nuixCase, event, details);
-					historyRecordFinish = System.currentTimeMillis();
-					totalHistoryEventsRecorded++;
-					totalHistoryRecordMillis += historyRecordFinish - historyRecordStart;
-				} else if(details.get("assigned") != null){
-					recordCustodianEvent(nuixCase, event, details);
-					historyRecordFinish = System.currentTimeMillis();
-					totalHistoryEventsRecorded++;
-					totalHistoryRecordMillis += historyRecordFinish - historyRecordStart;
-				}
+			Map<String,Object> details = event.getDetails();
+			
+			long historyRecordStart = System.currentTimeMillis();
+			long historyRecordFinish = 0;
+			
+			// Tag Add/Remove events
+			if(settings.getSyncTagEvents() && details.get("tag") != null){
+				// Appears we have a tagging event
+				recordTagEvent(event, details);
+				historyRecordFinish = System.currentTimeMillis();
+				totalHistoryEventsRecorded++;
+				totalHistoryRecordMillis += historyRecordFinish - historyRecordStart;
+			} else if(settings.getSyncCustomMetadataEvents() && details.get("fieldName") != null){
+				//Appears we have add remove custom metadata events
+				recordCustomMetadataEvent(nuixCase, event, details);
+				historyRecordFinish = System.currentTimeMillis();
+				totalHistoryEventsRecorded++;
+				totalHistoryRecordMillis += historyRecordFinish - historyRecordStart;
+			} else if(settings.getSyncItemSetEvents() && details.get("item-set") != null  && 
+					(details.containsKey("items-assigned-count") || details.containsKey("items-unassigned-count"))){
+				// Appears we have an item set event
+				recordItemSetEvent(nuixCase, event, details);
+				historyRecordFinish = System.currentTimeMillis();
+				totalHistoryEventsRecorded++;
+				totalHistoryRecordMillis += historyRecordFinish - historyRecordStart;
+			} else if(settings.getSyncExclusionEvents() && details.get("excluded") != null){
+				//Appears we have exclusion/inclusion event
+				recordExclusionEvent(nuixCase, event, details);
+				historyRecordFinish = System.currentTimeMillis();
+				totalHistoryEventsRecorded++;
+				totalHistoryRecordMillis += historyRecordFinish - historyRecordStart;
+			} else if(settings.getSyncCustodianEvents() && details.get("assigned") != null){
+				recordCustodianEvent(nuixCase, event, details);
+				historyRecordFinish = System.currentTimeMillis();
+				totalHistoryEventsRecorded++;
+				totalHistoryRecordMillis += historyRecordFinish - historyRecordStart;
+			} else if(settings.getSyncProductionSetEvents() && details.get("productionSet") != null){
+				recordProductionSetEvent(nuixCase, event, details);
+				historyRecordFinish = System.currentTimeMillis();
+				totalHistoryEventsRecorded++;
+				totalHistoryRecordMillis += historyRecordFinish - historyRecordStart;
 			}
 		}
 		
@@ -648,6 +812,74 @@ public class AnnotationHistoryRepository implements Closeable{
 		}
 	}
 	
+	private void recordProductionSetEvent(Case nuixCase, HistoryEvent event, Map<String, Object> details) throws IOException, SQLException {
+		Set<Item> items = event.getAffectedItems();
+		byte[] serializedItemBitmap = dehydrateItemCollection(items);
+		
+		boolean added = false;
+		boolean created = false;
+		
+		if(details.containsKey("added")){
+			added = (boolean) details.get("added");	
+		} else {
+			created = true;	
+		}
+		
+		
+		String productionSetSettings = null;
+		String productionSetName = ((com.nuix.storage.stores.productionsets.ProductionSet) details.get("productionSet")).getName();
+		
+		// If this was a production set creation event, we need to record all the settings used to create the production
+		// set so it can be recreated later on
+		if(created){
+			Map<String,Object> settings = new HashMap<String,Object>();
+			ProductionSet prod = nuixCase.findProductionSetByName(productionSetName);
+			if(prod == null){
+				logger.error("Attempted to record ProductionSet creation event, but it appears a production set with that name no"+
+						"longer exists, making it impossible to ascertain settings used to create the production set.");
+				//TODO: Define rules regarding what should happen in this state
+			} else {
+				settings.put("numberingOptions", prod.getNumberingOptions());
+				settings.put("stampingOptions", prod.getNumberingOptions());
+				settings.put("imagingOptions", prod.getNumberingOptions());
+				settings.put("markupSets", prod.getNumberingOptions());
+				settings.put("applyHighlights", prod.getNumberingOptions());
+				settings.put("applyRedactions", prod.getNumberingOptions());
+				
+				GsonBuilder gsonBuilder = new GsonBuilder();
+				gsonBuilder.serializeNulls();
+				gsonBuilder.setPrettyPrinting();
+				Gson gson = gsonBuilder.create();
+				
+				productionSetSettings = gson.toJson(settings);
+			}
+		}
+		
+		List<Object> data = new ArrayList<Object>();
+		data.add(event.getStartDate().getMillis()); //TimeStamp
+		data.add(added);
+		data.add(created);
+		data.add(productionSetSettings);
+		data.add(productionSetName);
+		data.add(serializedItemBitmap);
+		data.add(items.size());
+		
+		if(created){
+			logger.info(String.format("Recording creation of production set '%s' with settings:\n%s",
+					productionSetName,productionSetSettings));
+		} else {
+			if(added){
+				logger.info(String.format("Recording %s items being added to production set '%s'",
+						items.size(),productionSetName));	
+			} else {
+				logger.info(String.format("Recording %s items being removed from production set '%s'",
+						items.size(),productionSetName));
+			}
+		}
+		
+		executeInsert(sqlInsertProductionSetEvent,data);
+	}
+
 	private void recordCustodianEvent(Case nuixCase, HistoryEvent event, Map<String, Object> details) throws IOException, SQLException{
 		Set<Item> items = event.getAffectedItems();
 		byte[] serializedItemBitmap = dehydrateItemCollection(items);
@@ -770,26 +1002,31 @@ public class AnnotationHistoryRepository implements Closeable{
 				DateTime valueDateTime = (DateTime)value;
 				data.add(valueDateTime.getZone().getID()); //ValueTimeZone
 				data.add(valueDateTime.getMillis()); //ValueInteger
+				data.add(null); //ValueFloat
 				data.add(null); //ValueText
 				data.add(null); //ValueBinary
 			} else if(valueType.contentEquals("integer") || valueType.contentEquals("long")){
 				data.add(null); //ValueTimeZone
 				data.add(value); //ValueInteger
+				data.add(null); //ValueFloat
 				data.add(null); //ValueText
 				data.add(null); //ValueBinary
 			} else if(valueType.contentEquals("float")){
 				data.add(null); //ValueTimeZone
 				data.add(null); //ValueInteger
-				data.add(Double.toString((Double)value)); //ValueText
+				data.add((Double)value); //ValueFloat
+				data.add(null); //ValueText
 				data.add(null); //ValueBinary
 			} else if(valueType.contentEquals("binary")){
 				data.add(null); //ValueTimeZone
 				data.add(null); //ValueInteger
+				data.add(null); //ValueFloat
 				data.add(null); //ValueText
 				data.add((byte[])value); //ValueBinary
 			} else {
 				data.add(null); //ValueTimeZone
 				data.add(null); //ValueInteger
+				data.add(null); //ValueFloat
 				data.add(FormatUtility.getInstance().convertToString(value)); //ValueText
 				data.add(null); //ValueBinary
 			}
@@ -804,6 +1041,7 @@ public class AnnotationHistoryRepository implements Closeable{
 			data.add(null); //ValueType
 			data.add(null); //ValueTimeZone
 			data.add(null); //ValueInteger
+			data.add(null); //ValueFloat
 			data.add(null); //ValueText
 			data.add(null); //ValueBinary
 			data.add(serializedItemBitmap);
@@ -834,23 +1072,51 @@ public class AnnotationHistoryRepository implements Closeable{
 		executeInsert(sqlInsertTagEvent,data);
 	}
 	
-	private void createInitialStateSnapshot(Case nuixCase) throws IOException, SQLException{
+	private void createInitialStateSnapshot(Case nuixCase, AnnotationSyncSettings settings) throws IOException, SQLException{
 		logger.info("Creating initial tag state snapshot...");
 		long snapshotTimestamp = DateTime.now().getMillis();
 		
-		// Snapshot tag states
-		Set<String> tags = nuixCase.getAllTags();
-		for(String tag : tags){
-			Set<Item> items = nuixCase.searchUnsorted("tag:\""+tag+"\"");
-			logger.info(String.format("Recording %s for %s items", tag,items.size()));
-			byte[] serializeItemBitmap = dehydrateItemCollection(items);
-			List<Object> data = new ArrayList<Object>();
-			data.add(snapshotTimestamp);
-			data.add(tag);
-			data.add(true);
-			data.add(serializeItemBitmap);
-			data.add(items.size());
-			executeInsert(sqlInsertTagEvent,data);
+		if(settings.getSyncTagEvents()){
+			// Snapshot tag states
+			Set<String> tags = nuixCase.getAllTags();
+			int tagIndex = 0;
+			for(String tag : tags){
+				tagIndex++;
+				String query = String.format("tag:\"%s\"", tag);
+				Set<Item> items = nuixCase.searchUnsorted(query);
+				logger.info(String.format("(%s/%s) Recording snapshot of tag '%s' for %s items",tagIndex,tags.size(),tag,items.size()));
+				byte[] serializeItemBitmap = dehydrateItemCollection(items);
+				List<Object> data = new ArrayList<Object>();
+				data.add(snapshotTimestamp);
+				data.add(tag);
+				data.add(true);
+				data.add(serializeItemBitmap);
+				data.add(items.size());
+				executeInsert(sqlInsertTagEvent,data);
+			}
+		}
+		
+		if(settings.getSyncCustodianEvents()){
+			// Snapshot custodians
+			Set<String> custodians = nuixCase.getAllCustodians();
+			int custodianIndex = 0;
+			for(String custodian : custodians){
+				custodianIndex++;
+				String query = String.format("custodian:\"%s\"", custodian);
+				Set<Item> items = nuixCase.searchUnsorted(query);
+				logger.info(String.format("(%s/%s) Recording snapshot of custodian '%s' for %s items",custodianIndex,
+						custodians.size(),custodian,items.size()));
+				
+				byte[] serializedItemBitmap = dehydrateItemCollection(items);
+				
+				List<Object> data = new ArrayList<Object>();
+				data.add(snapshotTimestamp); //TimeStamp
+				data.add(true);
+				data.add(custodian);
+				data.add(serializedItemBitmap);
+				data.add(items.size());
+				executeInsert(sqlInsertCustodianEvent,data);
+			}
 		}
 	}
 	
@@ -932,10 +1198,11 @@ public class AnnotationHistoryRepository implements Closeable{
 					event.valueType = rs.getString(4);
 					event.valueTimeZone = rs.getString(5);
 					event.valueLong = rs.getLong(6);
-					event.valueText = rs.getString(7);
-					event.valueBinary = rs.getBytes(8);
-					event.bitmapBytes = rs.getBytes(9);
-					event.itemCount = rs.getInt(10);
+					event.valueFloat = rs.getDouble(7);
+					event.valueText = rs.getString(8);
+					event.valueBinary = rs.getBytes(9);
+					event.bitmapBytes = rs.getBytes(10);
+					event.itemCount = rs.getInt(11);
 					callback.accept(event);
 				}
 			} catch (SQLException e) {
@@ -1009,12 +1276,12 @@ public class AnnotationHistoryRepository implements Closeable{
 	
 	public AnnotationHistoryRepositorySummary buildSummary() throws SQLException{
 		AnnotationHistoryRepositorySummary result = new AnnotationHistoryRepositorySummary();
-		result.distinctItemsReferences = executeLongScalar("SELECT COUNT(*) FROM GUIDRef",null);
+		result.distinctItemsReferences = executeLongScalar("SELECT COUNT(*) FROM GUIDRef");
 		
-		result.totalCustomMetadataEvents = executeLongScalar("SELECT COUNT(*) FROM CustomMetadataEvent",null);
-		result.totalExclusionEvents = executeLongScalar("SELECT COUNT(*) FROM ExclusionEvent",null);
-		result.totalItemSetEvents = executeLongScalar("SELECT COUNT(*) FROM ItemSetEvent",null);
-		result.totalTagEvents = executeLongScalar("SELECT COUNT(*) FROM TagEvent",null);
+		result.totalCustomMetadataEvents = executeLongScalar("SELECT COUNT(*) FROM CustomMetadataEvent");
+		result.totalExclusionEvents = executeLongScalar("SELECT COUNT(*) FROM ExclusionEvent");
+		result.totalItemSetEvents = executeLongScalar("SELECT COUNT(*) FROM ItemSetEvent");
+		result.totalTagEvents = executeLongScalar("SELECT COUNT(*) FROM TagEvent");
 		
 		return result;
 	}
