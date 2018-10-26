@@ -165,7 +165,6 @@ public class AnnotationHistoryRepository implements Closeable{
 	/***
 	 * Creates a new instance against the given and database file.  If the database file does not
 	 * already exist it will be created and initialized.
-	 * @param nuixCase The case to record from or sync to
 	 * @param databaseFile The database file to record annotations to or playback annotations from
 	 * @throws SQLException If the SQL bits throw an error
 	 */
@@ -190,7 +189,6 @@ public class AnnotationHistoryRepository implements Closeable{
 	/***
 	 * Creates a new instance against the given and database file.  If the database file does not
 	 * already exist it will be created and initialized.
-	 * @param nuixCase The case to record from or sync to
 	 * @param databaseFile The database file to record annotations to or playback annotations from
 	 * @throws SQLException If the SQL bits throw an error
 	 */
@@ -705,6 +703,8 @@ public class AnnotationHistoryRepository implements Closeable{
 	 * query the Nuix case history for all further events started after that point, effectively obtaining and recording all new
 	 * event history entries not yet recorded in this database.
 	 * 
+	 * @param nuixCase The case to record history events from
+	 * @param settings The settings which determine how the sync is performed
 	 * @throws IOException If there is an error: creating snapshot, getting case history or converting items into bitamp byte array for DB
 	 * @throws SQLException If the SQL bits throw an error
 	 */
