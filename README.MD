@@ -7,6 +7,10 @@ SuperUtilities
 
 A library of helper methods built on top of the Nuix API
 
+View the GitHub project [here](https://github.com/Nuix/SuperUtilities) or download the latest release [here](https://github.com/Nuix/SuperUtilities/releases).
+
+View the Java docs [here](https://nuix.github.io/SuperUtilities/).
+
 # Getting Started
 
 ## Setup
@@ -51,7 +55,7 @@ end
 $current_case.close
 ```
 
-The best place to start is the generated Java docs.
+The best place to start is the generated [Java docs](https://nuix.github.io/SuperUtilities/).
 
 # Building From Source
 
