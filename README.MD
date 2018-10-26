@@ -29,7 +29,7 @@ This is a small library of functionality which is a companion to the functionali
     - Resolve placeholders in template strings provided by end user
     - etc
 - [JsonExporter](https://nuix.github.io/SuperUtilities/com/nuix/superutilities/export/JsonExporter.html): Provides methods for exporting an item to a JSON representation.
-- [TemplateExporter](https://nuix.github.io/SuperUtilities/com/nuix/superutilities/export/TemplateExporter.html): Kava wrapper around Ruby ERB templates, supports converting HTML template output to PDFs using iText.
+- [TemplateExporter](https://nuix.github.io/SuperUtilities/com/nuix/superutilities/export/TemplateExporter.html): A Java wrapper around Ruby ERB templates, supports converting HTML template output to PDFs using iText.
 - [PdfUtility](https://nuix.github.io/SuperUtilities/com/nuix/superutilities/misc/PdfUtility.html): Provides convenience method for using iText to merge multiple PDFs into a single PDF.
 - [SuperItemUtility](https://nuix.github.io/SuperUtilities/com/nuix/superutilities/items/SuperItemUtility.html): Provides some methods for accomplishing some operations not covered by the Nuix API's ItemUtility object such as:
 	- Find container ancestor items for one or more provided items
