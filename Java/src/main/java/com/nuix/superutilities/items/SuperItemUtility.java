@@ -16,6 +16,7 @@ import java.util.stream.Collectors;
 import com.nuix.superutilities.SuperUtilities;
 
 import nuix.Item;
+import nuix.TreePosition;
 
 /***
  * Offers methods for working with items and item collections in the same spirit of the
@@ -174,7 +175,7 @@ public class SuperItemUtility {
 	 * of ItemUtility.deduplicate is that the original with the earliest position value, amongst the items with the same
 	 * MD5, is considered the original.  This implementation allows code to provide a 2 argument function which will
 	 * determine the winner.  It may be a good idea for the custom function provided to default to the default position
-	 * behavior when all other comparisons it may perform are equal, to mimick the behavior of the API.  Like the API
+	 * behavior when all other comparisons it may perform are equal, to mimic the behavior of the API.  Like the API
 	 * deduplicate method, items without an MD5 value are automatically included in the results and therefore never
 	 * sent to the tie breaker function.
 	 * @param items The items to deduplicate
@@ -210,5 +211,32 @@ public class SuperItemUtility {
 		Set<Item> result = new HashSet<Item>(working.values());
 		result.addAll(noMd5);
 		return result;
+	}
+	
+	/***
+	 * Tests whether 2 items have the same parent by comparing their tree position values
+	 * @param a The first item to compare
+	 * @param b The second item to compare
+	 * @return True if items appear to have the same parent item based on their tree position values
+	 */
+	public boolean itemsAreSiblings(Item a, Item b){
+		TreePosition posA = a.getPosition();
+		TreePosition posB = b.getPosition();
+		int[] arrA = posA.toArray();
+		int[] arrB = posB.toArray();
+		
+		// If position array length differs they are at
+		// different depths and therefore cannot be siblings
+		if(arrA.length != arrB.length){
+			return false;
+		}
+		
+		// Test to make sure position values match up to
+		// but not including the last position int
+		for (int i = 0; i < arrA.length-1; i++) {
+			if(arrA[i] != arrB[i]) return false;
+		}
+		
+		return true;
 	}
 }
