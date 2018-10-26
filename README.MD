@@ -62,8 +62,7 @@ java_import com.nuix.superutilities.SuperUtilities
 $su = SuperUtilities.init($utilities,NUIX_VERSION)
 ```
 
-Similar to the Utilities object in the API, you can then use SuperUtilities object to obtain the various objects offered in this library.  For example, use SuperItemUtility to resolve
-a collection of items to their container ancestor items:
+Similar to the Utilities object in the API, you can then use [SuperUtilities](https://nuix.github.io/SuperUtilities/com/nuix/superutilities/SuperUtilities.html) object to obtain the various objects offered in this library.  For example, use [SuperItemUtility](https://nuix.github.io/SuperUtilities/com/nuix/superutilities/items/SuperItemUtility.html) to resolve a collection of items to their container ancestor items:
 
 ```ruby
 # Open a case
