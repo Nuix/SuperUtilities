@@ -187,7 +187,7 @@ public class SuperUtilities{
 	}
 	
 	/***
-	 * Saves a diagnostics zip file (similar to same operation in the GUI)
+	 * Saves a diagnostics zip file (similar to same operation in the workbench GUI)
 	 * @param zipFile File object specifying where the zip file should be saved to.
 	 */
 	public void saveDiagnostics(File zipFile){
