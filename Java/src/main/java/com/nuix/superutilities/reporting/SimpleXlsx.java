@@ -40,8 +40,8 @@ public class SimpleXlsx {
 	
 	public SimpleXlsx(String file) throws Exception {
 		initializeAspose();
-		this.file = new File(file);
-		if(this.file.exists()) {
+		if(file != null) { this.file = new File(file); }
+		if(this.file != null && this.file.exists()) {
 			workbook = new Workbook(file);
 		} else {
 			workbook = new Workbook();
@@ -50,10 +50,16 @@ public class SimpleXlsx {
 	}
 	
 	public void saveAs(String file) throws Exception {
+		if(file == null || file.trim().isEmpty()) {
+			throw new IllegalArgumentException("Empyt/null value for 'file' argument, save(String file) method doesn't know where to save the file to");
+		}
 		workbook.save(file);
 	}
 	
 	public void save() throws Exception {
+		if(this.file == null) {
+			throw new IllegalArgumentException("Instance has no value for 'file', save() method doesn't know where to save the file to");
+		}
 		workbook.save(file.getAbsolutePath());
 	}
 	
@@ -67,5 +73,11 @@ public class SimpleXlsx {
 	
 	public Workbook getAsposeWorkbook() {
 		return workbook;
+	}
+	
+	public Style createStyle() {
+		Style newStyle = workbook.createStyle();
+		workbook.getNamedStyle("test");
+		return newStyle;
 	}
 }
