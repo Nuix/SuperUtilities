@@ -29,8 +29,6 @@ public class IntersectionReport {
 	
 	private static Logger logger = Logger.getLogger(IntersectionReport.class);
 	
-	
-	
 	private SimpleXlsx xlsx = null;
 	
 	private Style rowCategoryLabelStyle = null;
@@ -117,6 +115,7 @@ public class IntersectionReport {
 	 * @throws Exception Thrown if there are errors
 	 */
 	public void generate(Case nuixCase, String sheetName, IntersectionReportSheetConfiguration sheetConfig) throws Exception {
+		colCategoryColorRing.restart();
 		SimpleWorksheet sheet = xlsx.getSheet(sheetName);
 		
 		List<String> parenRowCriteria = sheetConfig.getRowCriteria().stream().map(c -> parenExpression(c.getQuery())).collect(Collectors.toList());
