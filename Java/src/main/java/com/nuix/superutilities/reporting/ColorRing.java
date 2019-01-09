@@ -57,4 +57,8 @@ public class ColorRing implements Iterator<Color> {
 	public void restart() {
 		pos = 0;
 	}
+	
+	public void addColor(int red, int green, int blue) {
+		colors.add(Color.fromArgb(red, green, blue));
+	}
 }

@@ -3,6 +3,7 @@ package com.nuix.superutilities.reporting;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.StringJoiner;
+import java.util.function.Consumer;
 import java.util.stream.Collectors;
 
 import org.apache.log4j.Logger;
@@ -38,6 +39,30 @@ public class IntersectionReport {
 	private Style rowGeneralStyle = null;
 	
 	private ColorRing colCategoryColorRing = new ColorRing();
+	
+	private IntersectionReportProgressCallback progressCallback = null;
+	
+	private void fireProgress(int current, int total) {
+		if(progressCallback != null) {
+			progressCallback.progressUpdated(current, total);
+		}
+	}
+	
+	public void whenProgressUpdated(IntersectionReportProgressCallback callback) {
+		progressCallback = callback;
+	}
+	
+	private Consumer<String> messageCallback = null;
+	
+	private void fireMessage(String message) {
+		if(messageCallback != null) {
+			messageCallback.accept(message);
+		}
+	}
+	
+	public void whenMessageGenerated(Consumer<String> callback) {
+		messageCallback = callback;
+	}
 	
 	/***
 	 * Takes provided expression string and returns that expression wrapped in parens
@@ -100,6 +125,8 @@ public class IntersectionReport {
 		colCategoryStyle.setPattern(BackgroundType.SOLID);
 		AsposeCellsStyleHelper.enableAllBorders(colCategoryStyle);
 		
+		// These are intended as generic defaults and you should really call getColCategoryColorRing
+		// and configure the colors if they want them to look at all nice
 		colCategoryColorRing.addTintSeries(Color.fromArgb(255, 51, 51), 4); // Red
 		colCategoryColorRing.addTintSeries(Color.fromArgb(51, 204, 51), 4); // Green
 		colCategoryColorRing.addTintSeries(Color.fromArgb(0, 153, 204), 4); // Blue
@@ -121,10 +148,15 @@ public class IntersectionReport {
 		List<String> parenRowCriteria = sheetConfig.getRowCriteria().stream().map(c -> parenExpression(c.getQuery())).collect(Collectors.toList());
 		List<String> parenColCriteria = sheetConfig.getColCriteria().stream().map(c -> parenExpression(c.getQuery())).collect(Collectors.toList());
 		
+		int currentCellIndex = 0;
+		int totalCells = parenRowCriteria.size() * parenColCriteria.size() * sheetConfig.getValueGenerators().size();
+		long lastProgress = System.currentTimeMillis();
+		
 		List<Object> rowValues = new ArrayList<Object>();
 		String parenScopeQuery = parenExpression(sheetConfig.getScopeQuery());
 		
 		// Start out by building out headers
+		fireMessage("Building headers...");
 		sheet.setValue(0, 0, sheetConfig.getColPrimaryCategoryLabel());
 		sheet.setStyle(0, 0, colPrimaryCategoryLabelStyle);
 		
@@ -135,7 +167,8 @@ public class IntersectionReport {
 			// First Row
 			Style colCategoryStyleCopy = xlsx.createStyle();
 			colCategoryStyleCopy.copy(colCategoryStyle);
-			colCategoryStyleCopy.setForegroundColor(colCategoryColorRing.next());
+			Color primaryCategoryColor = colCategoryColorRing.next();
+			colCategoryStyleCopy.setForegroundColor(primaryCategoryColor);
 			
 			String colCriterion = sheetConfig.getColCriteria().get(c).getName();
 			int col = 1 + (c * sheetConfig.getValueGenerators().size());
@@ -147,12 +180,31 @@ public class IntersectionReport {
 			// Second Row
 			for (int sc = 0; sc < sheetConfig.getValueGenerators().size(); sc++) {
 				int subCol = col + sc;
-				sheet.setValue(1, subCol, sheetConfig.getValueGenerators().get(sc).getLabel());
-				sheet.setStyle(1, subCol, colCategoryStyle);
+				
+				// Secondary column headers are tinted colors of primary column header color
+				Style colSecondaryCategoryStyleCopy = xlsx.createStyle();
+				colSecondaryCategoryStyleCopy.copy(colCategoryStyle);
+				colSecondaryCategoryStyleCopy.setTextWrapped(true);
+				
+				// We want to tint the primary color to some degree, 1.0 tends to blow out the color to white
+				// so we will tint it relative.  For example if we have 4 columns we want roughly the first tinted 25%
+				// then the next 50%, then 75% and finally 100%.  We subtract a little so that we never hit
+				// 100% tint.
+				float tintDegree = ((float)sc+1) / ((float)sheetConfig.getValueGenerators().size()) - 0.15f;
+				
+				Color primaryCategoryColorTint = AsposeCellsColorHelper.getTint(primaryCategoryColor, tintDegree);
+				colSecondaryCategoryStyleCopy.setForegroundColor(primaryCategoryColorTint);
+				
+				String secondaryColumnLabel = sheetConfig.getValueGenerators().get(sc).getColumnLabel();
+				sheet.setValue(1, subCol, secondaryColumnLabel);
+				sheet.setStyle(1, subCol, colSecondaryCategoryStyleCopy);
 			}
 		}
+		
+		sheet.autoFitRow(2);
 		sheet.setCurrentRow(sheet.getCurrentRow()+2);
 		
+		fireMessage("Building rows...");
 		for (int r = 0; r < sheetConfig.getRowCriteria().size(); r++) {
 			String parenRowCriterion = parenRowCriteria.get(r);
 			
@@ -164,6 +216,13 @@ public class IntersectionReport {
 				logger.info(String.format("Query: %s", query));
 				for(ColumnValueGenerator generator : sheetConfig.getValueGenerators()) {
 					rowValues.add(generator.generateValue(nuixCase, query));
+					currentCellIndex++;
+					
+					// Periodic progress
+					if(System.currentTimeMillis() - lastProgress >= 1000 ){
+						fireProgress(currentCellIndex, totalCells);
+						lastProgress = System.currentTimeMillis();
+					}
 				}
 			}
 			
@@ -176,10 +235,20 @@ public class IntersectionReport {
 			// Apply styles
 			sheet.setStyle(sheet.getCurrentRow()-1, 0, rowCategoryStyle);
 		}
+		
+		fireMessage("Autofitting columns...");
 		sheet.autoFitColumns();
+		
+		fireMessage("Saving...");
 		xlsx.save();
+		fireMessage("Saved");
 	}
 
-	
-	
+	public ColorRing getColCategoryColorRing() {
+		return colCategoryColorRing;
+	}
+
+	public void setColCategoryColorRing(ColorRing colCategoryColorRing) {
+		this.colCategoryColorRing = colCategoryColorRing;
+	}
 }

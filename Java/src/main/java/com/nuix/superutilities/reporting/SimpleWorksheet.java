@@ -102,6 +102,10 @@ public class SimpleWorksheet {
 		worksheet.autoFitColumns();
 	}
 	
+	public void autoFitRow(int row) throws Exception {
+		worksheet.autoFitRow(row);
+	}
+	
 	public void appendRow(List<Object> rowValues) {
 		for (int c = 0; c < rowValues.size(); c++) {
 			Object rowValue = rowValues.get(c);

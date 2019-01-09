@@ -18,7 +18,7 @@ public class AsposeCellsColorHelper {
 		if(degree == 0)
 			return colorChannelValue;
 		
-		int tint = (int) (colorChannelValue + (0.25 * degree * (255 - colorChannelValue)));
+		int tint = (int) (colorChannelValue + (degree * (255f - (float)colorChannelValue)));
 		if(tint < 0)
 			return 0;
 		else if(tint > 255)

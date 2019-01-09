@@ -21,6 +21,12 @@ public class ScriptedColumnValueGenerator extends ColumnValueGenerator {
 		this.label = label;
 		this.expression = expression;
 	}
+	
+	public ScriptedColumnValueGenerator(String label, String categoryLabel, BiFunction<Case,String,Object> expression) {
+		this.label = label;
+		this.columnLabel = categoryLabel;
+		this.expression = expression;
+	}
 
 	@Override
 	public Object generateValue(Case nuixCase, String query) {
