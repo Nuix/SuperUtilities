@@ -14,6 +14,7 @@ public class IntersectionReportSheetConfiguration {
 	private String rowCategoryLabel = "Term";
 	private String colPrimaryCategoryLabel = "Column Category";
 	private String scopeQuery = "";
+	private boolean freezePanes = false;
 	
 	/***
 	 * Gets the list of criteria used for each row.
@@ -162,5 +163,21 @@ public class IntersectionReportSheetConfiguration {
 	 */
 	public void setScopeQuery(String scopeQuery) {
 		this.scopeQuery = scopeQuery;
+	}
+
+	/***
+	 * Gets whether "freeze panes" will be applied to this sheet.  When true, first column and first 2 rows will be frozen into place.
+	 * @return Whether "freeze panes" will be applied to this sheet.
+	 */
+	public boolean getFreezePanes() {
+		return freezePanes;
+	}
+
+	/***
+	 * Sets whether "freeze panes" will be applied to this sheet.  When true, first column and first 2 rows will be frozen into place.
+	 * @param freezePanes Whether "freeze panes" will be applied to this sheet.
+	 */
+	public void setFreezePanes(boolean freezePanes) {
+		this.freezePanes = freezePanes;
 	}
 }

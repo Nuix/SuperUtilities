@@ -11,6 +11,7 @@ import org.apache.log4j.Logger;
 import com.aspose.cells.BackgroundType;
 import com.aspose.cells.Color;
 import com.aspose.cells.Style;
+import com.nuix.superutilities.misc.FormatUtility;
 
 import nuix.Case;
 
@@ -142,6 +143,7 @@ public class IntersectionReport {
 	 * @throws Exception Thrown if there are errors
 	 */
 	public void generate(Case nuixCase, String sheetName, IntersectionReportSheetConfiguration sheetConfig) throws Exception {
+		long generationStarted = System.currentTimeMillis();
 		colCategoryColorRing.restart();
 		SimpleWorksheet sheet = xlsx.getSheet(sheetName);
 		
@@ -226,10 +228,6 @@ public class IntersectionReport {
 				}
 			}
 			
-			//TESTING
-//			List<String> stringRowValues = rowValues.stream().map(v -> v.toString()).collect(Collectors.toList());
-//			logger.info(String.join("\t", stringRowValues));
-			
 			sheet.appendRow(rowValues, rowGeneralStyle);
 			
 			// Apply styles
@@ -239,9 +237,19 @@ public class IntersectionReport {
 		fireMessage("Autofitting columns...");
 		sheet.autoFitColumns();
 		
+		if(sheetConfig.getFreezePanes() == true) {
+			// Freeze first column and top 2 rows
+			sheet.getAsposeWorksheet().freezePanes(2, 1, 2, 1);	
+		}
+		
 		fireMessage("Saving...");
 		xlsx.save();
 		fireMessage("Saved");
+		
+		long generationFinished = System.currentTimeMillis();
+		long elapsedMillis = generationFinished - generationStarted;
+		long elapsedSeconds = elapsedMillis / 1000;
+		fireMessage("Sheet generated in "+FormatUtility.getInstance().secondsToElapsedString(elapsedSeconds));
 	}
 
 	public ColorRing getColCategoryColorRing() {
