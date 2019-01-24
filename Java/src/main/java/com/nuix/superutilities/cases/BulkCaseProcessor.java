@@ -169,8 +169,7 @@ public class BulkCaseProcessor {
 						}
 					} catch (Exception e) {
 						// User code threw exception but didnt catch it
-						logger.error("Error in user provided case work function:");
-						logger.error(e);
+						logger.error("Error in user provided case work function:",e);
 						if(userFunctionErrorCallback != null){
 							WorkFunctionErrorEvent userFunctionErrorInfo = new WorkFunctionErrorEvent(caseInfo, e);
 							userFunctionErrorCallback.accept(userFunctionErrorInfo);
@@ -192,8 +191,7 @@ public class BulkCaseProcessor {
 					}
 					
 				} catch (Exception e) {
-					logger.error("Error opening case: ");
-					logger.error(e);
+					logger.error("Error opening case: ",e);
 					// On case open error notify callback if was provided
 					if(caseErrorCallback != null){
 						CaseOpenErrorEvent caseErrorInfo = new CaseOpenErrorEvent(caseInfo, e);
