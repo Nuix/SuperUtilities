@@ -1,6 +1,8 @@
 SuperUtilities
 ==============
 
+![This code was last tested in Nuix 7.6](https://img.shields.io/badge/Tested%20in%20Nuix-7.6-green.svg)
+
 # Overview
 
 **Written By:** Jason Wells
