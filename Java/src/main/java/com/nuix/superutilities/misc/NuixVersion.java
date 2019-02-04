@@ -10,13 +10,13 @@ import java.util.regex.Pattern;
  * <pre>
  * {@code
  * current_version = NuixVersion.new(NUIX_VERSION)
- * if current_version.isLessThan("6.0")
- *     puts "Sorry your version of Nuix is below the minimum required version of 6.0"
+ * if current_version.isLessThan("7.8.0.10")
+ *     puts "Sorry your version of Nuix is below the minimum required version of 7.8.0.10"
  *     exit 1
  * end
  * }
  * </pre>
- * @author JasonWells
+ * @author Jason Wells
  *
  */
 public class NuixVersion implements Comparable<NuixVersion> {
@@ -24,44 +24,57 @@ public class NuixVersion implements Comparable<NuixVersion> {
 	
 	private int major = 0;
 	private int minor = 0;
+	private int bugfix = 0;
 	private int build = 0;
 	
 	/***
 	 * Creates a new instance defaulting to version 0.0.0
 	 */
 	public NuixVersion(){
-		this(0,0,0);
+		this(0,0,0,0);
 	}
 	
 	/***
-	 * Creates a new instance using the provided major version: major.0.0
+	 * Creates a new instance using the provided major version: major.0.0.0
 	 * @param majorVersion The major version number
 	 */
 	public NuixVersion(int majorVersion){
-		this(majorVersion,0,0);
+		this(majorVersion,0,0,0);
 	}
 	/***
-	 * Creates a new instance using the provided major and minor versions: major.minor.0
+	 * Creates a new instance using the provided major and minor versions: major.minor.0.0
 	 * @param majorVersion The major version number
 	 * @param minorVersion The minor version number
 	 */
 	public NuixVersion(int majorVersion, int minorVersion){
-		this(majorVersion,minorVersion,0);
+		this(majorVersion,minorVersion,0,0);
 	}
 	/***
-	 * Creates a new instance using the provided major, minor and build versions: major.minor.build
+	 * Creates a new instance using the provided major, minor and bugfix versions: major.minor.bugfix.0
 	 * @param majorVersion The major version number
 	 * @param minorVersion The minor version number
+	 * @param bugfixVersion The bugfix version number
+	 */
+	public NuixVersion(int majorVersion, int minorVersion, int bugfixVersion){
+		this(majorVersion,minorVersion,bugfixVersion,0);
+	}
+	
+	/***
+	 * Creates a new instance using the provided major, minor, bugfix and build versions: major.minor.bugfix.build
+	 * @param majorVersion The major version number
+	 * @param minorVersion The minor version number
+	 * @param bugfixVersion The bugfix version number
 	 * @param buildVersion The build version number
 	 */
-	public NuixVersion(int majorVersion, int minorVersion, int buildVersion){
+	public NuixVersion(int majorVersion, int minorVersion, int bugfixVersion, int buildVersion){
 		major = majorVersion;
 		minor = minorVersion;
+		bugfix = bugfixVersion;
 		build = buildVersion;
 	}
 	
 	/***
-	 * Parses a version string into a NuixVersion instance.  Supports values such as: 6, 6.2, 6.2.0, 6.2.1-preview6 <br>
+	 * Parses a version string into a NuixVersion instance.  Supports values such as: 6, 6.2, 6.2.0, 6.2.1-preview6, 7.8.0.10 <br>
 	 * When providing a version string such as "6.2.1-preview6", "-preview6" will be trimmed off before parsing.
 	 * @param versionString The version string to parse.
 	 * @return A NuixVersion instance representing the supplied version string, if there is an error parsing the provided value will return
@@ -81,53 +94,76 @@ public class NuixVersion implements Comparable<NuixVersion> {
 					return new NuixVersion(versionPartInts[0],versionPartInts[1]);
 				case 3:
 					return new NuixVersion(versionPartInts[0],versionPartInts[1],versionPartInts[2]);
+				case 4:
+					return new NuixVersion(versionPartInts[0],versionPartInts[1],versionPartInts[2],versionPartInts[3]);
 				default:
 					return new NuixVersion();
 			}
 		}catch(Exception exc){
 			System.out.println("Error while parsing version: "+versionString);
-			System.out.println("Pretending version is 100.0.0");
-			return new NuixVersion(100,0,0);
+			System.out.println("Pretending version is 100.0.0.0");
+			return new NuixVersion(100,0,0,0);
 		}
 	}
 	
 	/***
-	 * Gets the determined major portion of this version instance (X.0.0)
+	 * Gets the determined major portion of this version instance (X.0.0.0)
 	 * @return The determined major portion of version
 	 */
 	public int getMajor() {
 		return major;
 	}
+	
 	/***
-	 * Sets the major portion of this version instance (X.0.0)
+	 * Sets the major portion of this version instance (X.0.0.0)
 	 * @param major The major version value
 	 */
 	public void setMajor(int major) {
 		this.major = major;
 	}
+	
 	/***
-	 * Gets the determined minor portion of this version instance (0.X.0)
+	 * Gets the determined minor portion of this version instance (0.X.0.0)
 	 * @return The determined minor portion of version
 	 */
 	public int getMinor() {
 		return minor;
 	}
+	
 	/***
-	 * Sets the minor portion of this version instance (0.X.0)
+	 * Sets the minor portion of this version instance (0.X.0.0)
 	 * @param minor The minor version value
 	 */
 	public void setMinor(int minor) {
 		this.minor = minor;
 	}
+	
 	/***
-	 * Gets the determined build portion of this version instance (0.0.X)
+	 * Gets the determined bugfix portion of this version instance (0.0.x.0)
+	 * @return The determined bugfix portion of version
+	 */
+	public int getBugfix() {
+		return bugfix;
+	}
+
+	/***
+	 * Sets the determined bugfix portion of this version instance (0.0.x.0)
+	 * @param bugfix The determined bugfix portion of version
+	 */
+	public void setBugfix(int bugfix) {
+		this.bugfix = bugfix;
+	}
+	
+	/***
+	 * Gets the determined build portion of this version instance (0.0.0.x)
 	 * @return The determined build portion of version
 	 */
 	public int getBuild() {
 		return build;
 	}
+	
 	/***
-	 * Sets the build portion of this version instance (0.0.X)
+	 * Sets the build portion of this version instance (0.0.0.x)
 	 * @param build The build version value
 	 */
 	public void setBuild(int build) {
@@ -139,8 +175,8 @@ public class NuixVersion implements Comparable<NuixVersion> {
 	 * {@link #parse(String)} when version string is available, such as in Ruby using constant NUIX_VERSION.
 	 * @return Best guess at current Nuix version based on package inspection.
 	 */
-	public static NuixVersion findCurrentVersion(){
-		String versionString = "0.0.0";
+	public static NuixVersion getCurrent(){
+		String versionString = "0.0.0.0";
 		for(Package p : Package.getPackages()){
 			if(p.getName().matches("com\\.nuix\\..*")){
 				versionString = p.getImplementationVersion();
@@ -222,25 +258,28 @@ public class NuixVersion implements Comparable<NuixVersion> {
 	public int compareTo(NuixVersion other) {
 		if(this.major == other.major){
 			if(this.minor == other.minor){
-				return Integer.compare(this.build, other.build);
-			}
-			else{
+				if(this.bugfix == other.bugfix) {
+					return Integer.compare(this.build, other.build);	
+				} else {
+					return Integer.compare(this.bugfix, other.bugfix);
+				}
+			} else{
 				return Integer.compare(this.minor, other.minor);
 			}
-		}
-		else{
+		} else{
 			return Integer.compare(this.major, other.major);
 		}
 		
 	}
 	
 	/***
-	 * Converts this instance back to a version string such as: 6.2.1234
+	 * Converts this instance back to a version string from its components, such as: "7.8.0.10"
 	 */
 	@Override
 	public String toString(){
 		return Integer.toString(this.major) + "." +
 				Integer.toString(this.minor) + "." +
+				Integer.toString(this.bugfix) + "." +
 				Integer.toString(this.build);
 	}
 }
