@@ -1,7 +1,7 @@
 SuperUtilities
 ==============
 
-![This code was last tested in Nuix 7.6](https://img.shields.io/badge/Tested%20in%20Nuix-7.6-green.svg)
+![This code was last tested in Nuix 7.8](https://img.shields.io/badge/Tested%20in%20Nuix-7.8-green.svg)
 
 # Overview
 
@@ -25,7 +25,7 @@ This is a small library of functionality which is a companion to the functionali
 - [CaseLockInfo](https://nuix.github.io/SuperUtilities/com/nuix/superutilities/cases/CaseLockInfo.html): Parses case lock file to help you determine what user is locking the case and what machine.
 - [BulkCaseProcessor](https://nuix.github.io/SuperUtilities/com/nuix/superutilities/cases/BulkCaseProcessor.html): Provides a way to run a block of code against multiple cases.  Exposes callbacks allowing a script to determine how to handle: a case being locked, an error opening a case and an error in user code while working with a case.
 - [FormatUtility](https://nuix.github.io/SuperUtilities/com/nuix/superutilities/misc/FormatUtility.html): Provides various helper methods I have found useful from a script such as:
-    - Conversion of byte count to KM, MB, GB
+    - Conversion of byte count to KB, MB, GB
     - Conversion of metadata property data types to string
     - General number formatting
     - Resolve placeholders in template strings provided by end user
