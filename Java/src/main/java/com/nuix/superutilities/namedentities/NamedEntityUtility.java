@@ -25,23 +25,30 @@ import nuix.Case;
 import nuix.Item;
 import nuix.ItemCustomMetadataMap;
 
+/***
+ * Provides functionality for working with Nuix named entities.
+ * @author Jason Wells
+ *
+ */
 public class NamedEntityUtility {
 	private static Logger logger = Logger.getLogger(NamedEntityUtility.class);
 	
 	private NamedEntityRedactionProgressCallback progressCallback = null;
-	
 	private void fireProgress(int current, int total) {
 		if(progressCallback != null) {
 			progressCallback.progressUpdated(current, total);
 		}
 	}
 	
+	/***
+	 * Registers callback for when this instance signals it has made progress.
+	 * @param callback Invoked when this instance signals it has made progress.
+	 */
 	public void whenProgressUpdated(NamedEntityRedactionProgressCallback callback) {
 		progressCallback = callback;
 	}
 	
 	private Consumer<String> messageCallback = null;
-	
 	private void fireMessage(String message) {
 		if(messageCallback != null) {
 			messageCallback.accept(message);
@@ -50,6 +57,10 @@ public class NamedEntityUtility {
 		}
 	}
 	
+	/***
+	 * Registers callback for when this instance logs a message.
+	 * @param callback Invoked when this instance logs a message.
+	 */
 	public void whenMessageGenerated(Consumer<String> callback) {
 		messageCallback = callback;
 	}
@@ -102,9 +113,11 @@ public class NamedEntityUtility {
 					}
 				}
 				
-				// Get property value as a String
+				// Get property value as a String.  We maintain an original copy and a copy we will modify so that
+				// later on we can see if any changes were actually made.
 				String originalStringValue = FormatUtility.getInstance().convertToString(prop.getValue());
 				String redactedStringValue = originalStringValue;
+				
 				// Calculate custom metadata field name for when we need it
 				String customMetadataField = String.format("%s%s", settings.getCustomMetadataFieldPrefix(), prop.getKey());
 				
@@ -183,6 +196,7 @@ public class NamedEntityUtility {
 			customMetadata.put(settings.getTimeOfRedactionFieldName(), DateTime.now());
 		}
 		
+		// Record that this item had custom metadata written to it
 		if(itemWasUpdated) {
 			itemResult.tallyUpdatedItem();
 		}
@@ -226,7 +240,7 @@ public class NamedEntityUtility {
 	/***
 	 * Creates redacted copies of metadata properties and item content text by performing find and replace operations by finding
 	 * named entity matches in the values and replacing them with redaction text.  This method locates items in the specified case
-	 * based on the list of named entities specified in the {@link NamedEntityRedactionSettings} object provided.  Once those items
+	 * based on the list of named entities specified in the {@link com.nuix.superutilities.namedentities.NamedEntityRedactionSettings} object provided.  Once those items
 	 * are ontained, this method calls {@link #recordRedactedCopies(Collection, NamedEntityRedactionSettings)}.
 	 * @param nuixCase The Nuix case from which items will be obtained.
 	 * @param settings The settings used to process the obtained items.
