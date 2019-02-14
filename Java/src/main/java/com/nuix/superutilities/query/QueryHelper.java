@@ -2,6 +2,7 @@ package com.nuix.superutilities.query;
 
 import java.util.Collection;
 import java.util.List;
+import java.util.Set;
 import java.util.stream.Collectors;
 
 import org.joda.time.DateTime;
@@ -103,5 +104,16 @@ public class QueryHelper {
 				.map(e -> String.format("(%s)", e))
 				.collect(Collectors.toList()); 
 		return String.join(" OR ", updatedExpressionsCollection);
+	}
+	
+	/***
+	 * Generates a query to find items which have a match for any of the provided named entities.
+	 * @param entityNames List of entity names to search for, must be values recognized by Nuix
+	 * @return A query for items having matches for any of the specified named entities such as: named-entities:( company;* OR country;* OR credit-card-num;*)
+	 */
+	public static String namedEntityQuery(Collection<String> entityNames) {
+		Set<String> entityNameFragments = entityNames.stream().map(ne -> String.format("%s;*",ne)).collect(Collectors.toSet());
+		String query = String.format("named-entities:(%s)", String.join(" OR ",entityNameFragments));
+		return query;
 	}
 }
