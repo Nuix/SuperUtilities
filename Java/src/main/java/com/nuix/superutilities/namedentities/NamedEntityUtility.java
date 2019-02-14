@@ -17,6 +17,7 @@ import java.util.regex.Pattern;
 import org.apache.log4j.Logger;
 import org.joda.time.DateTime;
 
+import com.nuix.superutilities.SuperUtilities;
 import com.nuix.superutilities.misc.FormatUtility;
 import com.nuix.superutilities.misc.PlaceholderResolver;
 import com.nuix.superutilities.query.QueryHelper;
@@ -24,6 +25,7 @@ import com.nuix.superutilities.query.QueryHelper;
 import nuix.Case;
 import nuix.Item;
 import nuix.ItemCustomMetadataMap;
+import nuix.ItemUtility;
 
 /***
  * Provides functionality for working with Nuix named entities.
@@ -67,7 +69,11 @@ public class NamedEntityUtility {
 	
 	/***
 	 * Creates redacted copies of metadata properties and item content text by performing find and replace operations by finding
-	 * named entity matches in the values and replacing them with redaction text.
+	 * named entity matches in the values and replacing them with redaction text.  Find and replace is performed using 
+	 * <a href="https://docs.oracle.com/javase/8/docs/api/java/util/regex/Pattern.html">Pattern</a> objects crafted by taking named entity match
+	 * strings, escaping them into regex literals and then running find replace against each property or item text.  Redactions are then recorded
+	 * as custom metadata fields back to the item.  See {@link com.nuix.superutilities.namedentities.NamedEntityRedactionSettings} for a list of
+	 * settings you can configure to determine how this process is performed.
 	 * @param item The item to process
 	 * @param settings The settings to use while processing the item.
 	 * @return Results object which contains some information about how things went.
@@ -241,7 +247,7 @@ public class NamedEntityUtility {
 	 * Creates redacted copies of metadata properties and item content text by performing find and replace operations by finding
 	 * named entity matches in the values and replacing them with redaction text.  This method locates items in the specified case
 	 * based on the list of named entities specified in the {@link com.nuix.superutilities.namedentities.NamedEntityRedactionSettings} object provided.  Once those items
-	 * are ontained, this method calls {@link #recordRedactedCopies(Collection, NamedEntityRedactionSettings)}.
+	 * are obtained, this method calls {@link #recordRedactedCopies(Collection, NamedEntityRedactionSettings)}.
 	 * @param nuixCase The Nuix case from which items will be obtained.
 	 * @param settings The settings used to process the obtained items.
 	 * @return Results object which contains some information about how things went.  Is a combination of the results generated for each individual item.
@@ -252,6 +258,28 @@ public class NamedEntityUtility {
 		fireMessage("Locating items with named entities using: "+query);
 		Set<Item> items = nuixCase.searchUnsorted(query);
 		return recordRedactedCopies(items,settings);
+	}
+	
+	/***
+	 *  Creates redacted copies of metadata properties and item content text by performing find and replace operations by finding
+	 * named entity matches in the values and replacing them with redaction text.  This method method accepts an arbitrary collection of
+	 * items which are filtered to only items with the relevant named entities as specified by {@link #recordRedactedCopies(Collection, NamedEntityRedactionSettings)}.  Items
+	 * with appropriate named entities is determined by first running a search for items with those named entities, as provided by {@link com.nuix.superutilities.query.QueryHelper#namedEntityQuery(Collection)}.
+	 * The hits of that query are then intersected against the arbitrary collection of items provided to produce the filtered collection of items which is then provided
+	 * as an argument in an internal call to {@link #recordRedactedCopies(Collection, NamedEntityRedactionSettings)}.
+	 * @param nuixCase The Nuix case used to obtain collection of items with relevant named entities
+	 * @param arbitraryItems A collection of items (likely from user selection) from which only items with relevant named entities will be pulled
+	 * @param settings The settings used to process the items.
+	 * @return Results object which contains some information about how things went.  Is a combination of the results generated for each individual item.
+	 * @throws Exception Thrown if something goes wrong running the search to obtain the items to process.
+	 */
+	public NamedEntityRedactionResults recordRedactedCopies(Case nuixCase, Collection<Item> arbitraryItems, NamedEntityRedactionSettings settings) throws Exception {
+		String query = QueryHelper.namedEntityQuery(settings.getEntityNames());
+		fireMessage("Locating items with named entities using: "+query);
+		Set<Item> searchItems = nuixCase.searchUnsorted(query);
+		ItemUtility iutil = SuperUtilities.getInstance().getNuixUtilities().getItemUtility();
+		Set<Item> finalItems = iutil.intersection(searchItems, arbitraryItems);
+		return recordRedactedCopies(finalItems,settings);
 	}
 	
 	/***
