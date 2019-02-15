@@ -2,6 +2,8 @@ script_directory = File.dirname(__FILE__)
 require File.join(script_directory,"SuperUtilities.jar")
 java_import com.nuix.superutilities.namedentities.NamedEntityUtility
 java_import com.nuix.superutilities.namedentities.NamedEntityRedactionSettings
+java_import com.nuix.superutilities.SuperUtilities
+$su = SuperUtilities.init($utilities,NUIX_VERSION)
 
 $current_case = $utilities.getCaseFactory.open("D:\\cases\\FakeData_7.8")
 
