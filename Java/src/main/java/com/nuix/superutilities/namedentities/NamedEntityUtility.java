@@ -2,7 +2,6 @@ package com.nuix.superutilities.namedentities;
 
 import java.io.File;
 import java.io.FileWriter;
-import java.io.IOException;
 import java.io.PrintWriter;
 import java.util.ArrayList;
 import java.util.Collection;
@@ -36,9 +35,9 @@ public class NamedEntityUtility {
 	private static Logger logger = Logger.getLogger(NamedEntityUtility.class);
 	
 	private NamedEntityRedactionProgressCallback progressCallback = null;
-	private void fireProgress(int current, int total) {
+	private void fireProgress(int current, int total, NamedEntityRedactionResults currentResults) {
 		if(progressCallback != null) {
-			progressCallback.progressUpdated(current, total);
+			progressCallback.progressUpdated(current, total, currentResults);
 		}
 	}
 	
@@ -224,19 +223,29 @@ public class NamedEntityUtility {
 		fireMessage(String.format("Items provided: %s",items.size()));
 		fireMessage(String.format("Using named entities: %s", String.join("; ",settings.getEntityNames())));
 		
+		Set<String> specificProperties = settings.getSpecificProperties();
+		boolean hasSpecificPropertiesList = specificProperties != null && specificProperties.size() > 0;
+		if (hasSpecificPropertiesList) {
+			logger.info("Specific Properties to be Processed:");
+			for(String propertyName : specificProperties) {
+				logger.info(propertyName);
+			}
+		}
+		
 		fireMessage("Beginning textual redaction...");
 		int index = 0;
 		for(Item item : items) {
 			index++;
-			fireProgress(index, items.size());
 			try {
 				NamedEntityRedactionResults itemResult = recordRedactedCopies(item,settings);
+//				logger.info(itemResult.toString());
 				overallResults.mergeOther(itemResult);
 			} catch (Exception e) {
 				String message = String.format("Error while generating redaction copies for item %s - '%s'", item.getGuid(), item.getLocalisedName());
 				logger.error(message,e);
 				fireMessage(message);
 			}
+			fireProgress(index, items.size(), overallResults);
 		}
 		fireMessage("Completed textual redaction");
 		
@@ -327,9 +336,8 @@ public class NamedEntityUtility {
 			throw exc;
 		}
 		finally{
-			try {
-				fw.close();
-			} catch (IOException e) {}
+			if(fw != null) {fw.close();}
+			if(pw != null) {pw.close();}
 			pw.close();
 		}
 	}
