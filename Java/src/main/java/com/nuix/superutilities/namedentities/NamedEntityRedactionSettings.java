@@ -64,7 +64,7 @@ public class NamedEntityRedactionSettings {
 	/***
 	 * Clears all entity names associated with this instance
 	 */
-	public void clearEntityName() {
+	public void clearEntityNames() {
 		this.entityNames.clear();
 	}
 
@@ -199,8 +199,9 @@ public class NamedEntityRedactionSettings {
 	 * a list of metadata property names, only those metadata properties will be scanned.
 	 * @param specificProperties Set of specific metadata properties to be scanned or a null or empty collection means all properties are to be scanned.
 	 */
-	public void setSpecificProperties(Set<String> specificProperties) {
-		this.specificProperties = specificProperties;
+	public void setSpecificProperties(Collection<String> specificProperties) {
+		this.specificProperties.clear();
+		this.specificProperties.addAll(specificProperties);
 	}
 	
 }
