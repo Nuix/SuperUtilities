@@ -23,6 +23,12 @@ public class PlaceholderResolver {
 	private Map<String,Pattern> placeholderPatterns = new LinkedHashMap<String,Pattern>();
 	private Set<String> placeholderPaths = new HashSet<String>();
 	
+	private void recordPlaceholderPattern(String key) {
+		if(!placeholderPatterns.containsKey(key)) {
+			placeholderPatterns.put(key,Pattern.compile(Pattern.quote("{"+key+"}"),Pattern.CASE_INSENSITIVE));
+		}
+	}
+	
 	/***
 	 * Set they value for a given placeholder
 	 * @param key The placeholder name without '{' or '}'
@@ -31,7 +37,7 @@ public class PlaceholderResolver {
 	public void set(String key, String value) {
 		key = key.toLowerCase();
 		placeholderData.put(key,value);
-		placeholderPatterns.put(key,Pattern.compile(Pattern.quote("{"+key+"}"),Pattern.CASE_INSENSITIVE));
+		recordPlaceholderPattern(key);
 	}
 	
 	/***
@@ -42,7 +48,7 @@ public class PlaceholderResolver {
 	public void setPath(String key, String value) {
 		key = key.toLowerCase();
 		placeholderData.put(key,value);
-		placeholderPatterns.put(key,Pattern.compile(Pattern.quote("{"+key+"}"),Pattern.CASE_INSENSITIVE));
+		recordPlaceholderPattern(key);
 		placeholderPaths.add(key);
 	}
 	
@@ -60,6 +66,8 @@ public class PlaceholderResolver {
 	 */
 	public void clear() {
 		placeholderData.clear();
+		placeholderPaths.clear();
+		placeholderPatterns.clear();
 	}
 	
 	/***
