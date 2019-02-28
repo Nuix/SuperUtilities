@@ -2,13 +2,17 @@ package com.nuix.superutilities.misc;
 
 import java.math.BigDecimal;
 import java.text.NumberFormat;
+import java.util.ArrayList;
+import java.util.List;
 import java.util.Locale;
 import java.util.Map;
+import java.util.StringJoiner;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
 import javax.xml.bind.DatatypeConverter;
 
+import org.apache.commons.lang3.StringUtils;
 import org.joda.time.DateTime;
 
 /***
@@ -301,4 +305,32 @@ public class FormatUtility {
                 BigDecimal.ROUND_HALF_UP);
         return bigDecimal.doubleValue();
     }
+	
+	public static String formatAsTextualTable(List<List<String>> rows) {
+		List<Integer> columnWidths = new ArrayList<Integer>();
+		for(List<String> row : rows) {
+			for (int col = 0; col < row.size(); col++) {
+				if(col+1 > columnWidths.size()) {
+					columnWidths.add(0);
+				}
+				
+				int width = row.get(col).length(); 
+				if(width > columnWidths.get(col)) {
+					columnWidths.set(col, width);
+				}
+			}
+		}
+		
+		StringJoiner result = new StringJoiner("\n");
+		for(List<String> row : rows) {
+			List<String> justifiedCols = new ArrayList<String>();
+			for (int col = 0; col < row.size(); col++) {
+				int paddedWidth = columnWidths.get(col) + 2;
+				justifiedCols.add(StringUtils.center(row.get(col), paddedWidth));
+			}
+			result.add(String.join(" | ", justifiedCols));
+		}
+		
+		return result.toString();
+	}
 }
