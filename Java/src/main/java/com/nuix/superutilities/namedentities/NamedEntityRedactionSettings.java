@@ -128,7 +128,7 @@ public class NamedEntityRedactionSettings {
 	/***
 	 * Sets the prefix applied to custom metadata fields names.  Custom metadata field names are source property field name prepended with
 	 * this prefix or "ContentText" (for item content text) prepended with this prefix.
-	 * @param customMetadataFieldPrefix
+	 * @param customMetadataFieldPrefix The prefix applied to custom metadata fields names
 	 */
 	public void setCustomMetadataFieldPrefix(String customMetadataFieldPrefix) {
 		this.customMetadataFieldPrefix = customMetadataFieldPrefix;
@@ -163,7 +163,7 @@ public class NamedEntityRedactionSettings {
 	/***
 	 * Sets whether a custom metadata field will be written to updated items with a time stamp of when the redaction was performed.
 	 * The name of the custom metadata field used can be set using {@link #setTimeOfRedactionFieldName(String)}.
-	 * @param recordTimeOfRedaction
+	 * @param recordTimeOfRedaction True to record when the redaction was performed
 	 */
 	public void setRecordTimeOfRedaction(boolean recordTimeOfRedaction) {
 		this.recordTimeOfRedaction = recordTimeOfRedaction;

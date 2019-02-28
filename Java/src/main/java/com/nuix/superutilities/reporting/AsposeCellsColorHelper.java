@@ -53,10 +53,10 @@ public class AsposeCellsColorHelper {
 	}
 	
 	/***
-	 * 
-	 * @param baseColor
-	 * @param degree
-	 * @return
+	 * Provides a tinted variation of the provided base color
+	 * @param baseColor A base color which will be tinted
+	 * @param degree To what extend the base color is tinted
+	 * @return Tinted copy of the provided base color
 	 */
 	public static Color getTint(Color baseColor, float degree) {
 		return getTint(

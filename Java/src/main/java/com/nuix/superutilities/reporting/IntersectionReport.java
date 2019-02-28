@@ -22,7 +22,7 @@ import nuix.Case;
  * provided to calculate its particular value.  Examples might be running Case.count(query) to get a responsive item count or running Case.search(query)
  * and tweaking the results to include families or calling methods on CaseStatistics such as getAuditSize(query) to report responsive items total audited size.
  * This class takes care of iteratively running these things and providing formatting as they are written into an XLSX Excel spreadsheet.  If a scope query
- * is provided via the method {@link #setScopeQuery(String)}, the provided query will be AND'ed together as well with each row/col criteria combination, allowing
+ * is provided via the method {@link IntersectionReportSheetConfiguration#setScopeQuery(String)}, the provided query will be AND'ed together as well with each row/col criteria combination, allowing
  * you to further scope the overall report to things like particular evidence, item types, tags, etc.
  * @author Jason Wells
  *
@@ -140,6 +140,7 @@ public class IntersectionReport {
 	 * Generates a new report sheet using the row criteria, column criteria and value generators currently assigned to this instance
 	 * @param nuixCase The Nuix case report data is collected against
 	 * @param sheetName The name of the excel worksheet to create
+	 * @param sheetConfig Configuration details regarding how this sheet should be generated
 	 * @throws Exception Thrown if there are errors
 	 */
 	public void generate(Case nuixCase, String sheetName, IntersectionReportSheetConfiguration sheetConfig) throws Exception {

@@ -28,7 +28,7 @@ public class QueryHelper {
 	 * a year input of 2019 and month input of 6 should yield the query: item-date:[20190601 TO 20190630]
 	 * @param year The year the range query should constrain to.  Value should be a valid 4 digit year (2019 not 19).
 	 * @param month The month of the year, valid values are 1 through 12
-	 * @return
+	 * @return A Nuix range query for items with an item date in the specified year and month
 	 */
 	public static String yearMonthRangeQuery(int year, int month) {
 		// Unlikely someone would intentionally provide year in this range, this is here

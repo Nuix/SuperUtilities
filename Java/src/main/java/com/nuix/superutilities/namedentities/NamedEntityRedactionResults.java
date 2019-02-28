@@ -25,10 +25,10 @@ public class NamedEntityRedactionResults {
 	}
 
 	/***
-	 * Records that a particlar property was recorded and adds 1 to count of times that property was updated.  Count of updated properties
+	 * Records that a particular property was recorded and adds 1 to count of times that property was updated.  Count of updated properties
 	 * can later be obtained by calling {@link #getUpdatedProperties()}.  If you are just looking for list of poperty names which were updated
 	 * you can call {@link #getUpdatedPropertyNames()}.
-	 * @param propertyName
+	 * @param propertyName The property name to increment the tally for
 	 */
 	public void tallyUpdatedProperty(String propertyName) {
 		if(!updatedProperties.containsKey(propertyName)) {
@@ -73,7 +73,7 @@ public class NamedEntityRedactionResults {
 	/***
 	 * Combines counts from another instance into this instance.  Used by {@link com.nuix.superutilities.namedentities.NamedEntityUtility#recordRedactedCopies(java.util.Collection, NamedEntityRedactionSettings)}
 	 * to coalesce results generated from processing individual items into a final overall result.
-	 * @param other
+	 * @param other The other NamedEntityRedactionResults instance to merge into this instance
 	 */
 	public void mergeOther(NamedEntityRedactionResults other) {
 		updatedItemCount += other.updatedItemCount;
