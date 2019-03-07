@@ -42,6 +42,10 @@ public class RegexScanner {
 	
 	private boolean scanProperties = true;
 	private Set<String> propertiesToScan = new HashSet<String>();
+	
+	private boolean scanCustomMetadata = true;
+	private Set<String> customMetadataFieldsToScan = new HashSet<String>();
+	
 	private boolean scanContent = true;
 	private boolean caseSensitive = false;
 	private boolean captureContextualText = true;
@@ -326,6 +330,44 @@ public class RegexScanner {
 			}
 		}
 		
+		if(scanCustomMetadata){
+			try {
+				for (PatternInfo p : patterns) {
+					Matcher m = null;
+					
+					for (Entry<String,String> cmEntry : getStringCustomMetadata(item,customMetadataFieldsToScan).entrySet()) {
+						String fieldName = cmEntry.getKey();
+						try {
+							String fieldValue = cmEntry.getValue();
+							if (m == null){
+								m = p.getPattern().matcher(fieldValue);
+							} else {
+								m.reset(fieldValue);
+							}
+							
+							while(m.find()){
+								int matchStart = m.start();
+								int matchEnd = m.end();
+								String value = m.group();
+								if(captureContextualText && contextSize > 0){
+									String context = getContextualSubString(fieldValue,matchStart,matchEnd,contextSize);
+									itemMatches.addMatch(p,fieldName,false,value,context,matchStart,matchEnd);	
+								} else {
+									itemMatches.addMatch(p,fieldName,false,value,"",matchStart,matchEnd);	
+								}
+							}
+						} catch (Exception e) {
+							RegexScanError error = new RegexScanError(item, p, fieldName, e);
+							fireScanError(error);
+						}
+					}
+				}
+			} catch (Exception e) {
+				RegexScanError error = new RegexScanError(item, null, null, e);
+				fireScanError(error);
+			}
+		}
+		
 		if(scanContent){
 			try {
 				for (PatternInfo p : patterns) {
@@ -387,6 +429,23 @@ public class RegexScanner {
 		return result;
 	}
 	
+	/***
+	 * Convenience method for converting the custom metadata fields of an item into a Map&lt;String,String&gt; so that
+	 * regular expressions may be ran against them.
+	 * @param item The item from which metadata properties will be pulled
+	 * @param specificFields List of specific custom metadata fields to be pulled.  If null is provided, all fields will be pulled.
+	 * @return Map of "stringified" custom metadata fields for the specified item
+	 */
+	public static Map<String,String> getStringCustomMetadata(Item item, Set<String> specificFields){
+		Map<String,String> result = new HashMap<String,String>();
+		for (Entry<String, Object> entry : item.getCustomMetadata().entrySet()) {
+			if(specificFields == null || specificFields.contains(entry.getKey())){
+				result.put(entry.getKey(), FormatUtility.getInstance().convertToString(entry.getValue()));
+			}
+		}
+		return result;
+	}
+	
 	public static String getContextualSubString(CharSequence textSequence, int matchStart, int matchEnd, int contextSize){
 		int rangeStart = matchStart - contextSize;
 		int rangeEnd = matchEnd + contextSize + 1;
@@ -403,6 +462,14 @@ public class RegexScanner {
 
 	public void setScanProperties(boolean scanProperties) {
 		this.scanProperties = scanProperties;
+	}
+
+	public boolean getScanCustomMetadata() {
+		return scanCustomMetadata;
+	}
+
+	public void setScanCustomMetadata(boolean scanCustomMetadata) {
+		this.scanCustomMetadata = scanCustomMetadata;
 	}
 
 	public boolean getScanContent() {
@@ -453,6 +520,17 @@ public class RegexScanner {
 		this.propertiesToScan = new HashSet<String>();
 		for(String propertyName : propertiesToScan){
 			this.propertiesToScan.add(propertyName);
+		}
+	}
+	
+	public List<String> getCustomMetadataToScan() {
+		return new ArrayList<String>(customMetadataFieldsToScan);
+	}
+	
+	public void setCustomMetadataToScan(List<String> fieldsToScan) {
+		this.customMetadataFieldsToScan = new HashSet<String>();
+		for(String fieldName : fieldsToScan){
+			this.customMetadataFieldsToScan.add(fieldName);
 		}
 	}
 	
