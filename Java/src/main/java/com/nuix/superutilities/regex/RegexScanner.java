@@ -464,6 +464,14 @@ public class RegexScanner {
 		this.scanProperties = scanProperties;
 	}
 
+	public boolean getScanCustomMetadata() {
+		return scanCustomMetadata;
+	}
+
+	public void setScanCustomMetadata(boolean scanCustomMetadata) {
+		this.scanCustomMetadata = scanCustomMetadata;
+	}
+
 	public boolean getScanContent() {
 		return scanContent;
 	}
@@ -512,6 +520,17 @@ public class RegexScanner {
 		this.propertiesToScan = new HashSet<String>();
 		for(String propertyName : propertiesToScan){
 			this.propertiesToScan.add(propertyName);
+		}
+	}
+	
+	public List<String> getCustomMetadataToScan() {
+		return new ArrayList<String>(customMetadataFieldsToScan);
+	}
+	
+	public void setCustomMetadataToScan(List<String> fieldsToScan) {
+		this.customMetadataFieldsToScan = new HashSet<String>();
+		for(String fieldName : fieldsToScan){
+			this.customMetadataFieldsToScan.add(fieldName);
 		}
 	}
 	
