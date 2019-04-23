@@ -1,5 +1,6 @@
 package com.nuix.superutilities.regex;
 
+import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.HashMap;
@@ -50,6 +51,9 @@ public class RegexScanner {
 	private boolean caseSensitive = false;
 	private boolean captureContextualText = true;
 	private int contextSize = 100;
+	
+	private boolean matchNamedEntityValues = false;
+	private Set<String> namedEntityTypes = new HashSet<String>();
 	
 	private boolean abortWasRequested = false;
 	private Object scanErrorLock = new Object();
@@ -292,9 +296,29 @@ public class RegexScanner {
 	protected ItemRegexMatchCollection scanItem(Item item) {
 		ItemRegexMatchCollection itemMatches = new ItemRegexMatchCollection(item);
 		
+		List<PatternInfo> patternsToScanFor = patterns;
+		if(matchNamedEntityValues && namedEntityTypes.size() > 0) {
+			patternsToScanFor = new ArrayList<PatternInfo>();
+			patternsToScanFor.addAll(patterns);
+			for(String namedEntityType : namedEntityTypes) {
+				try {
+					Set<String> entityValues = item.getEntities(namedEntityType);
+					for(String entityValue : entityValues) {
+						PatternInfo entityPattern = new PatternInfo(namedEntityType, "\\Q"+entityValue+"\\E");
+						entityPattern.compile(caseSensitive);
+						patternsToScanFor.add(entityPattern);
+					}
+				} catch (IOException e) {
+					RegexScanError error = new RegexScanError(item, null, "Named Entity Pattern Generation", e);
+					fireScanError(error);
+				}
+			}
+		}
+		
+		
 		if(scanProperties){
 			try {
-				for (PatternInfo p : patterns) {
+				for (PatternInfo p : patternsToScanFor) {
 					Matcher m = null;
 					
 					for (Entry<String,String> propertyEntry : getStringProperties(item,propertiesToScan).entrySet()) {
@@ -332,7 +356,7 @@ public class RegexScanner {
 		
 		if(scanCustomMetadata){
 			try {
-				for (PatternInfo p : patterns) {
+				for (PatternInfo p : patternsToScanFor) {
 					Matcher m = null;
 					
 					for (Entry<String,String> cmEntry : getStringCustomMetadata(item,customMetadataFieldsToScan).entrySet()) {
@@ -370,7 +394,7 @@ public class RegexScanner {
 		
 		if(scanContent){
 			try {
-				for (PatternInfo p : patterns) {
+				for (PatternInfo p : patternsToScanFor) {
 					try {
 						CharSequence contentTextCharSequence = item.getTextObject();
 						if(contentTextCharSequence != null){
@@ -534,6 +558,23 @@ public class RegexScanner {
 		}
 	}
 	
+	public boolean getMatchNamedEntityValues() {
+		return matchNamedEntityValues;
+	}
+
+	public void setMatchNamedEntityValues(boolean matchNamedEntityValues) {
+		this.matchNamedEntityValues = matchNamedEntityValues;
+	}
+
+	public Set<String> getNamedEntityTypes() {
+		return namedEntityTypes;
+	}
+
+	public void setNamedEntityTypes(Collection<String> namedEntityTypes) {
+		this.namedEntityTypes.clear();
+		this.namedEntityTypes.addAll(namedEntityTypes);
+	}
+
 	/***
 	 * When running a scan by providing a Consumer callback, this will signal
 	 * that further scanning should be aborted.
