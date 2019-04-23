@@ -54,6 +54,12 @@ public class NuixImageAnnotationRegion {
 		this.pageNumber = pageNumber;
 	}
 	
+	/***
+	 * Applies a redaction based on the region defined by this instance.
+	 * @param markupSet The markup set to which the redaction markup will be added.
+	 * @param item The item to which the redaction will be applied.
+	 * @throws Exception
+	 */
 	public void applyRedaction(MarkupSet markupSet, Item item) throws Exception {
 		logger.info(String.format("Applying redaction based on %s", this));
 		MutablePrintedImage printedImage = item.getPrintedImage();
@@ -61,6 +67,12 @@ public class NuixImageAnnotationRegion {
 		page.createRedaction(markupSet, x, y, width, height);
 	}
 	
+	/***
+	 * Applies a highlight based on the region defined by this instance.
+	 * @param markupSet The markup set to which the highlight markup will be added.
+	 * @param item The item to which the highlight will be applied.
+	 * @throws Exception
+	 */
 	public void applyHighlight(MarkupSet markupSet, Item item) throws Exception {
 		logger.info(String.format("Applying highlight based on %s", this));
 		MutablePrintedImage printedImage = item.getPrintedImage();
@@ -70,7 +82,7 @@ public class NuixImageAnnotationRegion {
 
 	@Override
 	public String toString() {
-		return "NuixPdfRegion [x=" + x + ", y=" + y + ", width=" + width + ", height=" + height + ", text=" + text
-				+ ", pageNumber=" + pageNumber + "]";
+		return "NuixImageAnnotationRegion [x=" + x + ", y=" + y + ", width=" + width + ", height=" + height + ", text="
+				+ text + ", pageNumber=" + pageNumber + "]";
 	}
 }
