@@ -38,7 +38,7 @@ public class PdfWorkCache {
 	 * export a PDF for that item and then return the newly generated PDFs path.
 	 * @param item The item you wish to obtain the PDF file path of
 	 * @return Path to the PDF file for the given item
-	 * @throws Exception
+	 * @throws Exception If something goes wrong
 	 */
 	public synchronized File getPdfPath(Item item) throws Exception {
 		File tempPdf = null;
@@ -60,7 +60,7 @@ public class PdfWorkCache {
 	/***
 	 * Calling this will delete all temporary PDFs created by this instance, as well as clear internal listing of PDFs and their associated
 	 * file paths.
-	 * @throws IOException 
+	 * @throws IOException If something goes wrong
 	 */
 	public synchronized void cleanupTemporaryPdfs() throws IOException {
 //		for(Map.Entry<String, File> pdfCacheEntry : pdfCache.entrySet()) {

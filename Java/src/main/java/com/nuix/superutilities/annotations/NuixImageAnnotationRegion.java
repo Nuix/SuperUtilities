@@ -58,7 +58,7 @@ public class NuixImageAnnotationRegion {
 	 * Applies a redaction based on the region defined by this instance.
 	 * @param markupSet The markup set to which the redaction markup will be added.
 	 * @param item The item to which the redaction will be applied.
-	 * @throws Exception
+	 * @throws Exception If something goes wrong
 	 */
 	public void applyRedaction(MarkupSet markupSet, Item item) throws Exception {
 		logger.info(String.format("Applying redaction based on %s", this));
@@ -71,7 +71,7 @@ public class NuixImageAnnotationRegion {
 	 * Applies a highlight based on the region defined by this instance.
 	 * @param markupSet The markup set to which the highlight markup will be added.
 	 * @param item The item to which the highlight will be applied.
-	 * @throws Exception
+	 * @throws Exception If something goes wrong
 	 */
 	public void applyHighlight(MarkupSet markupSet, Item item) throws Exception {
 		logger.info(String.format("Applying highlight based on %s", this));

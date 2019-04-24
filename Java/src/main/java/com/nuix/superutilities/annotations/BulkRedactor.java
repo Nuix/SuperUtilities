@@ -63,7 +63,7 @@ public class BulkRedactor {
 	
 	/***
 	 * Allows you to provide a callback which will be invoked when this instance emits a progress update.
-	 * @param callback
+	 * @param callback The callback to invoke when progress is updated
 	 */
 	public void whenProgressUpdated(Consumer<BulkRedactorProgressInfo> callback) {
 		progressUpdatedCallback = callback;
@@ -196,7 +196,7 @@ public class BulkRedactor {
 	 * @param nuixCase The source Nuix case.  Needed to obtain items (if none were given) and/or obtain the appropriate markup set.
 	 * @param settings The settings used to find and generate the redactions.
 	 * @param scopeItems Items to find and redact.
-	 * @throws Exception
+	 * @throws Exception If something goes wrong
 	 */
 	public void findAndRedact(Case nuixCase, BulkRedactorSettings settings, Collection<Item> scopeItems) throws Exception {
 		if(scopeItems == null || scopeItems.size() < 1) {
