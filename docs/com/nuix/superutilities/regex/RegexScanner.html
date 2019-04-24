@@ -17,7 +17,7 @@
     catch(err) {
     }
 //-->
-var methods = {"i0":10,"i1":10,"i2":10,"i3":10,"i4":10,"i5":9,"i6":10,"i7":10,"i8":10,"i9":10,"i10":10,"i11":10,"i12":9,"i13":9,"i14":10,"i15":10,"i16":10,"i17":10,"i18":10,"i19":10,"i20":10,"i21":10,"i22":9,"i23":10,"i24":10,"i25":10,"i26":10,"i27":10,"i28":10,"i29":10};
+var methods = {"i0":10,"i1":10,"i2":10,"i3":10,"i4":10,"i5":9,"i6":10,"i7":10,"i8":10,"i9":10,"i10":10,"i11":10,"i12":10,"i13":10,"i14":9,"i15":9,"i16":10,"i17":10,"i18":10,"i19":10,"i20":10,"i21":10,"i22":10,"i23":10,"i24":10,"i25":9,"i26":10,"i27":10,"i28":10,"i29":10,"i30":10,"i31":10,"i32":10,"i33":10};
 var tabs = {65535:["t0","All Methods"],1:["t1","Static Methods"],2:["t2","Instance Methods"],8:["t4","Concrete Methods"]};
 var altColor = "altColor";
 var rowColor = "rowColor";
@@ -188,26 +188,34 @@ extends java.lang.Object</pre>
 <td class="colLast"><code><span class="memberNameLink"><a href="../../../../com/nuix/superutilities/regex/RegexScanner.html#getCustomMetadataToScan--">getCustomMetadataToScan</a></span>()</code>&nbsp;</td>
 </tr>
 <tr id="i7" class="rowColor">
+<td class="colFirst"><code>boolean</code></td>
+<td class="colLast"><code><span class="memberNameLink"><a href="../../../../com/nuix/superutilities/regex/RegexScanner.html#getMatchNamedEntityValues--">getMatchNamedEntityValues</a></span>()</code>&nbsp;</td>
+</tr>
+<tr id="i8" class="altColor">
+<td class="colFirst"><code>java.util.Set&lt;java.lang.String&gt;</code></td>
+<td class="colLast"><code><span class="memberNameLink"><a href="../../../../com/nuix/superutilities/regex/RegexScanner.html#getNamedEntityTypes--">getNamedEntityTypes</a></span>()</code>&nbsp;</td>
+</tr>
+<tr id="i9" class="rowColor">
 <td class="colFirst"><code>java.util.List&lt;<a href="../../../../com/nuix/superutilities/regex/PatternInfo.html" title="class in com.nuix.superutilities.regex">PatternInfo</a>&gt;</code></td>
 <td class="colLast"><code><span class="memberNameLink"><a href="../../../../com/nuix/superutilities/regex/RegexScanner.html#getPatterns--">getPatterns</a></span>()</code>&nbsp;</td>
 </tr>
-<tr id="i8" class="altColor">
+<tr id="i10" class="altColor">
 <td class="colFirst"><code>java.util.List&lt;java.lang.String&gt;</code></td>
 <td class="colLast"><code><span class="memberNameLink"><a href="../../../../com/nuix/superutilities/regex/RegexScanner.html#getPropertiesToScan--">getPropertiesToScan</a></span>()</code>&nbsp;</td>
 </tr>
-<tr id="i9" class="rowColor">
+<tr id="i11" class="rowColor">
 <td class="colFirst"><code>boolean</code></td>
 <td class="colLast"><code><span class="memberNameLink"><a href="../../../../com/nuix/superutilities/regex/RegexScanner.html#getScanContent--">getScanContent</a></span>()</code>&nbsp;</td>
 </tr>
-<tr id="i10" class="altColor">
+<tr id="i12" class="altColor">
 <td class="colFirst"><code>boolean</code></td>
 <td class="colLast"><code><span class="memberNameLink"><a href="../../../../com/nuix/superutilities/regex/RegexScanner.html#getScanCustomMetadata--">getScanCustomMetadata</a></span>()</code>&nbsp;</td>
 </tr>
-<tr id="i11" class="rowColor">
+<tr id="i13" class="rowColor">
 <td class="colFirst"><code>boolean</code></td>
 <td class="colLast"><code><span class="memberNameLink"><a href="../../../../com/nuix/superutilities/regex/RegexScanner.html#getScanProperties--">getScanProperties</a></span>()</code>&nbsp;</td>
 </tr>
-<tr id="i12" class="altColor">
+<tr id="i14" class="altColor">
 <td class="colFirst"><code>static java.util.Map&lt;java.lang.String,java.lang.String&gt;</code></td>
 <td class="colLast"><code><span class="memberNameLink"><a href="../../../../com/nuix/superutilities/regex/RegexScanner.html#getStringCustomMetadata-nuix.Item-java.util.Set-">getStringCustomMetadata</a></span>(nuix.Item&nbsp;item,
                        java.util.Set&lt;java.lang.String&gt;&nbsp;specificFields)</code>
@@ -215,7 +223,7 @@ extends java.lang.Object</pre>
  regular expressions may be ran against them.</div>
 </td>
 </tr>
-<tr id="i13" class="rowColor">
+<tr id="i15" class="rowColor">
 <td class="colFirst"><code>static java.util.Map&lt;java.lang.String,java.lang.String&gt;</code></td>
 <td class="colLast"><code><span class="memberNameLink"><a href="../../../../com/nuix/superutilities/regex/RegexScanner.html#getStringProperties-nuix.Item-java.util.Set-">getStringProperties</a></span>(nuix.Item&nbsp;item,
                    java.util.Set&lt;java.lang.String&gt;&nbsp;specificProperties)</code>
@@ -223,27 +231,27 @@ extends java.lang.Object</pre>
  regular expressions may be ran against them.</div>
 </td>
 </tr>
-<tr id="i14" class="altColor">
+<tr id="i16" class="altColor">
 <td class="colFirst"><code>java.util.List&lt;<a href="../../../../com/nuix/superutilities/regex/ItemRegexMatchCollection.html" title="class in com.nuix.superutilities.regex">ItemRegexMatchCollection</a>&gt;</code></td>
 <td class="colLast"><code><span class="memberNameLink"><a href="../../../../com/nuix/superutilities/regex/RegexScanner.html#scanItems-java.util.Collection-">scanItems</a></span>(java.util.Collection&lt;nuix.Item&gt;&nbsp;items)</code>
 <div class="block">Scans a series of items serially (no concurrency)</div>
 </td>
 </tr>
-<tr id="i15" class="rowColor">
+<tr id="i17" class="rowColor">
 <td class="colFirst"><code>void</code></td>
 <td class="colLast"><code><span class="memberNameLink"><a href="../../../../com/nuix/superutilities/regex/RegexScanner.html#scanItems-java.util.Collection-java.util.function.Consumer-">scanItems</a></span>(java.util.Collection&lt;nuix.Item&gt;&nbsp;items,
          java.util.function.Consumer&lt;<a href="../../../../com/nuix/superutilities/regex/ItemRegexMatchCollection.html" title="class in com.nuix.superutilities.regex">ItemRegexMatchCollection</a>&gt;&nbsp;callback)</code>
 <div class="block">Scans a series of items, providing each item's matches to callback as they are obtained.</div>
 </td>
 </tr>
-<tr id="i16" class="altColor">
+<tr id="i18" class="altColor">
 <td class="colFirst"><code>void</code></td>
 <td class="colLast"><code><span class="memberNameLink"><a href="../../../../com/nuix/superutilities/regex/RegexScanner.html#scanItemsParallel-java.util.Collection-java.util.function.Consumer-">scanItemsParallel</a></span>(java.util.Collection&lt;nuix.Item&gt;&nbsp;items,
                  java.util.function.Consumer&lt;<a href="../../../../com/nuix/superutilities/regex/ItemRegexMatchCollection.html" title="class in com.nuix.superutilities.regex">ItemRegexMatchCollection</a>&gt;&nbsp;callback)</code>
 <div class="block">Scans a series of items, providing each item's matches to callback as they are obtained.</div>
 </td>
 </tr>
-<tr id="i17" class="rowColor">
+<tr id="i19" class="rowColor">
 <td class="colFirst"><code>void</code></td>
 <td class="colLast"><code><span class="memberNameLink"><a href="../../../../com/nuix/superutilities/regex/RegexScanner.html#scanItemsParallel-java.util.Collection-java.util.function.Consumer-int-">scanItemsParallel</a></span>(java.util.Collection&lt;nuix.Item&gt;&nbsp;items,
                  java.util.function.Consumer&lt;<a href="../../../../com/nuix/superutilities/regex/ItemRegexMatchCollection.html" title="class in com.nuix.superutilities.regex">ItemRegexMatchCollection</a>&gt;&nbsp;callback,
@@ -251,56 +259,64 @@ extends java.lang.Object</pre>
 <div class="block">Scans a series of items, providing each item's matches to callback as they are obtained.</div>
 </td>
 </tr>
-<tr id="i18" class="altColor">
+<tr id="i20" class="altColor">
 <td class="colFirst"><code>void</code></td>
 <td class="colLast"><code><span class="memberNameLink"><a href="../../../../com/nuix/superutilities/regex/RegexScanner.html#setCaptureContextualText-boolean-">setCaptureContextualText</a></span>(boolean&nbsp;captureContextualText)</code>&nbsp;</td>
 </tr>
-<tr id="i19" class="rowColor">
+<tr id="i21" class="rowColor">
 <td class="colFirst"><code>void</code></td>
 <td class="colLast"><code><span class="memberNameLink"><a href="../../../../com/nuix/superutilities/regex/RegexScanner.html#setCaseSensitive-boolean-">setCaseSensitive</a></span>(boolean&nbsp;caseSensitive)</code>&nbsp;</td>
 </tr>
-<tr id="i20" class="altColor">
+<tr id="i22" class="altColor">
 <td class="colFirst"><code>void</code></td>
 <td class="colLast"><code><span class="memberNameLink"><a href="../../../../com/nuix/superutilities/regex/RegexScanner.html#setContextSize-int-">setContextSize</a></span>(int&nbsp;contextSize)</code>&nbsp;</td>
 </tr>
-<tr id="i21" class="rowColor">
+<tr id="i23" class="rowColor">
 <td class="colFirst"><code>void</code></td>
 <td class="colLast"><code><span class="memberNameLink"><a href="../../../../com/nuix/superutilities/regex/RegexScanner.html#setCustomMetadataToScan-java.util.List-">setCustomMetadataToScan</a></span>(java.util.List&lt;java.lang.String&gt;&nbsp;fieldsToScan)</code>&nbsp;</td>
 </tr>
-<tr id="i22" class="altColor">
+<tr id="i24" class="altColor">
+<td class="colFirst"><code>void</code></td>
+<td class="colLast"><code><span class="memberNameLink"><a href="../../../../com/nuix/superutilities/regex/RegexScanner.html#setMatchNamedEntityValues-boolean-">setMatchNamedEntityValues</a></span>(boolean&nbsp;matchNamedEntityValues)</code>&nbsp;</td>
+</tr>
+<tr id="i25" class="rowColor">
 <td class="colFirst"><code>static void</code></td>
 <td class="colLast"><code><span class="memberNameLink"><a href="../../../../com/nuix/superutilities/regex/RegexScanner.html#setMaxToStringLength-int-">setMaxToStringLength</a></span>(int&nbsp;maxLength)</code>
 <div class="block">Configures the character count threshold in which the CharSequence TextObject of an item, obtained from the
  API, is first converted to a String object before being scanned for regular expression matches.</div>
 </td>
 </tr>
-<tr id="i23" class="rowColor">
-<td class="colFirst"><code>void</code></td>
-<td class="colLast"><code><span class="memberNameLink"><a href="../../../../com/nuix/superutilities/regex/RegexScanner.html#setPatterns-java.util.List-">setPatterns</a></span>(java.util.List&lt;<a href="../../../../com/nuix/superutilities/regex/PatternInfo.html" title="class in com.nuix.superutilities.regex">PatternInfo</a>&gt;&nbsp;patterns)</code>&nbsp;</td>
-</tr>
-<tr id="i24" class="altColor">
-<td class="colFirst"><code>void</code></td>
-<td class="colLast"><code><span class="memberNameLink"><a href="../../../../com/nuix/superutilities/regex/RegexScanner.html#setPropertiesToScan-java.util.List-">setPropertiesToScan</a></span>(java.util.List&lt;java.lang.String&gt;&nbsp;propertiesToScan)</code>&nbsp;</td>
-</tr>
-<tr id="i25" class="rowColor">
-<td class="colFirst"><code>void</code></td>
-<td class="colLast"><code><span class="memberNameLink"><a href="../../../../com/nuix/superutilities/regex/RegexScanner.html#setScanContent-boolean-">setScanContent</a></span>(boolean&nbsp;scanContent)</code>&nbsp;</td>
-</tr>
 <tr id="i26" class="altColor">
 <td class="colFirst"><code>void</code></td>
-<td class="colLast"><code><span class="memberNameLink"><a href="../../../../com/nuix/superutilities/regex/RegexScanner.html#setScanCustomMetadata-boolean-">setScanCustomMetadata</a></span>(boolean&nbsp;scanCustomMetadata)</code>&nbsp;</td>
+<td class="colLast"><code><span class="memberNameLink"><a href="../../../../com/nuix/superutilities/regex/RegexScanner.html#setNamedEntityTypes-java.util.Collection-">setNamedEntityTypes</a></span>(java.util.Collection&lt;java.lang.String&gt;&nbsp;namedEntityTypes)</code>&nbsp;</td>
 </tr>
 <tr id="i27" class="rowColor">
 <td class="colFirst"><code>void</code></td>
-<td class="colLast"><code><span class="memberNameLink"><a href="../../../../com/nuix/superutilities/regex/RegexScanner.html#setScanProperties-boolean-">setScanProperties</a></span>(boolean&nbsp;scanProperties)</code>&nbsp;</td>
+<td class="colLast"><code><span class="memberNameLink"><a href="../../../../com/nuix/superutilities/regex/RegexScanner.html#setPatterns-java.util.List-">setPatterns</a></span>(java.util.List&lt;<a href="../../../../com/nuix/superutilities/regex/PatternInfo.html" title="class in com.nuix.superutilities.regex">PatternInfo</a>&gt;&nbsp;patterns)</code>&nbsp;</td>
 </tr>
 <tr id="i28" class="altColor">
+<td class="colFirst"><code>void</code></td>
+<td class="colLast"><code><span class="memberNameLink"><a href="../../../../com/nuix/superutilities/regex/RegexScanner.html#setPropertiesToScan-java.util.List-">setPropertiesToScan</a></span>(java.util.List&lt;java.lang.String&gt;&nbsp;propertiesToScan)</code>&nbsp;</td>
+</tr>
+<tr id="i29" class="rowColor">
+<td class="colFirst"><code>void</code></td>
+<td class="colLast"><code><span class="memberNameLink"><a href="../../../../com/nuix/superutilities/regex/RegexScanner.html#setScanContent-boolean-">setScanContent</a></span>(boolean&nbsp;scanContent)</code>&nbsp;</td>
+</tr>
+<tr id="i30" class="altColor">
+<td class="colFirst"><code>void</code></td>
+<td class="colLast"><code><span class="memberNameLink"><a href="../../../../com/nuix/superutilities/regex/RegexScanner.html#setScanCustomMetadata-boolean-">setScanCustomMetadata</a></span>(boolean&nbsp;scanCustomMetadata)</code>&nbsp;</td>
+</tr>
+<tr id="i31" class="rowColor">
+<td class="colFirst"><code>void</code></td>
+<td class="colLast"><code><span class="memberNameLink"><a href="../../../../com/nuix/superutilities/regex/RegexScanner.html#setScanProperties-boolean-">setScanProperties</a></span>(boolean&nbsp;scanProperties)</code>&nbsp;</td>
+</tr>
+<tr id="i32" class="altColor">
 <td class="colFirst"><code>void</code></td>
 <td class="colLast"><code><span class="memberNameLink"><a href="../../../../com/nuix/superutilities/regex/RegexScanner.html#whenErrorOccurs-java.util.function.Consumer-">whenErrorOccurs</a></span>(java.util.function.Consumer&lt;<a href="../../../../com/nuix/superutilities/regex/RegexScanError.html" title="class in com.nuix.superutilities.regex">RegexScanError</a>&gt;&nbsp;errorCallback)</code>
 <div class="block">Allows you to provide a callback which will be invoked when an error occurs during scanning.</div>
 </td>
 </tr>
-<tr id="i29" class="rowColor">
+<tr id="i33" class="rowColor">
 <td class="colFirst"><code>void</code></td>
 <td class="colLast"><code><span class="memberNameLink"><a href="../../../../com/nuix/superutilities/regex/RegexScanner.html#whenProgressUpdated-java.util.function.Consumer-">whenProgressUpdated</a></span>(java.util.function.Consumer&lt;java.lang.Integer&gt;&nbsp;callback)</code>
 <div class="block">Allows you to provide a callback which will be invoked when progress updates occur.</div>
@@ -689,6 +705,42 @@ extends java.lang.Object</pre>
 <li class="blockList">
 <h4>setCustomMetadataToScan</h4>
 <pre>public&nbsp;void&nbsp;setCustomMetadataToScan(java.util.List&lt;java.lang.String&gt;&nbsp;fieldsToScan)</pre>
+</li>
+</ul>
+<a name="getMatchNamedEntityValues--">
+<!--   -->
+</a>
+<ul class="blockList">
+<li class="blockList">
+<h4>getMatchNamedEntityValues</h4>
+<pre>public&nbsp;boolean&nbsp;getMatchNamedEntityValues()</pre>
+</li>
+</ul>
+<a name="setMatchNamedEntityValues-boolean-">
+<!--   -->
+</a>
+<ul class="blockList">
+<li class="blockList">
+<h4>setMatchNamedEntityValues</h4>
+<pre>public&nbsp;void&nbsp;setMatchNamedEntityValues(boolean&nbsp;matchNamedEntityValues)</pre>
+</li>
+</ul>
+<a name="getNamedEntityTypes--">
+<!--   -->
+</a>
+<ul class="blockList">
+<li class="blockList">
+<h4>getNamedEntityTypes</h4>
+<pre>public&nbsp;java.util.Set&lt;java.lang.String&gt;&nbsp;getNamedEntityTypes()</pre>
+</li>
+</ul>
+<a name="setNamedEntityTypes-java.util.Collection-">
+<!--   -->
+</a>
+<ul class="blockList">
+<li class="blockList">
+<h4>setNamedEntityTypes</h4>
+<pre>public&nbsp;void&nbsp;setNamedEntityTypes(java.util.Collection&lt;java.lang.String&gt;&nbsp;namedEntityTypes)</pre>
 </li>
 </ul>
 <a name="abortScan--">
