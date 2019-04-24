@@ -167,7 +167,7 @@ public class BulkRedactorSettings {
 	/***
 	 * Converts a plain text term to a regular expression which is case insensitive.
 	 * This is done by generating a regular expression with a character class matching each letter in both lower
-	 * case and upper case and adding "\b" before and after.  For example if the input term is "cat", this returns
+	 * case and upper case.  For example if the input term is "cat", this returns
 	 * a regular expression "[Cc][Aa][Tt]".
 	 * @param inputTerm Term to convert to a case insensitive regular expression
 	 * @return String Regular expression that is case insensitive regular expression for input term
