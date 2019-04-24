@@ -90,7 +90,7 @@ public class BulkRedactor {
 		logger.debug("Fragment Segments:");
 		for(TextSegment segment : segments) {
 			Rectangle segRect = segment.getRectangle();
-			double y = Precision.round(segRect.getLLY(), 6);
+			double y = Precision.round(segRect.getLLY(), 2);
 			if(!groupedByLine.containsKey(y)) {
 				groupedByLine.put(y, new ArrayList<TextSegment>());
 			}
@@ -137,8 +137,8 @@ public class BulkRedactor {
 			// Markup in Nuix seems to come out a little taller than it needs to so we are going
 			// to make some small tweaks to the converted region to trim a tiny bit off the top
 			double heightUnit = height * 0.01; // 1% of region height
-			y += heightUnit * 7; // Translate down 7% of height
-			height -= heightUnit * 7; // Then remove 7% from height (move bottom edge back up a little)
+			y += heightUnit * 5; // Translate down 5% of height
+			height -= heightUnit * 5; // Then remove 5% from height (move bottom edge back up a little)
 			
 			NuixImageAnnotationRegion region = new NuixImageAnnotationRegion();
 			region.setX(x);
@@ -213,9 +213,14 @@ public class BulkRedactor {
 		int currentIteration = 0;
 		int matches = 0;
 		
-		logMessage("Using expressions:");
+		logMessage("Regular Expressions:");
 		for(String expression : settings.getExpressions()) {
 			logMessage(expression);
+		}
+		
+		logMessage("Named Entities:");
+		for(String namedEntity : settings.getNamedEntityTypes()) {
+			logMessage(namedEntity);
 		}
 		
 		for(Item item : scopeItems) {
