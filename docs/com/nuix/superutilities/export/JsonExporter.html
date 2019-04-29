@@ -17,7 +17,7 @@
     catch(err) {
     }
 //-->
-var methods = {"i0":10,"i1":10,"i2":10,"i3":10,"i4":10,"i5":10,"i6":10,"i7":9,"i8":9,"i9":9,"i10":10,"i11":9,"i12":9,"i13":10,"i14":10,"i15":10,"i16":10,"i17":10,"i18":10,"i19":10};
+var methods = {"i0":10,"i1":10,"i2":10,"i3":10,"i4":10,"i5":10,"i6":10,"i7":10,"i8":9,"i9":9,"i10":9,"i11":10,"i12":9,"i13":9,"i14":10,"i15":10,"i16":10,"i17":10,"i18":10,"i19":10,"i20":10};
 var tabs = {65535:["t0","All Methods"],1:["t1","Static Methods"],2:["t2","Instance Methods"],8:["t4","Concrete Methods"]};
 var altColor = "altColor";
 var rowColor = "rowColor";
@@ -146,124 +146,130 @@ extends java.lang.Object</pre>
 <th class="colLast" scope="col">Method and Description</th>
 </tr>
 <tr id="i0" class="altColor">
+<td class="colFirst"><code>java.lang.String</code></td>
+<td class="colLast"><code><span class="memberNameLink"><a href="../../../../com/nuix/superutilities/export/JsonExporter.html#convertItemToJsonString-nuix.Item-">convertItemToJsonString</a></span>(nuix.Item&nbsp;item)</code>
+<div class="block">Converts an item to a JSON String representation.</div>
+</td>
+</tr>
+<tr id="i1" class="rowColor">
 <td class="colFirst"><code>void</code></td>
 <td class="colLast"><code><span class="memberNameLink"><a href="../../../../com/nuix/superutilities/export/JsonExporter.html#exportItemAsJson-nuix.Item-java.io.File-">exportItemAsJson</a></span>(nuix.Item&nbsp;item,
                 java.io.File&nbsp;exportFilePath)</code>
 <div class="block">Exports an item as a JSON representation.</div>
 </td>
 </tr>
-<tr id="i1" class="rowColor">
+<tr id="i2" class="altColor">
 <td class="colFirst"><code>boolean</code></td>
 <td class="colLast"><code><span class="memberNameLink"><a href="../../../../com/nuix/superutilities/export/JsonExporter.html#getIncludeCustomMetadata--">getIncludeCustomMetadata</a></span>()</code>
 <div class="block">Gets whether item custom metadata will be included in generated JSON</div>
 </td>
 </tr>
-<tr id="i2" class="altColor">
+<tr id="i3" class="rowColor">
 <td class="colFirst"><code>boolean</code></td>
 <td class="colLast"><code><span class="memberNameLink"><a href="../../../../com/nuix/superutilities/export/JsonExporter.html#getIncludeProperties--">getIncludeProperties</a></span>()</code>
 <div class="block">Gets whether item metadata properties will be included in generated JSON</div>
 </td>
 </tr>
-<tr id="i3" class="rowColor">
+<tr id="i4" class="altColor">
 <td class="colFirst"><code>boolean</code></td>
 <td class="colLast"><code><span class="memberNameLink"><a href="../../../../com/nuix/superutilities/export/JsonExporter.html#getIncludeTags--">getIncludeTags</a></span>()</code>
 <div class="block">Gets whether items' tags will be included in generated JSON</div>
 </td>
 </tr>
-<tr id="i4" class="altColor">
+<tr id="i5" class="rowColor">
 <td class="colFirst"><code>boolean</code></td>
 <td class="colLast"><code><span class="memberNameLink"><a href="../../../../com/nuix/superutilities/export/JsonExporter.html#getIncludeText--">getIncludeText</a></span>()</code>
 <div class="block">Gets whether item content text will be included in generated JSON</div>
 </td>
 </tr>
-<tr id="i5" class="rowColor">
+<tr id="i6" class="altColor">
 <td class="colFirst"><code>boolean</code></td>
 <td class="colLast"><code><span class="memberNameLink"><a href="../../../../com/nuix/superutilities/export/JsonExporter.html#getPrettyPrint--">getPrettyPrint</a></span>()</code>
 <div class="block">Gets whether JSON will be "pretty printed".</div>
 </td>
 </tr>
-<tr id="i6" class="altColor">
+<tr id="i7" class="rowColor">
 <td class="colFirst"><code>boolean</code></td>
 <td class="colLast"><code><span class="memberNameLink"><a href="../../../../com/nuix/superutilities/export/JsonExporter.html#getSerializeNulls--">getSerializeNulls</a></span>()</code>
 <div class="block">Gets whether entries with a null value are included in the generated JSON</div>
 </td>
 </tr>
-<tr id="i7" class="rowColor">
+<tr id="i8" class="altColor">
 <td class="colFirst"><code>static java.util.Map&lt;java.lang.String,java.lang.Object&gt;</code></td>
 <td class="colLast"><code><span class="memberNameLink"><a href="../../../../com/nuix/superutilities/export/JsonExporter.html#mapAddress-nuix.Address-">mapAddress</a></span>(nuix.Address&nbsp;address)</code>
 <div class="block">Converts a Nuix Address object to a HashMap&lt;String,Object&gt; for JSON serialization.</div>
 </td>
 </tr>
-<tr id="i8" class="altColor">
+<tr id="i9" class="rowColor">
 <td class="colFirst"><code>static java.util.List&lt;java.util.Map&lt;java.lang.String,java.lang.Object&gt;&gt;</code></td>
 <td class="colLast"><code><span class="memberNameLink"><a href="../../../../com/nuix/superutilities/export/JsonExporter.html#mapAddresses-java.util.List-">mapAddresses</a></span>(java.util.List&lt;nuix.Address&gt;&nbsp;addresses)</code>
 <div class="block">Converts a List of Nuix Address objects to a list of HashMap&lt;String,Object&gt; for JSON serialization.</div>
 </td>
 </tr>
-<tr id="i9" class="rowColor">
+<tr id="i10" class="altColor">
 <td class="colFirst"><code>static java.util.Map&lt;java.lang.String,java.lang.Object&gt;</code></td>
 <td class="colLast"><code><span class="memberNameLink"><a href="../../../../com/nuix/superutilities/export/JsonExporter.html#mapCommunication-nuix.Communication-">mapCommunication</a></span>(nuix.Communication&nbsp;comm)</code>
 <div class="block">Converts a Nuix Communication object to a HashMap&lt;String,Object&gt; for JSON serialization.</div>
 </td>
 </tr>
-<tr id="i10" class="altColor">
+<tr id="i11" class="rowColor">
 <td class="colFirst"><code>java.util.Map&lt;java.lang.String,java.lang.Object&gt;</code></td>
 <td class="colLast"><code><span class="memberNameLink"><a href="../../../../com/nuix/superutilities/export/JsonExporter.html#mapItem-nuix.Item-">mapItem</a></span>(nuix.Item&nbsp;item)</code>
 <div class="block">Converts a Nuix item into a series of nested Map objects, which later can be easily serialized
  into JSON.</div>
 </td>
 </tr>
-<tr id="i11" class="rowColor">
+<tr id="i12" class="altColor">
 <td class="colFirst"><code>static java.util.Map&lt;java.lang.String,java.lang.String&gt;</code></td>
 <td class="colLast"><code><span class="memberNameLink"><a href="../../../../com/nuix/superutilities/export/JsonExporter.html#mapItemType-nuix.ItemType-">mapItemType</a></span>(nuix.ItemType&nbsp;itemType)</code>
 <div class="block">Converts a Nuix ItemType object to a HashMap&lt;String,String&gt; for JSON serialization.</div>
 </td>
 </tr>
-<tr id="i12" class="altColor">
+<tr id="i13" class="rowColor">
 <td class="colFirst"><code>static java.util.Map&lt;java.lang.String,java.lang.Object&gt;</code></td>
 <td class="colLast"><code><span class="memberNameLink"><a href="../../../../com/nuix/superutilities/export/JsonExporter.html#mapProperties-java.util.Map-">mapProperties</a></span>(java.util.Map&lt;java.lang.String,java.lang.Object&gt;&nbsp;properties)</code>
 <div class="block">This method generates a <code>Map</code> of the properties for an item, organizing properties into
  sub-categories based on the data type of their values.</div>
 </td>
 </tr>
-<tr id="i13" class="rowColor">
+<tr id="i14" class="altColor">
 <td class="colFirst"><code>java.util.Map&lt;java.lang.String,java.lang.Object&gt;</code></td>
 <td class="colLast"><code><span class="memberNameLink"><a href="../../../../com/nuix/superutilities/export/JsonExporter.html#mapSourceItem-nuix.SourceItem-">mapSourceItem</a></span>(nuix.SourceItem&nbsp;sourceItem)</code>
 <div class="block">This method takes a provided SourceItem and generates a series of nested <code>Map</code> instances
  representing the SourceItem and its data.</div>
 </td>
 </tr>
-<tr id="i14" class="altColor">
+<tr id="i15" class="rowColor">
 <td class="colFirst"><code>void</code></td>
 <td class="colLast"><code><span class="memberNameLink"><a href="../../../../com/nuix/superutilities/export/JsonExporter.html#setIncludeCustomMetadata-boolean-">setIncludeCustomMetadata</a></span>(boolean&nbsp;includeCustomMetadata)</code>
 <div class="block">Sets whether item custom metadata will be included in generated JSON</div>
 </td>
 </tr>
-<tr id="i15" class="rowColor">
+<tr id="i16" class="altColor">
 <td class="colFirst"><code>void</code></td>
 <td class="colLast"><code><span class="memberNameLink"><a href="../../../../com/nuix/superutilities/export/JsonExporter.html#setIncludeProperties-boolean-">setIncludeProperties</a></span>(boolean&nbsp;includeProperties)</code>
 <div class="block">Sets whether item metadata properties will be included in generated JSON</div>
 </td>
 </tr>
-<tr id="i16" class="altColor">
+<tr id="i17" class="rowColor">
 <td class="colFirst"><code>void</code></td>
 <td class="colLast"><code><span class="memberNameLink"><a href="../../../../com/nuix/superutilities/export/JsonExporter.html#setIncludeTags-boolean-">setIncludeTags</a></span>(boolean&nbsp;includeTags)</code>
 <div class="block">Sets whether items' tags will be included in generated JSON</div>
 </td>
 </tr>
-<tr id="i17" class="rowColor">
+<tr id="i18" class="altColor">
 <td class="colFirst"><code>void</code></td>
 <td class="colLast"><code><span class="memberNameLink"><a href="../../../../com/nuix/superutilities/export/JsonExporter.html#setIncludeText-boolean-">setIncludeText</a></span>(boolean&nbsp;includeText)</code>
 <div class="block">Sets whether item content text will be included in generated JSON</div>
 </td>
 </tr>
-<tr id="i18" class="altColor">
+<tr id="i19" class="rowColor">
 <td class="colFirst"><code>void</code></td>
 <td class="colLast"><code><span class="memberNameLink"><a href="../../../../com/nuix/superutilities/export/JsonExporter.html#setPrettyPrint-boolean-">setPrettyPrint</a></span>(boolean&nbsp;prettyPrint)</code>
 <div class="block">Sets whether JSON will be "pretty printed".</div>
 </td>
 </tr>
-<tr id="i19" class="rowColor">
+<tr id="i20" class="altColor">
 <td class="colFirst"><code>void</code></td>
 <td class="colLast"><code><span class="memberNameLink"><a href="../../../../com/nuix/superutilities/export/JsonExporter.html#setSerializeNulls-boolean-">setSerializeNulls</a></span>(boolean&nbsp;serializeNulls)</code>
 <div class="block">Sets whether entries with null value are included in the generated JSON</div>
@@ -530,6 +536,23 @@ extends java.lang.Object</pre>
 <dt><span class="paramLabel">Parameters:</span></dt>
 <dd><code>item</code> - The item to serialize into JSON</dd>
 <dd><code>exportFilePath</code> - File path to write the JSON result to.</dd>
+</dl>
+</li>
+</ul>
+<a name="convertItemToJsonString-nuix.Item-">
+<!--   -->
+</a>
+<ul class="blockList">
+<li class="blockList">
+<h4>convertItemToJsonString</h4>
+<pre>public&nbsp;java.lang.String&nbsp;convertItemToJsonString(nuix.Item&nbsp;item)</pre>
+<div class="block">Converts an item to a JSON String representation.  The Item's information is first converted into a series of Map objects
+ by calling <a href="../../../../com/nuix/superutilities/export/JsonExporter.html#mapItem-nuix.Item-"><code>mapItem(Item)</code></a>, result of which is then serialized into a JSON String and returned.</div>
+<dl>
+<dt><span class="paramLabel">Parameters:</span></dt>
+<dd><code>item</code> - The item to serialize into JSON</dd>
+<dt><span class="returnLabel">Returns:</span></dt>
+<dd>A JSON String representation of the given item.</dd>
 </dl>
 </li>
 </ul>
