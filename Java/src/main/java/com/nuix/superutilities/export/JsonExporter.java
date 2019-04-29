@@ -56,7 +56,8 @@ public class JsonExporter {
 	private Consumer<Map<String,Object>> beforeSerializationCallback = null;
 	
 	/***
-	 * Allows you to provide a callback which can inspect or modify the nested series of Maps before they are serialized by GSON to JSON.
+	 * Allows you to provide a callback which can inspect or modify the nested series of Maps before they are serialized by GSON to JSON
+	 * by {{@link #exportItemAsJson(Item, File)} or {{@link #convertItemToJsonString(Item)}.
 	 * @param callback A callback which may inspect or modify the nested Map form of an item before it is serialized to JSON
 	 */
 	public void beforeSerialization(Consumer<Map<String,Object>> callback) {
