@@ -298,6 +298,24 @@ public class JsonExporter {
 	}
 	
 	/***
+	 * Converts an item to a JSON String representation.  The Item's information is first converted into a series of Map objects
+	 * by calling {@link JsonExporter#mapItem(Item)}, result of which is then serialized into a JSON String and returned.
+	 * @param item The item to serialize into JSON
+	 * @return A JSON String representation of the given item.
+	 */
+	public String convertItemToJsonString(Item item) {
+		//Configure JSON instance based on settings
+		Gson gson = null;
+		GsonBuilder gsonBuilder = new GsonBuilder();
+		if(serializeNulls) gsonBuilder.serializeNulls();
+		if(prettyPrint) gsonBuilder.setPrettyPrinting();
+		gson = gsonBuilder.create();
+		Map<String,Object> mappedData = mapItem(item); 
+		String asJson = gson.toJson(mappedData);
+		return asJson;
+	}
+	
+	/***
 	 * This method generates a {@link java.util.Map} of the properties for an item, organizing properties into
 	 * sub-categories based on the data type of their values.
 	 * @param properties A Nuix item properties map to convert

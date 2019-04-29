@@ -3,9 +3,9 @@ require File.join(script_directory,"SuperUtilities.jar")
 java_import com.nuix.superutilities.SuperUtilities
 $su = SuperUtilities.init($utilities,NUIX_VERSION)
 
-$current_case = $utilities.getCaseFactory.open("C:\\@Nuix\\Cases\\Ziggy")
+$current_case = $utilities.getCaseFactory.open("D:\\cases\\Ziggy")
 
-export_directory = "C:\\Temp\\JSON\\"
+export_directory = "D:\\Temp\\JSON\\"
 java.io.File.new(export_directory).mkdirs
 items = $current_case.search("")
 items = $utilities.getItemSorter.sortItemsByPosition(items)
