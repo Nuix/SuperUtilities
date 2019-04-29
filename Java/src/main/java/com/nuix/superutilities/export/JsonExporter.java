@@ -9,6 +9,7 @@ import java.util.HashMap;
 import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.function.Consumer;
 import java.util.stream.Collectors;
 
 import org.joda.time.DateTime;
@@ -47,6 +48,20 @@ public class JsonExporter {
 	private boolean includeTags = true;
 	private boolean serializeNulls = true;
 	private boolean prettyPrint = true;
+	
+	private boolean includeParentGuid = true;
+	private boolean includeChildGuids = true;
+	private boolean includePathGuids = true;
+	
+	private Consumer<Map<String,Object>> beforeSerializationCallback = null;
+	
+	/***
+	 * Allows you to provide a callback which can inspect or modify the nested series of Maps before they are serialized by GSON to JSON.
+	 * @param callback A callback which may inspect or modify the nested Map form of an item before it is serialized to JSON
+	 */
+	public void beforeSerialization(Consumer<Map<String,Object>> callback) {
+		beforeSerializationCallback = callback;
+	}
 	
 	/***
 	 * Gets whether item content text will be included in generated JSON
@@ -110,6 +125,54 @@ public class JsonExporter {
 	 */
 	public void setIncludeTags(boolean includeTags) {
 		this.includeTags = includeTags;
+	}
+	
+	/***
+	 * Gets whether parent GUID should be serialized when calling {@link #mapItem(Item)}, {{@link #exportItemAsJson(Item, File)} or {{@link #convertItemToJsonString(Item)}.
+	 * @return True if parent GUID will be serialized.
+	 */
+	public boolean getIncludeParentGuid() {
+		return includeParentGuid;
+	}
+
+	/***
+	 * Sets whether parent GUID should be serialized when calling {@link #mapItem(Item)}, {{@link #exportItemAsJson(Item, File)} or {{@link #convertItemToJsonString(Item)}.
+	 * @param includeParentGuid True if parent GUID should be serialized.
+	 */
+	public void setIncludeParentGuid(boolean includeParentGuid) {
+		this.includeParentGuid = includeParentGuid;
+	}
+
+	/***
+	 * Gets whether child GUIDs should be serialized when calling {@link #mapItem(Item)}, {{@link #exportItemAsJson(Item, File)} or {{@link #convertItemToJsonString(Item)}.
+	 * @return True if child GUIDs will be serialized
+	 */
+	public boolean getIncludeChildGuids() {
+		return includeChildGuids;
+	}
+
+	/***
+	 * Sets whether child GUIDs should be serialized when calling {@link #mapItem(Item)}, {{@link #exportItemAsJson(Item, File)} or {{@link #convertItemToJsonString(Item)}.
+	 * @param includeChildGuids True if child GUIDs should be serialized
+	 */
+	public void setIncludeChildGuids(boolean includeChildGuids) {
+		this.includeChildGuids = includeChildGuids;
+	}
+
+	/***
+	 * Gets whether path GUIDs should be serialized when calling {@link #mapItem(Item)}, {{@link #exportItemAsJson(Item, File)} or {{@link #convertItemToJsonString(Item)}.
+	 * @return True if path GUIDs will be serialized
+	 */
+	public boolean getIncludePathGuids() {
+		return includePathGuids;
+	}
+
+	/***
+	 * Sets whether path GUIDs should be serialized when calling {@link #mapItem(Item)}, {{@link #exportItemAsJson(Item, File)} or {{@link #convertItemToJsonString(Item)}.
+	 * @param includePathGuids True if path GUIDs should be serialized
+	 */
+	public void setIncludePathGuids(boolean includePathGuids) {
+		this.includePathGuids = includePathGuids;
 	}
 
 	/***
@@ -202,11 +265,21 @@ public class JsonExporter {
 		itemMap.put("ItemType",mapItemType(item.getType()));
 		itemMap.put("GUID", item.getGuid());
 		itemMap.put("PathNames", item.getPathNames());
-		Item parent = item.getParent();
-		if(parent != null){ itemMap.put("ParentGUID", parent.getGuid()); }
-		else { itemMap.put("ParentGUID", null); }
-		itemMap.put("PathGUIDs", item.getPath().stream().map(i -> i.getGuid()).collect(Collectors.toList()));
-		itemMap.put("ChildGUIDs", item.getChildren().stream().map(i -> i.getGuid()).collect(Collectors.toList()));
+		
+		if(includeParentGuid) {
+			Item parent = item.getParent();
+			if(parent != null){ itemMap.put("ParentGUID", parent.getGuid()); }
+			else { itemMap.put("ParentGUID", null); }	
+		}
+		
+		if(includePathGuids) {
+			itemMap.put("PathGUIDs", item.getPath().stream().map(i -> i.getGuid()).collect(Collectors.toList()));	
+		}
+		
+		if(includeChildGuids) {
+			itemMap.put("ChildGUIDs", item.getChildren().stream().map(i -> i.getGuid()).collect(Collectors.toList()));	
+		}
+		
 		itemMap.put("Name",item.getLocalisedName());
 		
 		itemMap.put("MD5", item.getDigests().getMd5());
@@ -221,6 +294,7 @@ public class JsonExporter {
 		
 		itemMap.put("CorrectedExtension", item.getCorrectedExtension());
 		itemMap.put("OriginalExtension", item.getOriginalExtension());
+		
 		DateTime itemDate = item.getDate();
 		if(itemDate != null){
 			itemMap.put("ItemDate", item.getDate().toString());	
@@ -288,7 +362,8 @@ public class JsonExporter {
 		try {
 			fos = new FileOutputStream(exportFilePath);
 			bw = new BufferedWriter(new OutputStreamWriter(fos));
-			Map<String,Object> mappedData = mapItem(item); 
+			Map<String,Object> mappedData = mapItem(item);
+			if(beforeSerializationCallback != null) { beforeSerializationCallback.accept(mappedData); }
 			String asJson = gson.toJson(mappedData);
 			bw.write(asJson);
 			bw.close();
@@ -310,7 +385,8 @@ public class JsonExporter {
 		if(serializeNulls) gsonBuilder.serializeNulls();
 		if(prettyPrint) gsonBuilder.setPrettyPrinting();
 		gson = gsonBuilder.create();
-		Map<String,Object> mappedData = mapItem(item); 
+		Map<String,Object> mappedData = mapItem(item);
+		if(beforeSerializationCallback != null) { beforeSerializationCallback.accept(mappedData); }
 		String asJson = gson.toJson(mappedData);
 		return asJson;
 	}
