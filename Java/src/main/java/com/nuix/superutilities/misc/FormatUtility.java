@@ -13,6 +13,7 @@ import java.util.regex.Pattern;
 import javax.xml.bind.DatatypeConverter;
 
 import org.apache.commons.lang3.StringUtils;
+import org.apache.commons.lang3.exception.ExceptionUtils;
 import org.joda.time.DateTime;
 
 /***
@@ -332,5 +333,17 @@ public class FormatUtility {
 		}
 		
 		return result.toString();
+	}
+	
+	public static String debugString(Map<String,?> map) {
+		StringJoiner result = new StringJoiner("\n");
+		for(Map.Entry<String,?> entry : map.entrySet()){
+			result.add(String.format("'%s' => '%s'",entry.getKey(), getInstance().convertToString(entry.getValue())));
+		}
+		return result.toString();
+	}
+	
+	public static String debugString(Exception exc) {
+		return ExceptionUtils.getStackTrace(exc);
 	}
 }

@@ -49,6 +49,8 @@ public class PlaceholderResolver {
 	 * <code>{item_date_short}</code> - The item's item date formatted <code>YYYYMMDD</code> or <code style="font-weight:bold">NO_DATE</code> for items without an item date.<br/>
 	 * <code>{item_date_long}</code> - The item's item date formatted <code>YYYYMMdd-HHmmss</code> or <code style="font-weight:bold">NO_DATE</code> for items without an item date.<br/>
 	 * <code>{item_date_year}</code> - The item's item date 4 digit year or <code style="font-weight:bold">NO_DATE</code> for items without an item date.<br/>
+	 * <code>{item_date_month}</code> - The item's item date 2 digit month or <code style="font-weight:bold">NO_DATE</code> for items without an item date.<br/>
+	 * <code>{item_date_day}</code> - The item's item date 2 digit day of the month or <code style="font-weight:bold">NO_DATE</code> for items without an item date.<br/>
 	 * <code>{top_level_guid}</code> - The GUID of the provided item's top level item or <code style="font-weight:bold">ABOVE_TOP_LEVEL</code> for items which are above top level.<br/>
 	 * <code>{top_level_name}</code> - The name (via <code>Item.getLocalisedName</code>) of the provided item's top level item or <code style="font-weight:bold">ABOVE_TOP_LEVEL</code> for items which are above top level.</br>
 	 * <code>{top_level_kind}</code> - The kind (via <code>ItemType.getKind.getName</code>) of the provided item's top level item or <code style="font-weight:bold">ABOVE_TOP_LEVEL</code> for items which are above top level.</br>
@@ -83,10 +85,14 @@ public class PlaceholderResolver {
 			set("item_date_short","NO_DATE");
 			set("item_date_long","NO_DATE");
 			set("item_date_year","NO_DATE");
+			set("item_date_month","NO_DATE");
+			set("item_date_day","NO_DATE");
 		} else {
 			set("item_date_short",itemDate.toString("YYYYMMdd"));
 			set("item_date_long",itemDate.toString("YYYYMMdd-HHmmss"));
 			set("item_date_year",itemDate.toString("YYYY"));
+			set("item_date_month","MM");
+			set("item_date_day","dd");
 		}
 		
 		Item topLevelItem = item.getTopLevelItem();
