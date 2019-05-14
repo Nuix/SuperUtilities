@@ -141,6 +141,7 @@ public class BulkRedactor {
 			height -= heightUnit * 5; // Then remove 5% from height (move bottom edge back up a little)
 			
 			NuixImageAnnotationRegion region = new NuixImageAnnotationRegion();
+			region.setAsposeSourcePageRectangle(pageRect);
 			region.setX(x);
 			region.setY(y - height);
 			region.setHeight(height);
@@ -197,19 +198,25 @@ public class BulkRedactor {
 	 * @param settings The settings used to find and generate the redactions.
 	 * @param scopeItems Items to find and redact.
 	 * @throws Exception If something goes wrong
+	 * @return Returns a list of all match region objects (so they can be reported, inspected, etc)
 	 */
-	public void findAndRedact(Case nuixCase, BulkRedactorSettings settings, Collection<Item> scopeItems) throws Exception {
+	public List<NuixImageAnnotationRegion> findAndMarkup(Case nuixCase, BulkRedactorSettings settings, Collection<Item> scopeItems) throws Exception {
 		if(scopeItems == null || scopeItems.size() < 1) {
 			logger.info("No scopeItems were provided, using all items in case");
 			scopeItems = nuixCase.search("");
 		}
+		
+		List<NuixImageAnnotationRegion> allFoundRegions = new ArrayList<NuixImageAnnotationRegion>();
 		
 		// This is very important!  If Aspose is not initialized, it will be working in evaluation mode
 		// which means it will give partial results!
 		com.nuix.data.util.aspose.AsposePdf.ensureInitialised();
 
 		PdfWorkCache pdfCache = new PdfWorkCache(settings.getTempDirectory());
-		MarkupSet markupSet = settings.getMarkupSet(nuixCase);
+		MarkupSet markupSet = null;
+		if (settings.getApplyRedactions() ||  settings.getApplyRedactions()) {
+			markupSet = settings.getMarkupSet(nuixCase);	
+		}
 		int currentIteration = 0;
 		int matches = 0;
 		
@@ -229,10 +236,15 @@ public class BulkRedactor {
 			
 			List<NuixImageAnnotationRegion> regions = findExpressionsInPdfFile(tempPdf, settings.getExpressions());
 			if(regions.size() > 0) {
+				for(NuixImageAnnotationRegion region : regions) {
+					region.setItem(item);
+				}
+				allFoundRegions.addAll(regions);
 				logMessage("Item with GUID %s had %s matches",item.getGuid(),regions.size());
 				for(NuixImageAnnotationRegion region : regions) {
 					matches++;
-					region.applyRedaction(markupSet, item);
+					if(settings.getApplyRedactions()) { region.applyRedaction(markupSet); }
+					if(settings.getApplyHighLights()) { region.applyHighlight(markupSet); }
 				}	
 			}
 			
@@ -246,10 +258,15 @@ public class BulkRedactor {
 				Set<String> entityExpressions = entityValues.stream().map(v -> BulkRedactorSettings.phraseToExpression(v)).collect(Collectors.toSet());
 				List<NuixImageAnnotationRegion> entityRegions = findExpressionsInPdfFile(tempPdf, entityExpressions);
 				if(entityRegions.size() > 0) {
+					for(NuixImageAnnotationRegion region : regions) {
+						region.setItem(item);
+					}
+					allFoundRegions.addAll(regions);
 					logMessage("Item with GUID %s had %s named entity matches",item.getGuid(),entityRegions.size());
 					for(NuixImageAnnotationRegion region : entityRegions) {
 						matches++;
-						region.applyRedaction(markupSet, item);
+						if(settings.getApplyRedactions()) { region.applyRedaction(markupSet); }
+						if(settings.getApplyHighLights()) { region.applyHighlight(markupSet); }
 					}	
 				}
 			}
@@ -265,5 +282,7 @@ public class BulkRedactor {
 		logMessage("Cleaning up temp directory %s",settings.getTempDirectory());
 		pdfCache.cleanupTemporaryPdfs();
 		logMessage("Temp directory deleted");
+		
+		return allFoundRegions;
 	}
 }

@@ -26,6 +26,9 @@ public class BulkRedactorSettings {
 	private Set<String> expressions = new HashSet<String>();
 	private Set<String> namedEntityTypes = new HashSet<String>();
 	
+	private boolean applyRedactions = true;
+	private boolean applyHighLights = false;
+	
 	/***
 	 * Gets the name of the markup set to which markups will be recorded against.
 	 * @return The name of the markup set to use.
@@ -230,4 +233,22 @@ public class BulkRedactorSettings {
 			addPhrase(phrase);
 		}
 	}
+
+	public boolean getApplyRedactions() {
+		return applyRedactions;
+	}
+
+	public void setApplyRedactions(boolean applyRedactions) {
+		this.applyRedactions = applyRedactions;
+	}
+
+	public boolean getApplyHighLights() {
+		return applyHighLights;
+	}
+
+	public void setApplyHighLights(boolean applyHighLights) {
+		this.applyHighLights = applyHighLights;
+	}
+	
+	
 }
