@@ -107,6 +107,15 @@ public class QueryHelper {
 	}
 	
 	/***
+	 * Returns a query in the form: <code>NOT (a OR b OR c)</code> with a,b and c being expressions provided.
+	 * @param expressions Expressions to be OR'ed and then NOT'ed.
+	 * @return A query in the form: <code>NOT (a OR b OR c)</code>
+	 */
+	public static String notJoinByOr(Collection<String> expressions) {
+		return String.format("NOT (%s)", joinByOr(expressions));
+	}
+	
+	/***
 	 * Generates a query to find items which have a match for any of the provided named entities.
 	 * @param entityNames List of entity names to search for, must be values recognized by Nuix
 	 * @return A query for items having matches for any of the specified named entities such as: named-entities:( company;* OR country;* OR credit-card-num;*)
