@@ -142,7 +142,7 @@ public class TermExpander {
 			}
 		} else if(FuzzyTermInfo.isFuzzyTerm(term)) {
 			if(fuzzyResolutionAlgorithm == SimilarityCalculation.Nuix) {
-				expandFuzzyWithNuix(nuixCase, term, scopeQuery, result);
+				expandFuzzyWithNuix(nuixCase, content, properties, term, scopeQuery, result);
 			} else {
 				expandFuzzyWithSimilarityFiltering(term, result, allTermStats);
 			}
@@ -221,7 +221,7 @@ public class TermExpander {
 	 * @param result Collection to add results to
 	 * @throws IOException
 	 */
-	private void expandFuzzyWithNuix(Case nuixCase, String term, String scopeQuery, List<ExpandedTermInfo> result)
+	private void expandFuzzyWithNuix(Case nuixCase, boolean content, boolean properties, String term, String scopeQuery, List<ExpandedTermInfo> result)
 			throws IOException {
 		// Were going to ask Nuix what terms it gets for the fuzzy search
 		int currentProgress = 0;
@@ -229,7 +229,17 @@ public class TermExpander {
 		// Build out the query we will be submitting to Nuix, including scope query only
 		// if it is not an empty string.
 		List<String> queryPieces = new ArrayList<String>();
-		queryPieces.add(term);
+		String termQueryPiece = "";
+		if(content && properties) {
+			termQueryPiece = String.format("content:%s OR properties:%s", term, term);
+		} else if(content && !properties) {
+			termQueryPiece = String.format("content:%s", term);
+		} else if(properties && !content) {
+			termQueryPiece = String.format("properties:%s", term);
+		} else if(!content && !properties) {
+			return;
+		}
+		queryPieces.add(termQueryPiece);
 		if(!scopeQuery.isEmpty()) { queryPieces.add(scopeQuery); }
 		String query = QueryHelper.parenThenJoinByAnd(queryPieces);
 		
@@ -240,7 +250,7 @@ public class TermExpander {
 			currentProgress++;
 			fireProgressUpdated(currentProgress, items.size());
 			ExtendedItem eItem = (ExtendedItem)item;
-			for(String itemTerm : eItem.getTerms(term)) {
+			for(String itemTerm : eItem.getTerms(termQueryPiece)) {
 				distinctTerms.add(itemTerm);
 			}
 		}
