@@ -36,8 +36,13 @@ inputs = [
 	"jason~1.0",
 ]
 
+# Whether content terms should be included
 content = true
+
+# Whether properties terms should be included
 properties = true
+
+# Scope query restricting which items' terms are included
 scope_query = ""
 
 term_expander = TermExpander.new

@@ -17,24 +17,28 @@ public class ExpandedTermInfo {
 	public void setOriginalTerm(String originalTerm) {
 		this.originalTerm = originalTerm;
 	}
+	
 	public String getMatchedTerm() {
 		return matchedTerm;
 	}
 	public void setMatchedTerm(String matchedTerm) {
 		this.matchedTerm = matchedTerm;
 	}
+	
 	public long getOcurrences() {
 		return ocurrences;
 	}
 	public void setOcurrences(long ocurrences) {
 		this.ocurrences = ocurrences;
 	}
+	
 	public float getSimilarity() {
 		return similarity;
 	}
 	public void setSimilarity(float similarity) {
 		this.similarity = similarity;
 	}
+	
 	@Override
 	public String toString() {
 		return "ExpandedTermInfo [originalTerm=" + originalTerm + ", matchedTerm=" + matchedTerm + ", ocurrences="
