@@ -50,8 +50,8 @@ public class PlaceholderResolver {
 	 * <code>{item_date_long}</code> - The item's item date formatted <code>YYYYMMdd-HHmmss</code> or <code style="font-weight:bold">NO_DATE</code> for items without an item date.<br>
 	 * <code>{item_date_year}</code> - The item's item date 4 digit year or <code style="font-weight:bold">NO_DATE</code> for items without an item date.<br>
 	 * <code>{top_level_guid}</code> - The GUID of the provided item's top level item or <code style="font-weight:bold">ABOVE_TOP_LEVEL</code> for items which are above top level.<br>
-	 * <code>{top_level_name}</code> - The name (via <code>Item.getLocalisedName</code>) of the provided item's top level item or <code style="font-weight:bold">ABOVE_TOP_LEVEL</code> for items which are above top level.</br>
-	 * <code>{top_level_kind}</code> - The kind (via <code>ItemType.getKind.getName</code>) of the provided item's top level item or <code style="font-weight:bold">ABOVE_TOP_LEVEL</code> for items which are above top level.</br>
+	 * <code>{top_level_name}</code> - The name (via <code>Item.getLocalisedName</code>) of the provided item's top level item or <code style="font-weight:bold">ABOVE_TOP_LEVEL</code> for items which are above top level.<br>
+	 * <code>{top_level_kind}</code> - The kind (via <code>ItemType.getKind.getName</code>) of the provided item's top level item or <code style="font-weight:bold">ABOVE_TOP_LEVEL</code> for items which are above top level.<br>
 	 * <code>{original_extension}</code> - The original extension as obtained from Nuix via <code>Item.getOriginalExtension</code> or <code style="font-weight:bold">NO_ORIGINAL_EXTENSION</code> for items where Nuix does not have an original extension value.<br>
 	 * <code>{corrected_extension}</code> - The corrected extension as obtained from Nuix via <code>Item.getCorrectedExtension</code> or <code style="font-weight:bold">NO_CORRECTED_EXTENSION</code> for items where Nuix does not have a corrected extension value.<br> 
 	 * @param item The item used to set all of the item based placeholder values.

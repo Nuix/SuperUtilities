@@ -14,7 +14,7 @@ import nuix.Case;
 import nuix.MarkupSet;
 
 /***
- * Provides settings regarding bulk redaction performed by {@link BulkRedactor#findAndRedact(Case, BulkRedactorSettings, Collection)}.
+ * Provides settings regarding bulk redaction performed by {@link BulkRedactor#findAndMarkup(Case, BulkRedactorSettings, Collection)}.
  * @author Jason Wells
  *
  */
