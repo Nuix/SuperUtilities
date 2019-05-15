@@ -22,6 +22,7 @@ import java.util.Set;
 import java.util.function.Consumer;
 import java.util.stream.Collectors;
 
+import org.apache.log4j.Logger;
 import org.joda.time.DateTime;
 import org.roaringbitmap.RoaringBitmap;
 import org.sqlite.SQLiteConfig;
@@ -37,7 +38,6 @@ import com.google.gson.GsonBuilder;
 import com.google.gson.reflect.TypeToken;
 import com.nuix.superutilities.misc.FormatUtility;
 
-import jxl.common.Logger;
 import nuix.Case;
 import nuix.HistoryEvent;
 import nuix.Item;
