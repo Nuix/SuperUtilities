@@ -86,7 +86,6 @@ public class NuixImageAnnotationRegion {
 	/***
 	 * Applies a highlight based on the region defined by this instance.
 	 * @param markupSet The markup set to which the highlight markup will be added.
-	 * @param item The item to which the highlight will be applied.
 	 * @throws Exception If something goes wrong
 	 */
 	public void applyHighlight(MarkupSet markupSet) throws Exception {
@@ -98,7 +97,7 @@ public class NuixImageAnnotationRegion {
 
 	@Override
 	public String toString() {
-		return "NuixImageAnnotationRegion [x=" + x + ", y=" + y + ", width=" + width + ", height=" + height + ", text="
-				+ text + ", pageNumber=" + pageNumber + "]";
+		return String.format("NuixImageAnnotationRegion [ItemGUID=%s,x=%s,y=%s,width=%s,height=%s,text=%s,pageNumber=%s]",
+				item.getGuid(),x,y,width,height,text,pageNumber);
 	}
 }
