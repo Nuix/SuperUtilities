@@ -26,8 +26,12 @@ public class CaseHistoryHelper implements Iterator<HistoryEvent> {
 		
 		Map<String,Object> settings = new HashMap<String,Object>();
 		settings.put("order", "start_date_ascending");
-		settings.put("startDateAfter", minStart);
-		settings.put("startDateBefore", maxStart);
+		if(minStart != null) {
+			settings.put("startDateAfter", minStart);
+		}
+		if(maxStart != null) {
+			settings.put("startDateBefore", maxStart);
+		}
 		for(String eventType : eventTypes){
 			settings.put("type", eventType);
 			eventIterators.put(eventType, nuixCase.getHistory(settings).iterator());
