@@ -35,25 +35,25 @@ public class PlaceholderResolver {
 	}
 	
 	/***
-	 * Automatically sets various place holders based on the provided item.  Place holders set:<br/><br/>
-	 * <code>{guid}</code> - The item's GUID.<br/>
-	 * <code>{guid_prefix}</code> Characters 0-2 of the item's GUID.  Useful for creating sub-directories based on GUID.<br/>
-	 * <code>{guid_infix}</code> Characters 3-5 of the item's GUID.  Useful for creating sub-directories based on GUID.<br/>
-	 * <code>{name}</code> - The item's name as obtained by <code>Item.getLocalisedName</code><br/>
-	 * <code>{md5}</code> - The item's MD5 or <code style="font-weight:bold">NO_MD5</code> for items without an MD5 value<br/>
-	 * <code>{type}</code> - The item's type name as obtained by <code>ItemType.getLocalisedName</code><br/>
-	 * <code>{mime_type}</code> - The item's mime type as obtained by <code>ItemType.getName</code><br/>
-	 * <code>{kind}</code> - The item's kind name as obtained by <code>ItemType.getKind.getName</code><br/>
-	 * <code>{custodian}</code> - The item's assigned custodian or <code style="font-weight:bold">NO_CUSTODIAN</code> for items without a custodian assigned<br/>
-	 * <code>{evidence_name}</code> - The name of the evidence the item belongs to.<br/>
-	 * <code>{item_date_short}</code> - The item's item date formatted <code>YYYYMMDD</code> or <code style="font-weight:bold">NO_DATE</code> for items without an item date.<br/>
-	 * <code>{item_date_long}</code> - The item's item date formatted <code>YYYYMMdd-HHmmss</code> or <code style="font-weight:bold">NO_DATE</code> for items without an item date.<br/>
-	 * <code>{item_date_year}</code> - The item's item date 4 digit year or <code style="font-weight:bold">NO_DATE</code> for items without an item date.<br/>
-	 * <code>{top_level_guid}</code> - The GUID of the provided item's top level item or <code style="font-weight:bold">ABOVE_TOP_LEVEL</code> for items which are above top level.<br/>
+	 * Automatically sets various place holders based on the provided item.  Place holders set:<br><br>
+	 * <code>{guid}</code> - The item's GUID.<br>
+	 * <code>{guid_prefix}</code> Characters 0-2 of the item's GUID.  Useful for creating sub-directories based on GUID.<br>
+	 * <code>{guid_infix}</code> Characters 3-5 of the item's GUID.  Useful for creating sub-directories based on GUID.<br>
+	 * <code>{name}</code> - The item's name as obtained by <code>Item.getLocalisedName</code><br>
+	 * <code>{md5}</code> - The item's MD5 or <code style="font-weight:bold">NO_MD5</code> for items without an MD5 value<br>
+	 * <code>{type}</code> - The item's type name as obtained by <code>ItemType.getLocalisedName</code><br>
+	 * <code>{mime_type}</code> - The item's mime type as obtained by <code>ItemType.getName</code><br>
+	 * <code>{kind}</code> - The item's kind name as obtained by <code>ItemType.getKind.getName</code><br>
+	 * <code>{custodian}</code> - The item's assigned custodian or <code style="font-weight:bold">NO_CUSTODIAN</code> for items without a custodian assigned<br>
+	 * <code>{evidence_name}</code> - The name of the evidence the item belongs to.<br>
+	 * <code>{item_date_short}</code> - The item's item date formatted <code>YYYYMMDD</code> or <code style="font-weight:bold">NO_DATE</code> for items without an item date.<br>
+	 * <code>{item_date_long}</code> - The item's item date formatted <code>YYYYMMdd-HHmmss</code> or <code style="font-weight:bold">NO_DATE</code> for items without an item date.<br>
+	 * <code>{item_date_year}</code> - The item's item date 4 digit year or <code style="font-weight:bold">NO_DATE</code> for items without an item date.<br>
+	 * <code>{top_level_guid}</code> - The GUID of the provided item's top level item or <code style="font-weight:bold">ABOVE_TOP_LEVEL</code> for items which are above top level.<br>
 	 * <code>{top_level_name}</code> - The name (via <code>Item.getLocalisedName</code>) of the provided item's top level item or <code style="font-weight:bold">ABOVE_TOP_LEVEL</code> for items which are above top level.</br>
 	 * <code>{top_level_kind}</code> - The kind (via <code>ItemType.getKind.getName</code>) of the provided item's top level item or <code style="font-weight:bold">ABOVE_TOP_LEVEL</code> for items which are above top level.</br>
-	 * <code>{original_extension}</code> - The original extension as obtained from Nuix via <code>Item.getOriginalExtension</code> or <code style="font-weight:bold">NO_ORIGINAL_EXTENSION</code> for items where Nuix does not have an original extension value.<br/>
-	 * <code>{corrected_extension}</code> - The corrected extension as obtained from Nuix via <code>Item.getCorrectedExtension</code> or <code style="font-weight:bold">NO_CORRECTED_EXTENSION</code> for items where Nuix does not have a corrected extension value.<br/> 
+	 * <code>{original_extension}</code> - The original extension as obtained from Nuix via <code>Item.getOriginalExtension</code> or <code style="font-weight:bold">NO_ORIGINAL_EXTENSION</code> for items where Nuix does not have an original extension value.<br>
+	 * <code>{corrected_extension}</code> - The corrected extension as obtained from Nuix via <code>Item.getCorrectedExtension</code> or <code style="font-weight:bold">NO_CORRECTED_EXTENSION</code> for items where Nuix does not have a corrected extension value.<br> 
 	 * @param item The item used to set all of the item based placeholder values.
 	 */
 	public void setFromItem(Item item) {
