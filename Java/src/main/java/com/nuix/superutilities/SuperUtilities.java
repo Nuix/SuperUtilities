@@ -241,6 +241,10 @@ public class SuperUtilities{
 		return new CaseHistoryHelper(nuixCase,eventTypes,minStart,maxStart);
 	}
 	
+	/***
+	 * Convenience method to obtain Nuix BulkAnnotater
+	 * @return Nuix bulk annotater obtained from Utilities object
+	 */
 	public static BulkAnnotater getBulkAnnotater(){
 		return getInstance().getNuixUtilities().getBulkAnnotater();
 	}
