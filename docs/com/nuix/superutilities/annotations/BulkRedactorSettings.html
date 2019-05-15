@@ -17,7 +17,7 @@
     catch(err) {
     }
 //-->
-var methods = {"i0":10,"i1":10,"i2":10,"i3":10,"i4":9,"i5":10,"i6":10,"i7":10,"i8":10,"i9":10,"i10":9,"i11":10,"i12":10,"i13":10,"i14":10,"i15":10,"i16":9,"i17":9};
+var methods = {"i0":10,"i1":10,"i2":10,"i3":10,"i4":9,"i5":10,"i6":10,"i7":10,"i8":10,"i9":10,"i10":10,"i11":10,"i12":9,"i13":10,"i14":10,"i15":10,"i16":10,"i17":10,"i18":10,"i19":10,"i20":9,"i21":9};
 var tabs = {65535:["t0","All Methods"],1:["t1","Static Methods"],2:["t2","Instance Methods"],8:["t4","Concrete Methods"]};
 var altColor = "altColor";
 var rowColor = "rowColor";
@@ -110,7 +110,7 @@ var activeTableTab = "activeTableTab";
 <br>
 <pre>public class <span class="typeNameLabel">BulkRedactorSettings</span>
 extends java.lang.Object</pre>
-<div class="block">Provides settings regarding bulk redaction performed by <a href="../../../../com/nuix/superutilities/annotations/BulkRedactor.html#findAndRedact-nuix.Case-com.nuix.superutilities.annotations.BulkRedactorSettings-java.util.Collection-"><code>BulkRedactor.findAndRedact(Case, BulkRedactorSettings, Collection)</code></a>.</div>
+<div class="block">Provides settings regarding bulk redaction performed by <a href="../../../../com/nuix/superutilities/annotations/BulkRedactor.html#findAndMarkup-nuix.Case-com.nuix.superutilities.annotations.BulkRedactorSettings-java.util.Collection-"><code>BulkRedactor.findAndMarkup(Case, BulkRedactorSettings, Collection)</code></a>.</div>
 <dl>
 <dt><span class="simpleTagLabel">Author:</span></dt>
 <dd>Jason Wells</dd>
@@ -181,78 +181,94 @@ extends java.lang.Object</pre>
 </td>
 </tr>
 <tr id="i5" class="rowColor">
+<td class="colFirst"><code>boolean</code></td>
+<td class="colLast"><code><span class="memberNameLink"><a href="../../../../com/nuix/superutilities/annotations/BulkRedactorSettings.html#getApplyHighLights--">getApplyHighLights</a></span>()</code>&nbsp;</td>
+</tr>
+<tr id="i6" class="altColor">
+<td class="colFirst"><code>boolean</code></td>
+<td class="colLast"><code><span class="memberNameLink"><a href="../../../../com/nuix/superutilities/annotations/BulkRedactorSettings.html#getApplyRedactions--">getApplyRedactions</a></span>()</code>&nbsp;</td>
+</tr>
+<tr id="i7" class="rowColor">
 <td class="colFirst"><code>java.util.Set&lt;java.lang.String&gt;</code></td>
 <td class="colLast"><code><span class="memberNameLink"><a href="../../../../com/nuix/superutilities/annotations/BulkRedactorSettings.html#getExpressions--">getExpressions</a></span>()</code>
 <div class="block">Gets the regular expressions which will be used to locate text to markup.</div>
 </td>
 </tr>
-<tr id="i6" class="altColor">
+<tr id="i8" class="altColor">
 <td class="colFirst"><code>nuix.MarkupSet</code></td>
 <td class="colLast"><code><span class="memberNameLink"><a href="../../../../com/nuix/superutilities/annotations/BulkRedactorSettings.html#getMarkupSet-nuix.Case-">getMarkupSet</a></span>(nuix.Case&nbsp;nuixCase)</code>
 <div class="block">Gets the Nuix MarkupSet object based on the markup set name as set by <a href="../../../../com/nuix/superutilities/annotations/BulkRedactorSettings.html#setMarkupSetName-java.lang.String-"><code>setMarkupSetName(String)</code></a>.</div>
 </td>
 </tr>
-<tr id="i7" class="rowColor">
+<tr id="i9" class="rowColor">
 <td class="colFirst"><code>java.lang.String</code></td>
 <td class="colLast"><code><span class="memberNameLink"><a href="../../../../com/nuix/superutilities/annotations/BulkRedactorSettings.html#getMarkupSetName--">getMarkupSetName</a></span>()</code>
 <div class="block">Gets the name of the markup set to which markups will be recorded against.</div>
 </td>
 </tr>
-<tr id="i8" class="altColor">
+<tr id="i10" class="altColor">
 <td class="colFirst"><code>java.util.Set&lt;java.lang.String&gt;</code></td>
 <td class="colLast"><code><span class="memberNameLink"><a href="../../../../com/nuix/superutilities/annotations/BulkRedactorSettings.html#getNamedEntityTypes--">getNamedEntityTypes</a></span>()</code>
 <div class="block">Gets the list of named entity types to be redacted.</div>
 </td>
 </tr>
-<tr id="i9" class="rowColor">
+<tr id="i11" class="rowColor">
 <td class="colFirst"><code>java.io.File</code></td>
 <td class="colLast"><code><span class="memberNameLink"><a href="../../../../com/nuix/superutilities/annotations/BulkRedactorSettings.html#getTempDirectory--">getTempDirectory</a></span>()</code>
 <div class="block">Gets the temp directory to which <a href="../../../../com/nuix/superutilities/annotations/BulkRedactor.html" title="class in com.nuix.superutilities.annotations"><code>BulkRedactor</code></a> will export PDF files which will be provided to Aspose.</div>
 </td>
 </tr>
-<tr id="i10" class="altColor">
+<tr id="i12" class="altColor">
 <td class="colFirst"><code>static java.lang.String</code></td>
 <td class="colLast"><code><span class="memberNameLink"><a href="../../../../com/nuix/superutilities/annotations/BulkRedactorSettings.html#phraseToExpression-java.lang.String-">phraseToExpression</a></span>(java.lang.String&nbsp;phrase)</code>
 <div class="block">Converts a phrase (string with potentially multiple terms) into a regular expression for used searching for text to redact in a PDF.</div>
 </td>
 </tr>
-<tr id="i11" class="rowColor">
+<tr id="i13" class="rowColor">
+<td class="colFirst"><code>void</code></td>
+<td class="colLast"><code><span class="memberNameLink"><a href="../../../../com/nuix/superutilities/annotations/BulkRedactorSettings.html#setApplyHighLights-boolean-">setApplyHighLights</a></span>(boolean&nbsp;applyHighLights)</code>&nbsp;</td>
+</tr>
+<tr id="i14" class="altColor">
+<td class="colFirst"><code>void</code></td>
+<td class="colLast"><code><span class="memberNameLink"><a href="../../../../com/nuix/superutilities/annotations/BulkRedactorSettings.html#setApplyRedactions-boolean-">setApplyRedactions</a></span>(boolean&nbsp;applyRedactions)</code>&nbsp;</td>
+</tr>
+<tr id="i15" class="rowColor">
 <td class="colFirst"><code>void</code></td>
 <td class="colLast"><code><span class="memberNameLink"><a href="../../../../com/nuix/superutilities/annotations/BulkRedactorSettings.html#setExpressions-java.util.Collection-">setExpressions</a></span>(java.util.Collection&lt;java.lang.String&gt;&nbsp;expressions)</code>
 <div class="block">Sets the regular expressions which will be used to locate text to markup.</div>
 </td>
 </tr>
-<tr id="i12" class="altColor">
+<tr id="i16" class="altColor">
 <td class="colFirst"><code>void</code></td>
 <td class="colLast"><code><span class="memberNameLink"><a href="../../../../com/nuix/superutilities/annotations/BulkRedactorSettings.html#setMarkupSetName-java.lang.String-">setMarkupSetName</a></span>(java.lang.String&nbsp;markupSetName)</code>
 <div class="block">Sets the name of the markup set to which markup will be recorded against.</div>
 </td>
 </tr>
-<tr id="i13" class="rowColor">
+<tr id="i17" class="rowColor">
 <td class="colFirst"><code>void</code></td>
 <td class="colLast"><code><span class="memberNameLink"><a href="../../../../com/nuix/superutilities/annotations/BulkRedactorSettings.html#setNamedEntityTypes-java.util.Collection-">setNamedEntityTypes</a></span>(java.util.Collection&lt;java.lang.String&gt;&nbsp;namedEntityTypes)</code>
 <div class="block">Sets the list of named entity type to be redacted.</div>
 </td>
 </tr>
-<tr id="i14" class="altColor">
+<tr id="i18" class="altColor">
 <td class="colFirst"><code>void</code></td>
 <td class="colLast"><code><span class="memberNameLink"><a href="../../../../com/nuix/superutilities/annotations/BulkRedactorSettings.html#setTempDirectory-java.io.File-">setTempDirectory</a></span>(java.io.File&nbsp;tempDirectory)</code>
 <div class="block">Sets the temp directory to which <a href="../../../../com/nuix/superutilities/annotations/BulkRedactor.html" title="class in com.nuix.superutilities.annotations"><code>BulkRedactor</code></a> will export PDF files which will be provided to Aspose.</div>
 </td>
 </tr>
-<tr id="i15" class="rowColor">
+<tr id="i19" class="rowColor">
 <td class="colFirst"><code>void</code></td>
 <td class="colLast"><code><span class="memberNameLink"><a href="../../../../com/nuix/superutilities/annotations/BulkRedactorSettings.html#setTempDirectory-java.lang.String-">setTempDirectory</a></span>(java.lang.String&nbsp;tempDirectory)</code>
 <div class="block">Sets the temp directory to which <a href="../../../../com/nuix/superutilities/annotations/BulkRedactor.html" title="class in com.nuix.superutilities.annotations"><code>BulkRedactor</code></a> will export PDF files which will be provided to Aspose.</div>
 </td>
 </tr>
-<tr id="i16" class="altColor">
+<tr id="i20" class="altColor">
 <td class="colFirst"><code>static java.util.List&lt;java.lang.String&gt;</code></td>
 <td class="colLast"><code><span class="memberNameLink"><a href="../../../../com/nuix/superutilities/annotations/BulkRedactorSettings.html#splitPhrase-java.lang.String-">splitPhrase</a></span>(java.lang.String&nbsp;phrase)</code>
 <div class="block">Splits a string into tokens on whitespace using the regular expression: \s+</div>
 </td>
 </tr>
-<tr id="i17" class="rowColor">
+<tr id="i21" class="rowColor">
 <td class="colFirst"><code>static java.lang.String</code></td>
 <td class="colLast"><code><span class="memberNameLink"><a href="../../../../com/nuix/superutilities/annotations/BulkRedactorSettings.html#termToRegex-java.lang.String-">termToRegex</a></span>(java.lang.String&nbsp;inputTerm)</code>
 <div class="block">Converts a plain text term to a regular expression which is case insensitive.</div>
@@ -553,7 +569,7 @@ extends java.lang.Object</pre>
 <a name="addPhrases-java.util.Collection-">
 <!--   -->
 </a>
-<ul class="blockListLast">
+<ul class="blockList">
 <li class="blockList">
 <h4>addPhrases</h4>
 <pre>public&nbsp;void&nbsp;addPhrases(java.util.Collection&lt;java.lang.String&gt;&nbsp;phrases)</pre>
@@ -563,6 +579,42 @@ extends java.lang.Object</pre>
 <dt><span class="paramLabel">Parameters:</span></dt>
 <dd><code>phrases</code> - Multiple phrases to the list of expressions used to find and markup text.</dd>
 </dl>
+</li>
+</ul>
+<a name="getApplyRedactions--">
+<!--   -->
+</a>
+<ul class="blockList">
+<li class="blockList">
+<h4>getApplyRedactions</h4>
+<pre>public&nbsp;boolean&nbsp;getApplyRedactions()</pre>
+</li>
+</ul>
+<a name="setApplyRedactions-boolean-">
+<!--   -->
+</a>
+<ul class="blockList">
+<li class="blockList">
+<h4>setApplyRedactions</h4>
+<pre>public&nbsp;void&nbsp;setApplyRedactions(boolean&nbsp;applyRedactions)</pre>
+</li>
+</ul>
+<a name="getApplyHighLights--">
+<!--   -->
+</a>
+<ul class="blockList">
+<li class="blockList">
+<h4>getApplyHighLights</h4>
+<pre>public&nbsp;boolean&nbsp;getApplyHighLights()</pre>
+</li>
+</ul>
+<a name="setApplyHighLights-boolean-">
+<!--   -->
+</a>
+<ul class="blockListLast">
+<li class="blockList">
+<h4>setApplyHighLights</h4>
+<pre>public&nbsp;void&nbsp;setApplyHighLights(boolean&nbsp;applyHighLights)</pre>
 </li>
 </ul>
 </li>
