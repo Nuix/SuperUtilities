@@ -60,6 +60,8 @@ public class CustomExporter {
 	
 	private Map<String,String> headerRenames = new HashMap<String,String>();
 	
+	private Map<?,?> parallelProcessingSettings = new HashMap<String,Object>();
+	
 	public CustomExporter() {}
 	
 	/***
@@ -297,13 +299,18 @@ public class CustomExporter {
 				}
 			});
 			
+			if(parallelProcessingSettings != null && parallelProcessingSettings.size() > 0) {
+				logInfo("Providing parallel processing settings...");
+				exporter.setParallelProcessingSettings(parallelProcessingSettings);
+			}
+			
 			logInfo("Beginning temp export using BatchExporter...");
 			exporter.exportItems(items);
 			logInfo("Finished temp export using BatchExporter");
 			
 			/* BEGIN FIXING UP INTO NEW STRUCTURE */
 					
-			// Used to resolve naming templates to final pathing structure
+			// Used to resolve naming templates to final path structure
 			PlaceholderResolver resolver = new PlaceholderResolver();
 			
 			// Tracks old relative path and new relative path so that OPT file can be updated
@@ -318,7 +325,7 @@ public class CustomExporter {
 					
 					@Override
 					public void accept(LinkedHashMap<String, String> record) {
-						// Periodically logs progress
+						// Periodically log progress
 						long diffMillis = System.currentTimeMillis() - restructureStartMillis;
 						if(diffMillis > 2 * 1000 || recordsProcessed % 100 == 0) {
 							logInfo("Export Restructure | %s",recordsProcessed);
@@ -331,6 +338,7 @@ public class CustomExporter {
 							List<String> headers = DatLoadFile.getHeadersFromRecord(record);
 							List<String> outputHeaders = new ArrayList<String>();
 							for(String header : headers) {
+								// Perform any header renaming we may need to do
 								if(headerRenames.containsKey(header)) {
 									outputHeaders.add(headerRenames.get(header));
 								} else {
@@ -338,6 +346,8 @@ public class CustomExporter {
 								}
 							}
 							
+							// If we're exporting JSON files, we need to add our own column to record
+							// the path in the DAT since this is a product we are adding and not Nuix
 							if(exportJson) {
 								outputHeaders.add("JSONPATH");
 							}
@@ -356,6 +366,7 @@ public class CustomExporter {
 							resolver.setPath("export_directory", exportDirectory.getAbsolutePath());
 							resolver.setFromItem(currentItem);
 							
+							// Restructure text files if we have them
 							if(exportText) {
 								File source = new File(exportTempDirectory,record.get("TEXTPATH"));
 								resolver.set("extension", FilenameUtils.getExtension(record.get("TEXTPATH")));
@@ -366,6 +377,7 @@ public class CustomExporter {
 								record.put("TEXTPATH",getRelativePath(exportDirectory,dest));
 							}
 							
+							// Restructure native files if we have them
 							if(exportNatives) {
 								File source = new File(exportTempDirectory,record.get("ITEMPATH"));
 								resolver.set("extension", FilenameUtils.getExtension(record.get("ITEMPATH")));
@@ -376,6 +388,7 @@ public class CustomExporter {
 								record.put("ITEMPATH",getRelativePath(exportDirectory,dest));
 							}
 							
+							// Restructure PDF files if we have them
 							if(exportPdfs) {
 								File source = new File(exportTempDirectory,record.get("PDFPATH"));
 								resolver.set("extension", FilenameUtils.getExtension(record.get("PDFPATH")));
@@ -386,6 +399,7 @@ public class CustomExporter {
 								record.put("PDFPATH",getRelativePath(exportDirectory,dest));
 							}
 							
+							// Restructure TIFF file if we have them
 							if(exportTiffs) {
 								File source = new File(exportTempDirectory,record.get("TIFFPATH"));
 								resolver.set("extension", FilenameUtils.getExtension(record.get("TIFFPATH")));
@@ -398,6 +412,7 @@ public class CustomExporter {
 								record.put("TIFFPATH",newTiffRelativePath);
 							}
 							
+							// Produce JSON file if settings specified to do so
 							if(exportJson) {
 								resolver.set("extension", "json");
 								File dest = new File(resolver.resolveTemplatePath(jsonFileNameTemplate));
@@ -421,7 +436,7 @@ public class CustomExporter {
 			
 			logInfo("Export Restructure | Completed");
 			
-			// Fix up OPT file
+			// Fix up OPT file to reflect final TIFF file paths
 			if(exportTiffs) {
 				logInfo("Fixing pathing in OPT file...");
 				File source = new File(exportTempDirectory,"loadfile.opt");
@@ -455,5 +470,16 @@ public class CustomExporter {
 			if(generalLog != null) generalLog.close();
 			if(errorLog != null) errorLog.close();	
 		}
+	}
+
+	/***
+	 * Sets the map of settings which will be passed to {@link nuix.BatchExporter#setParallelProcessingSettings(Map)} when performing
+	 * the temporary export before restructuring.
+	 * @param settings A map of settings, see API documentation for
+	 * <a href="https://download.nuix.com/releases/desktop/stable/docs/en/scripting/api/nuix/ParallelProcessingConfigurable.html#setParallelProcessingSettings-java.util.Map-">BatchExporter.setParallelProcessingSettings</a>
+	 * for a list of settings accepted.
+	 */
+	public void setParallelProcessingSettings(Map<?, ?> settings) {
+		this.parallelProcessingSettings = settings;
 	}
 }
