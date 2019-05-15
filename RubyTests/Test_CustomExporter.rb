@@ -6,6 +6,17 @@ java_import com.nuix.superutilities.export.CustomExporter
 
 $current_case = $utilities.getCaseFactory.open('D:\cases\FakeData_1552095540_Hare\Pearlie Morar')
 
+export_directory = "D:\\temp\\CustomExport_#{Time.now.to_i}"
+items = $current_case.search("kind:email").take(1000)
+
+ce = CustomExporter.new
+
+# A path template is provided for text/native/pdf/tiff/json files exported by CustomExporter.
+# The following placeholders are recognized.  When restructuring the final export, the given path
+# template is resolved for the relevant item, determining where it will end up in the final restructured
+# export.  DAT and OPT loadfiles are also updated to reflect final destination of these files.
+#
+# {export_directory} - The export directory specified when you call CustomExporter.exportItems
 # {guid} - The item's GUID.
 # {guid_prefix} Characters 0-2 of the item's GUID. Useful for creating sub-directories based on GUID.
 # {guid_infix} Characters 3-5 of the item's GUID. Useful for creating sub-directories based on GUID.
@@ -25,10 +36,21 @@ $current_case = $utilities.getCaseFactory.open('D:\cases\FakeData_1552095540_Har
 # {original_extension} - The original extension as obtained from Nuix via Item.getOriginalExtension or NO_ORIGINAL_EXTENSION for items where Nuix does not have an original extension value.
 # {corrected_extension} - The corrected extension as obtained from Nuix via Item.getCorrectedExtension or NO_CORRECTED_EXTENSION for items where Nuix does not have a corrected extension value.
 # {extension} - Extension of given file as Nuix exported it
+#
+# Additionally we can provide settings as accepted by BatchExporter.addProduct in the second argument.  Note that the following settings
+# are overwritten by the script (effectively ignored) since their functionality is effectively provided by the path template you provide.
+# - naming
+# - path
+ce.exportText("{export_directory}\\CUSTOM_TEXT\\{item_date_short}\\{guid}.txt",{})
+ce.exportNatives("{export_directory}\\CUSTOM_NATIVE\\{kind}\\{guid}.{extension}",{})
+ce.exportPdfs("{export_directory}\\CUSTOM_PDF\\{type}\\{guid}.pdf",{})
+ce.exportTiffs("{export_directory}\\CUSTOM_IMAGE\\{type}\\{guid}.{extension}",{})
+ce.exportJson("{export_directory}\\JSON\\{guid}.json")
 
-export_directory = "D:\\temp\\CustomExport_#{Time.now.to_i}"
-items = $current_case.search("kind:email").take(1000)
-
+# Some columns in the DAT file produced by BatchExporter are not based on the metadata profile
+# you provide, but are added to the DAT as part of the export process.  Sometimes people would
+# like these columns to have different headers.  Since we need to rebuild the DAT file to reflect
+# the resstructure of the export products, we can also renamed headers during this process.
 header_renames = {
 	"DOCID" => "DOCID_Renamed",
 	"PARENT_DOCID" => "PARENT_DOCID_Renamed",
@@ -43,14 +65,8 @@ header_renames = {
 	"PDFPATH" => "PDFPATH_Renamed",
 	"TIFFPATH" => "TIFFPATH_Renamed",
 }
-
-ce = CustomExporter.new
-ce.exportText("{export_directory}\\CUSTOM_TEXT\\{item_date_short}\\{guid}.txt",{})
-ce.exportNatives("{export_directory}\\CUSTOM_NATIVE\\{kind}\\{guid}.{extension}",{})
-ce.exportPdfs("{export_directory}\\CUSTOM_PDF\\{type}\\{guid}.pdf",{})
-ce.exportTiffs("{export_directory}\\CUSTOM_IMAGE\\{type}\\{guid}.{extension}",{})
-ce.exportJson("{export_directory}\\JSON\\{guid}.json")
 ce.setHeaderRenames(header_renames)
+
 ce.exportItems($current_case,export_directory,items)
 
 $current_case.close
