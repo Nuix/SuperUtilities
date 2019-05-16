@@ -10,6 +10,7 @@ import java.util.Map;
 import java.util.function.Consumer;
 import java.util.regex.Pattern;
 
+import org.apache.commons.io.FileUtils;
 import org.apache.commons.io.FilenameUtils;
 
 import com.nuix.superutilities.SuperUtilities;
@@ -61,6 +62,8 @@ public class CustomExporter {
 	private Map<String,String> headerRenames = new HashMap<String,String>();
 	
 	private Map<?,?> parallelProcessingSettings = new HashMap<String,Object>();
+	private Map<?,?> imagingSettings = new HashMap<String,Object>();
+	private Map<?,?> stampingSettings = new HashMap<String,Object>();
 	
 	public CustomExporter() {}
 	
@@ -299,9 +302,22 @@ public class CustomExporter {
 				}
 			});
 			
+			// Pass along worker settings if we have some
 			if(parallelProcessingSettings != null && parallelProcessingSettings.size() > 0) {
 				logInfo("Providing parallel processing settings...");
 				exporter.setParallelProcessingSettings(parallelProcessingSettings);
+			}
+			
+			// Pass along imaging settings if we have some
+			if(imagingSettings != null && imagingSettings.size() > 0) {
+				logInfo("Providing imaging settings...");
+				exporter.setImagingOptions(imagingSettings);
+			}
+			
+			// Pass along stamping settings if we have some
+			if(stampingSettings != null && stampingSettings.size() > 0) {
+				logInfo("Providing stamping settings...");
+				exporter.setStampingOptions(stampingSettings);
 			}
 			
 			logInfo("Beginning temp export using BatchExporter...");
@@ -463,6 +479,10 @@ public class CustomExporter {
 			summaryReportXml.renameTo(summaryReportXmlDest);
 			tlMd5DigestTxt.renameTo(tlMd5DigestTxtDest);
 			
+			// Finally, we can delete our temp export as we have moved everything into the final structure
+			logInfo("Deleting temporary export...");
+			FileUtils.deleteDirectory(exportTempDirectory);
+			
 			logInfo("Custom export completed");
 		} catch (Exception e) {
 			logError("Error during export:\n%s",FormatUtility.debugString(e));
@@ -473,7 +493,7 @@ public class CustomExporter {
 	}
 
 	/***
-	 * Sets the map of settings which will be passed to {@link nuix.BatchExporter#setParallelProcessingSettings(Map)} when performing
+	 * Sets the Map of settings which will be passed to <code>BatchExporter.setParallelProcessingSettings(Map)</code> when performing
 	 * the temporary export before restructuring.
 	 * @param settings A map of settings, see API documentation for
 	 * <a href="https://download.nuix.com/releases/desktop/stable/docs/en/scripting/api/nuix/ParallelProcessingConfigurable.html#setParallelProcessingSettings-java.util.Map-">BatchExporter.setParallelProcessingSettings</a>
@@ -481,5 +501,27 @@ public class CustomExporter {
 	 */
 	public void setParallelProcessingSettings(Map<?, ?> settings) {
 		this.parallelProcessingSettings = settings;
+	}
+	
+	/***
+	 * Sets the Map of settings which will be passed to <code>BatchExporter.setImagingOptions(Map)</code> when performing
+	 * the temporary export before restructuring.
+	 * @param settings A map of settings, see API documentation for
+	 * <a href="https://download.nuix.com/releases/desktop/stable/docs/en/scripting/api/nuix/ImagingConfigurable.html#setImagingOptions-java.util.Map-">BatchExporter.setImagingOptions</a>
+	 * for a list of settings accepted.
+	 */
+	public void setImagingOptions(Map<?, ?> settings) {
+		this.imagingSettings = settings;
+	}
+	
+	/***
+	 * Sets the Map of settings which will be passed to <code>BatchExporter.setStampingOptions(Map)</code> when performing
+	 * the temporary export before restructuring.
+	 * @param settings A map of settings, see API documentation for
+	 * <a href="https://download.nuix.com/releases/desktop/stable/docs/en/scripting/api/nuix/StampingConfigurable.html#setStampingOptions-java.util.Map-">BatchExporter.setStampingOptions</a>
+	 * for a list of settings accepted.
+	 */
+	public void setStampingOptions(Map<?, ?> settings) {
+		this.stampingSettings = settings;
 	}
 }

@@ -30,6 +30,8 @@ ce = CustomExporter.new
 # {item_date_short} - The item's item date formatted YYYYMMDD or NO_DATE for items without an item date.
 # {item_date_long} - The item's item date formatted YYYYMMdd-HHmmss or NO_DATE for items without an item date.
 # {item_date_year} - The item's item date 4 digit year or NO_DATE for items without an item date.
+# {item_date_month} - The item's item date 2 digit month or NO_DATE for items without an item date.
+# {item_date_day} - The item's item date 2 digit day of the month or NO_DATE for items without an item date.
 # {top_level_guid} - The GUID of the provided item's top level item or ABOVE_TOP_LEVEL for items which are above top level.
 # {top_level_name} - The name (via Item.getLocalisedName) of the provided item's top level item or ABOVE_TOP_LEVEL for items which are above top level.
 # {top_level_kind} - The kind (via ItemType.getKind.getName) of the provided item's top level item or ABOVE_TOP_LEVEL for items which are above top level.
@@ -45,7 +47,7 @@ ce.exportText("{export_directory}\\CUSTOM_TEXT\\{item_date_short}\\{guid}.txt",{
 ce.exportNatives("{export_directory}\\CUSTOM_NATIVE\\{kind}\\{guid}.{extension}",{})
 ce.exportPdfs("{export_directory}\\CUSTOM_PDF\\{type}\\{guid}.pdf",{})
 ce.exportTiffs("{export_directory}\\CUSTOM_IMAGE\\{type}\\{guid}.{extension}",{})
-ce.exportJson("{export_directory}\\JSON\\{guid}.json")
+ce.exportJson("{export_directory}\\JSON\\{item_date_year}\\{item_date_month}\\{item_date_day}\\{item_date_long}.json")
 
 # Some columns in the DAT file produced by BatchExporter are not based on the metadata profile
 # you provide, but are added to the DAT as part of the export process.  Sometimes people would
@@ -67,6 +69,27 @@ header_renames = {
 }
 ce.setHeaderRenames(header_renames)
 
+# We can also provide some settings for workers, imaging and stamping.  Settings are the same
+# ones accepted by BatchExporter through the methods of the same name as these setting are ultimately
+# just passed along to the BatchExporter when the up front export is performed.
+
+ce.setParallelProcessingSettings({
+	"workerCount" => 4,
+	"workerTemp" => "D:\\Temp\\Worker",
+})
+
+ce.setImagingOptions({
+	"imageExcelSpreadsheet" => false,
+})
+
+ce.setStampingOptions({
+	"headerCentre" => {
+		"type" => "custom",
+		"customText" => "Exported by CustomExporter Test",
+	}
+})
+
+# Now that we're all configured, lets get the export under way
 ce.exportItems($current_case,export_directory,items)
 
 $current_case.close
