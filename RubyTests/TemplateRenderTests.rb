@@ -3,7 +3,7 @@ require File.join(script_directory,"SuperUtilities.jar")
 java_import com.nuix.superutilities.SuperUtilities
 $su = SuperUtilities.init($utilities,NUIX_VERSION)
 
-$current_case = $utilities.getCaseFactory.open("C:\\@Nuix\\Cases\\Ziggy")
+$current_case = $utilities.getCaseFactory.open("D:\\Cases\\Ziggy")
 items = $current_case.search("cat").take(5)
 
 t = $su.createTemplateExporter(File.join(script_directory,"ItemTemplate1.erb"))
