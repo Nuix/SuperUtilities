@@ -38,6 +38,7 @@ This is a small library of functionality which is a companion to the functionali
 	- Deduplicate with custom logic determining which item is kept as the original
 	- Find physical file ancestors for provided items
 	- Split a collection of items into chunks while attempting to keep items in the same family within the same chunk
+- [CustomExporter](https://nuix.github.io/SuperUtilities/com/nuix/superutilities/export/CustomExporter.html): Provides customized exports while still leveraging the performance of BatchExporter. This is accomplished by first performing a BatchExport using the Nuix API. Once that temporary export is completed, all the exported products (text, natives, images, pdfs) are then restructured based on a series of file naming templates. While restructuring is occurring, paths in DAT and OPT load files are updated to match new structure.  Additionally provides options for exporting JSON representations of items and XLSX metadata "loadfile".  See the [example script](https://github.com/Nuix/SuperUtilities/blob/master/RubyTests/Test_CustomExporter.rb) demonstrating its usage.
 - and more
 
 A good place to get a sense of the functionality on offer is to peruse the [Java docs](https://nuix.github.io/SuperUtilities/).
