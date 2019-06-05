@@ -1,12 +1,12 @@
 package com.nuix.superutilities.export;
 
 import java.io.File;
-import java.io.IOException;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.function.BiFunction;
 import java.util.function.Consumer;
 import java.util.regex.Pattern;
 
@@ -22,6 +22,8 @@ import com.nuix.superutilities.loadfiles.OptRecord;
 import com.nuix.superutilities.loadfiles.SimpleTextFileWriter;
 import com.nuix.superutilities.misc.FormatUtility;
 import com.nuix.superutilities.misc.PlaceholderResolver;
+import com.nuix.superutilities.reporting.SimpleWorksheet;
+import com.nuix.superutilities.reporting.SimpleXlsx;
 
 import nuix.BatchExporter;
 import nuix.Case;
@@ -33,6 +35,13 @@ import nuix.MetadataItem;
 import nuix.MetadataProfile;
 import nuix.Utilities;
 
+/***
+ * Provides customized exports while still leveraging the performance of <a href="https://download.nuix.com/releases/desktop/stable/docs/en/scripting/api/nuix/BatchExporter.html">BatchExporter</a>.
+ * This is accomplished by first performing a BatchExport using the Nuix API.  Once that temporary export is completed, all the exported products (text, natives, images, pdfs) are then
+ * restructured based on a series of file naming templates.  While restructuring is occurring, paths in DAT and OPT load files are updated to match new structure.
+ * @author Jason Wells
+ *
+ */
 public class CustomExporter {
 	private MetadataProfile profile = null;
 	
@@ -59,11 +68,15 @@ public class CustomExporter {
 	private String jsonFileNameTemplate = "{export_directory}\\JSON\\{guid}.json";
 	private JsonExporter jsonExporter = null;
 	
+	private boolean exportXlsx = false;
+	
 	private Map<String,String> headerRenames = new HashMap<String,String>();
 	
 	private Map<?,?> parallelProcessingSettings = new HashMap<String,Object>();
 	private Map<?,?> imagingSettings = new HashMap<String,Object>();
 	private Map<?,?> stampingSettings = new HashMap<String,Object>();
+	
+	private Map<String,BiFunction<Item,String,String>> dynamicPlaceholders = new LinkedHashMap<String,BiFunction<Item,String,String>>();
 	
 	public CustomExporter() {}
 	
@@ -86,6 +99,32 @@ public class CustomExporter {
 	 */
 	public void setProfile(MetadataProfile profile) {
 		this.profile = profile;
+	}
+	
+	/***
+	 * Assigns a dynamically calculated placeholder to this instance.
+	 * @param placeholderName Placeholder name with "{" or "}".  For example "my_value".  Placeholder in templates can then be referred to using "{my_value}". It is
+	 * preferred that you use only lower case characters and no whitespace characters.  Letters, numbers and underscores only is recommended.
+	 * @param function A function which accepts as arguments an item and String with product type.  Expected to return a String value.  If function yields a null
+	 * then placeholder will resolve to "NO_VALUE" when resolving the template.
+	 */
+	public void setDynamicPlaceholder(String placeholderName, BiFunction<Item,String,String> function) {
+		dynamicPlaceholders.put(placeholderName, function);
+	}
+	
+	/***
+	 * Removes a previously added dynamic placeholder.
+	 * @param placeholderName
+	 */
+	public void removeDynamicPlaceholder(String placeholderName) {
+		dynamicPlaceholders.remove(placeholderName);
+	}
+	
+	/***
+	 * Removes all previously added dynamic placeholders.
+	 */
+	public void clearAllDynamicPlaholders() {
+		dynamicPlaceholders.clear();
 	}
 	
 	public void exportNatives(String fileNameTemplate, Map<String,Object> emailExportSettings) {
@@ -124,6 +163,23 @@ public class CustomExporter {
 		this.jsonExporter = jsonExporter;
 	}
 	
+	/***
+	 * Allows you to provide a Map of headers to rename.  Intended to provide a way to rename headers that Nuix automatically adds
+	 * to DAT files is generates:<br>
+	 * <code>DOCID</code><br>
+	 * <code>PARENT_DOCID</code><br>
+	 * <code>ATTACH_DOCID</code><br>
+	 * <code>BEGINBATES</code><br>
+	 * <code>ENDBATES</code><br>
+	 * <code>BEGINGROUP</code><br>
+	 * <code>ENDGROUP</code><br>
+	 * <code>PAGECOUNT</code><br>
+	 * <code>ITEMPATH</code> (when exporting natives)<br>
+	 * <code>TEXTPATH</code> (when exporting text)<br>
+	 * <code>PDFPATH</code> (when exporting PDFs)<br>
+	 * <code>TIFFPATH</code> (when exporting TIFFs)<br>
+	 * @param renames A Map with the map key being the header name before and the map value being what you want that header renamed to.  Map key is case sensitive!
+	 */
 	public void setHeaderRenames(Map<String,String> renames) {
 		this.headerRenames = renames;
 	}
@@ -193,6 +249,12 @@ public class CustomExporter {
 		return basePattern.matcher(absolute.getAbsolutePath()).replaceFirst("");
 	}
 	
+	/***
+	 * If a given file path already exists, iteratively adds a suffix until an unused file path is discovered.
+	 * @param intendedDest The file which may already exist
+	 * @return The original path if file does not already exist, otherwise a suffixed file name path that does not conflict with
+	 * any existing file names.
+	 */
 	private File resolveNameCollisions(File intendedDest) {
 		File result = intendedDest;
 		int suffix = 0;
@@ -207,16 +269,19 @@ public class CustomExporter {
 	}
 	
 	/***
-	 * Exports given items in custom structure.  This is accomplished by first performing a temporary "legal export" using
-	 * the API object BatchExporter.  Once that export is complete, files are restructured into final format.  Load file paths are
-	 * updated to reflect restructuring.
-	 * @param nuixCase The relevant Nuix case, needed to resolve GUIDs in temp export DAT file to actual items.
-	 * @param exportDirectory Where the final export should reside.
-	 * @param items
-	 * @throws IOException
+	 * Resolves dynamic place holders provided by user.
+	 * @param resolver The resolver to which we will store calculated placeholder values.
+	 * @param item The current item this placeholder will be used for.
+	 * @param productType The product type this placeholder will be used for.  Should be one of the following values: "TEXT","NATIVE","PDF","TIFF" and "JSON".
 	 */
-	public void exportItems(Case nuixCase, String exportDirectory, List<Item> items) throws IOException {
-		exportItems(nuixCase, new File(exportDirectory),items);
+	private void resolveDynamicPlaceholders(PlaceholderResolver resolver, Item item, String productType) {
+		for(Map.Entry<String,BiFunction<Item,String,String>> dynamicPlaceholderFunc : dynamicPlaceholders.entrySet()) {
+			String resolvedValue = dynamicPlaceholderFunc.getValue().apply(item, productType);
+			if(resolvedValue == null) {
+				resolvedValue = "NO_VALUE";
+			}
+			resolver.set(dynamicPlaceholderFunc.getKey(), resolvedValue);
+		}
 	}
 	
 	/***
@@ -226,13 +291,28 @@ public class CustomExporter {
 	 * @param nuixCase The relevant Nuix case, needed to resolve GUIDs in temp export DAT file to actual items.
 	 * @param exportDirectory Where the final export should reside.
 	 * @param items
-	 * @throws IOException
+	 * @throws Exception If something goes wrong
 	 */
-	public void exportItems(Case nuixCase, File exportDirectory, List<Item> items) throws IOException {
+	public void exportItems(Case nuixCase, String exportDirectory, List<Item> items) throws Exception {
+		exportItems(nuixCase, new File(exportDirectory),items);
+	}
+	
+	/***
+	 * Exports given items in custom structure.  This is accomplished by first performing a temporary "legal export" using
+	 * the API object BatchExporter.  Once that export is complete, files are restructured into final format.  Load file paths are
+	 * updated to reflect restructuring.
+	 * @param nuixCase The relevant Nuix case, needed to resolve GUIDs in temp export DAT file to actual items.
+	 * @param exportDirectory Where the final export should reside.
+	 * @param items The items to export
+	 * @throws Exception If something goes wrong
+	 */
+	public void exportItems(Case nuixCase, File exportDirectory, List<Item> items) throws Exception {
 		Utilities util = SuperUtilities.getInstance().getNuixUtilities();
 		File exportTempDirectory = new File(exportDirectory,"_TEMP_");
 		BatchExporter exporter = util.createBatchExporter(exportTempDirectory);
 		MetadataProfile exportProfile = ensureProfileWithGuid(profile);
+		
+		
 		
 		Map<String,Object> loadfileSettings = new HashMap<String,Object>();
 		loadfileSettings.put("metadataProfile", exportProfile);
@@ -273,6 +353,8 @@ public class CustomExporter {
 			logInfo("Configuring BatchExporter for TIFF Export:\n%s",FormatUtility.debugString(productSettings));
 			exporter.addProduct("tiff", productSettings);
 		}
+		
+		
 		
 		exportDirectory.mkdirs();
 		File tempDatFile = new File(exportTempDirectory,"loadfile.dat");
@@ -332,6 +414,9 @@ public class CustomExporter {
 			// Tracks old relative path and new relative path so that OPT file can be updated
 			Map<String,String> tiffRenames = new HashMap<String,String>();
 			
+			final SimpleXlsx xlsx = new SimpleXlsx(new File(exportDirectory,"loadfile.xlsx"));;
+			SimpleWorksheet worksheet = xlsx.getSheet("Loadfile");;
+			
 			logInfo("Restructuring export using %s as input, writing to %s as output...",tempDatFile.getAbsolutePath(),finalDatFile.getAbsolutePath());
 			try(DatLoadFileWriter datWriter = new DatLoadFileWriter(finalDatFile)){
 				DatLoadFileReader.withEachRecord(tempDatFile, new Consumer<LinkedHashMap<String,String>>() {
@@ -369,6 +454,11 @@ public class CustomExporter {
 							}
 							
 							datWriter.writeValues(outputHeaders);
+							
+							if(exportXlsx) {
+								worksheet.appendRow(outputHeaders);
+							}
+							
 							headersWrittern = true;
 						}
 						
@@ -386,6 +476,7 @@ public class CustomExporter {
 							if(exportText) {
 								File source = new File(exportTempDirectory,record.get("TEXTPATH"));
 								resolver.set("extension", FilenameUtils.getExtension(record.get("TEXTPATH")));
+								resolveDynamicPlaceholders(resolver, currentItem, "TEXT");
 								File dest = new File(resolver.resolveTemplatePath(textFileNameTemplate));
 								dest = resolveNameCollisions(dest);
 								dest.getParentFile().mkdirs();
@@ -397,6 +488,7 @@ public class CustomExporter {
 							if(exportNatives) {
 								File source = new File(exportTempDirectory,record.get("ITEMPATH"));
 								resolver.set("extension", FilenameUtils.getExtension(record.get("ITEMPATH")));
+								resolveDynamicPlaceholders(resolver, currentItem, "NATIVE");
 								File dest = new File(resolver.resolveTemplatePath(nativeFileNameTemplate));
 								dest = resolveNameCollisions(dest);
 								dest.getParentFile().mkdirs();
@@ -408,6 +500,7 @@ public class CustomExporter {
 							if(exportPdfs) {
 								File source = new File(exportTempDirectory,record.get("PDFPATH"));
 								resolver.set("extension", FilenameUtils.getExtension(record.get("PDFPATH")));
+								resolveDynamicPlaceholders(resolver, currentItem, "PDF");
 								File dest = new File(resolver.resolveTemplatePath(pdfFileNameTemplate));
 								dest = resolveNameCollisions(dest);
 								dest.getParentFile().mkdirs();
@@ -419,6 +512,7 @@ public class CustomExporter {
 							if(exportTiffs) {
 								File source = new File(exportTempDirectory,record.get("TIFFPATH"));
 								resolver.set("extension", FilenameUtils.getExtension(record.get("TIFFPATH")));
+								resolveDynamicPlaceholders(resolver, currentItem, "TIFF");
 								File dest = new File(resolver.resolveTemplatePath(tiffFileNameTemplate));
 								dest = resolveNameCollisions(dest);
 								dest.getParentFile().mkdirs();
@@ -431,6 +525,7 @@ public class CustomExporter {
 							// Produce JSON file if settings specified to do so
 							if(exportJson) {
 								resolver.set("extension", "json");
+								resolveDynamicPlaceholders(resolver, currentItem, "JSON");
 								File dest = new File(resolver.resolveTemplatePath(jsonFileNameTemplate));
 								dest = resolveNameCollisions(dest);
 								dest.getParentFile().mkdirs();
@@ -446,8 +541,19 @@ public class CustomExporter {
 						}
 						
 						datWriter.writeRecordValues(record);
+						if(exportXlsx) {
+							List<Object> recordValues = new ArrayList<Object>();
+							recordValues.addAll(record.values());
+							worksheet.appendRow(recordValues);
+						}
 					}
 				});
+				
+				if(exportXlsx) {
+					worksheet.autoFitColumns();
+					xlsx.save();
+					xlsx.close();
+				}
 			}
 			
 			logInfo("Export Restructure | Completed");
@@ -523,5 +629,21 @@ public class CustomExporter {
 	 */
 	public void setStampingOptions(Map<?, ?> settings) {
 		this.stampingSettings = settings;
+	}
+
+	/***
+	 * Gets whether DAT contents should additionally be exported as an XLSX spreadsheet.
+	 * @return Whether DAT contents should additionally be exported as an XLSX spreadsheet.
+	 */
+	public boolean getExportXlsx() {
+		return exportXlsx;
+	}
+
+	/***
+	 * Sets whether DAT contents should additionally be exported as an XLSX spreadsheet.
+	 * @param exportXlsx Whether DAT contents should additionally be exported as an XLSX spreadsheet.
+	 */
+	public void setExportXlsx(boolean exportXlsx) {
+		this.exportXlsx = exportXlsx;
 	}
 }
