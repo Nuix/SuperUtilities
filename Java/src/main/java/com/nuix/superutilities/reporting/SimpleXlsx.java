@@ -1,6 +1,8 @@
 package com.nuix.superutilities.reporting;
 
+import java.io.Closeable;
 import java.io.File;
+import java.io.IOException;
 import java.lang.reflect.Method;
 import java.util.HashMap;
 import java.util.Map;
@@ -9,7 +11,7 @@ import com.aspose.cells.Style;
 import com.aspose.cells.Workbook;
 import com.aspose.cells.Worksheet;
 
-public class SimpleXlsx {
+public class SimpleXlsx implements Closeable {
 	public static void initializeAspose() throws Exception {
 		String[] potentialAsposeLocations = new String[]{
 				"com.nuix.data.util.aspose.AsposeCells",
@@ -37,6 +39,10 @@ public class SimpleXlsx {
 	private Workbook workbook = null;
 	@SuppressWarnings("unused")
 	private Map<String,Style> createdStyles = new HashMap<String,Style>();
+	
+	public SimpleXlsx(File file) throws Exception {
+		this(file.getAbsolutePath());
+	}
 	
 	public SimpleXlsx(String file) throws Exception {
 		initializeAspose();
@@ -79,5 +85,10 @@ public class SimpleXlsx {
 		Style newStyle = workbook.createStyle();
 		workbook.getNamedStyle("test");
 		return newStyle;
+	}
+
+	@Override
+	public void close() throws IOException {
+		workbook.dispose();
 	}
 }

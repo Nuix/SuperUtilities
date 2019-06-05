@@ -106,7 +106,7 @@ public class SimpleWorksheet {
 		worksheet.autoFitRow(row);
 	}
 	
-	public void appendRow(List<Object> rowValues) {
+	public void appendRow(List<? extends Object> rowValues) {
 		for (int c = 0; c < rowValues.size(); c++) {
 			Object rowValue = rowValues.get(c);
 			setValue(currentRow,c,rowValue);
