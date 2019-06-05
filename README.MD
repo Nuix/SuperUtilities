@@ -40,7 +40,7 @@ This is a small library of functionality which is a companion to the functionali
 	- Split a collection of items into chunks while attempting to keep items in the same family within the same chunk
 - and more
 
-A good place to get a sense of the functionality on offer is to preuse the [Java docs](https://nuix.github.io/SuperUtilities/).
+A good place to get a sense of the functionality on offer is to peruse the [Java docs](https://nuix.github.io/SuperUtilities/).
 
 # Getting Started
 

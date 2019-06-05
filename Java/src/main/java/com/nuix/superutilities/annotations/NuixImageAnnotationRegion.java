@@ -2,6 +2,8 @@ package com.nuix.superutilities.annotations;
 
 import org.apache.log4j.Logger;
 
+import com.aspose.pdf.Rectangle;
+
 import nuix.Item;
 import nuix.MarkupSet;
 import nuix.MutablePrintedImage;
@@ -16,6 +18,9 @@ public class NuixImageAnnotationRegion {
 	private double height = 0.0;
 	private String text = "";
 	private int pageNumber = 0;
+	private Item item;
+	
+	private Rectangle asposeSourcePageRectangle = null;
 	
 	public double getX() {
 		return x;
@@ -53,14 +58,25 @@ public class NuixImageAnnotationRegion {
 	public void setPageNumber(int pageNumber) {
 		this.pageNumber = pageNumber;
 	}
+	public Item getItem() {
+		return item;
+	}
+	public void setItem(Item item) {
+		this.item = item;
+	}
+	public Rectangle getAsposeSourcePageRectangle() {
+		return asposeSourcePageRectangle;
+	}
+	public void setAsposeSourcePageRectangle(Rectangle asposeSourcePageRectangle) {
+		this.asposeSourcePageRectangle = asposeSourcePageRectangle;
+	}
 	
 	/***
 	 * Applies a redaction based on the region defined by this instance.
 	 * @param markupSet The markup set to which the redaction markup will be added.
-	 * @param item The item to which the redaction will be applied.
 	 * @throws Exception If something goes wrong
 	 */
-	public void applyRedaction(MarkupSet markupSet, Item item) throws Exception {
+	public void applyRedaction(MarkupSet markupSet) throws Exception {
 		logger.info(String.format("Applying redaction based on %s", this));
 		MutablePrintedImage printedImage = item.getPrintedImage();
 		MutablePrintedPage page = (MutablePrintedPage)printedImage.getPages().get(pageNumber-1);
@@ -70,10 +86,9 @@ public class NuixImageAnnotationRegion {
 	/***
 	 * Applies a highlight based on the region defined by this instance.
 	 * @param markupSet The markup set to which the highlight markup will be added.
-	 * @param item The item to which the highlight will be applied.
 	 * @throws Exception If something goes wrong
 	 */
-	public void applyHighlight(MarkupSet markupSet, Item item) throws Exception {
+	public void applyHighlight(MarkupSet markupSet) throws Exception {
 		logger.info(String.format("Applying highlight based on %s", this));
 		MutablePrintedImage printedImage = item.getPrintedImage();
 		MutablePrintedPage page = (MutablePrintedPage)printedImage.getPages().get(pageNumber-1);
@@ -82,7 +97,7 @@ public class NuixImageAnnotationRegion {
 
 	@Override
 	public String toString() {
-		return "NuixImageAnnotationRegion [x=" + x + ", y=" + y + ", width=" + width + ", height=" + height + ", text="
-				+ text + ", pageNumber=" + pageNumber + "]";
+		return String.format("NuixImageAnnotationRegion [ItemGUID=%s,x=%s,y=%s,width=%s,height=%s,text=%s,pageNumber=%s]",
+				item.getGuid(),x,y,width,height,text,pageNumber);
 	}
 }

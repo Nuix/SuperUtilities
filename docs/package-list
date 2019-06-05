@@ -3,6 +3,7 @@ com.nuix.superutilities.annotations
 com.nuix.superutilities.cases
 com.nuix.superutilities.export
 com.nuix.superutilities.items
+com.nuix.superutilities.loadfiles
 com.nuix.superutilities.misc
 com.nuix.superutilities.namedentities
 com.nuix.superutilities.query

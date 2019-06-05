@@ -151,8 +151,8 @@ extends java.lang.Object</pre>
 <th class="colLast" scope="col">Method and Description</th>
 </tr>
 <tr id="i0" class="altColor">
-<td class="colFirst"><code>void</code></td>
-<td class="colLast"><code><span class="memberNameLink"><a href="../../../../com/nuix/superutilities/annotations/BulkRedactor.html#findAndRedact-nuix.Case-com.nuix.superutilities.annotations.BulkRedactorSettings-java.util.Collection-">findAndRedact</a></span>(nuix.Case&nbsp;nuixCase,
+<td class="colFirst"><code>java.util.List&lt;<a href="../../../../com/nuix/superutilities/annotations/NuixImageAnnotationRegion.html" title="class in com.nuix.superutilities.annotations">NuixImageAnnotationRegion</a>&gt;</code></td>
+<td class="colLast"><code><span class="memberNameLink"><a href="../../../../com/nuix/superutilities/annotations/BulkRedactor.html#findAndMarkup-nuix.Case-com.nuix.superutilities.annotations.BulkRedactorSettings-java.util.Collection-">findAndMarkup</a></span>(nuix.Case&nbsp;nuixCase,
              <a href="../../../../com/nuix/superutilities/annotations/BulkRedactorSettings.html" title="class in com.nuix.superutilities.annotations">BulkRedactorSettings</a>&nbsp;settings,
              java.util.Collection&lt;nuix.Item&gt;&nbsp;scopeItems)</code>
 <div class="block">Finds text in PDFs of given items.</div>
@@ -262,22 +262,24 @@ extends java.lang.Object</pre>
 </dl>
 </li>
 </ul>
-<a name="findAndRedact-nuix.Case-com.nuix.superutilities.annotations.BulkRedactorSettings-java.util.Collection-">
+<a name="findAndMarkup-nuix.Case-com.nuix.superutilities.annotations.BulkRedactorSettings-java.util.Collection-">
 <!--   -->
 </a>
 <ul class="blockListLast">
 <li class="blockList">
-<h4>findAndRedact</h4>
-<pre>public&nbsp;void&nbsp;findAndRedact(nuix.Case&nbsp;nuixCase,
-                          <a href="../../../../com/nuix/superutilities/annotations/BulkRedactorSettings.html" title="class in com.nuix.superutilities.annotations">BulkRedactorSettings</a>&nbsp;settings,
-                          java.util.Collection&lt;nuix.Item&gt;&nbsp;scopeItems)
-                   throws java.lang.Exception</pre>
+<h4>findAndMarkup</h4>
+<pre>public&nbsp;java.util.List&lt;<a href="../../../../com/nuix/superutilities/annotations/NuixImageAnnotationRegion.html" title="class in com.nuix.superutilities.annotations">NuixImageAnnotationRegion</a>&gt;&nbsp;findAndMarkup(nuix.Case&nbsp;nuixCase,
+                                                               <a href="../../../../com/nuix/superutilities/annotations/BulkRedactorSettings.html" title="class in com.nuix.superutilities.annotations">BulkRedactorSettings</a>&nbsp;settings,
+                                                               java.util.Collection&lt;nuix.Item&gt;&nbsp;scopeItems)
+                                                        throws java.lang.Exception</pre>
 <div class="block">Finds text in PDFs of given items.  Then generates redactions based on the matches.</div>
 <dl>
 <dt><span class="paramLabel">Parameters:</span></dt>
 <dd><code>nuixCase</code> - The source Nuix case.  Needed to obtain items (if none were given) and/or obtain the appropriate markup set.</dd>
 <dd><code>settings</code> - The settings used to find and generate the redactions.</dd>
 <dd><code>scopeItems</code> - Items to find and redact.</dd>
+<dt><span class="returnLabel">Returns:</span></dt>
+<dd>Returns a list of all match region objects (so they can be reported, inspected, etc)</dd>
 <dt><span class="throwsLabel">Throws:</span></dt>
 <dd><code>java.lang.Exception</code> - If something goes wrong</dd>
 </dl>
