@@ -95,7 +95,7 @@ public class CustomExporter {
 	 * the "GUID" column is added to it.  This is done because the GUID is needed during the restructuring
 	 * phase to find the relevant item in the case corresponding to a given record in the temporary export's
 	 * Concordance DAT file.
-	 * @param profile
+	 * @param profile The profile to use when generating metadata loadfiles.
 	 */
 	public void setProfile(MetadataProfile profile) {
 		this.profile = profile;
@@ -114,7 +114,7 @@ public class CustomExporter {
 	
 	/***
 	 * Removes a previously added dynamic placeholder.
-	 * @param placeholderName
+	 * @param placeholderName The name of the dynamic placeholder to remove
 	 */
 	public void removeDynamicPlaceholder(String placeholderName) {
 		dynamicPlaceholders.remove(placeholderName);
@@ -290,7 +290,7 @@ public class CustomExporter {
 	 * updated to reflect restructuring.
 	 * @param nuixCase The relevant Nuix case, needed to resolve GUIDs in temp export DAT file to actual items.
 	 * @param exportDirectory Where the final export should reside.
-	 * @param items
+	 * @param items The items to export
 	 * @throws Exception If something goes wrong
 	 */
 	public void exportItems(Case nuixCase, String exportDirectory, List<Item> items) throws Exception {
