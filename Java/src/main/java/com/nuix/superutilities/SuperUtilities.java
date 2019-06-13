@@ -179,8 +179,8 @@ public class SuperUtilities{
 	}
 	
 	/***
-	 * Creates a new instance of {@link com.nuix.superutilities.cases.CaseUtility}.
-	 * @return a new instance of {@link com.nuix.superutilities.cases.CaseUtility}
+	 * Creates a new instance of {@link com.nuix.superutilities.cases.BulkCaseProcessor}.
+	 * @return a new instance of {@link com.nuix.superutilities.cases.BulkCaseProcessor}
 	 */
 	public BulkCaseProcessor createBulkCaseProcessor(){
 		return new BulkCaseProcessor();
