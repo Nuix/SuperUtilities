@@ -30,6 +30,7 @@ public class SQLiteBacked implements Closeable {
 	private Connection persistentConnection = null;
 	
 	public SQLiteBacked(File databaseFile) {
+		this.databaseFile = databaseFile;
 		SQLiteConfig config = new SQLiteConfig();
 		config.setCacheSize(2000);
 		config.setPageSize(4096 * 10);
