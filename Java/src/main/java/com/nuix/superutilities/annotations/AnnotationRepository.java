@@ -4,7 +4,10 @@ import java.io.File;
 import java.io.IOException;
 import java.sql.ResultSet;
 import java.sql.SQLException;
+import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 import java.util.Set;
 import java.util.function.Consumer;
 
@@ -139,7 +142,7 @@ public class AnnotationRepository extends SQLiteBacked {
 			
 			String sql = "INSERT INTO Item (GUID,MD5,Name) VALUES (?,?,?)";
 			executeInsert(sql, guidBytes, md5Bytes, name);
-			long id = executeScalar("SELECT ID FROM Item WHERE GUID = ?", guidBytes);
+			long id = executeLongScalar("SELECT ID FROM Item WHERE GUID = ?", guidBytes);
 			itemGuidIdLookup.put(guid, id);
 			return id;
 		}
@@ -155,9 +158,94 @@ public class AnnotationRepository extends SQLiteBacked {
 			
 			String sql = "INSERT INTO MarkupSet (Name,Description,RedactionReason) VALUES (?,?,?)";
 			executeInsert(sql,name,description,redactionReason);
-			long id = executeScalar("SELECT ID FROM MarkupSet WHERE Name = ?", name);
+			long id = executeLongScalar("SELECT ID FROM MarkupSet WHERE Name = ?", name);
 			markupSetIdLookup.put(name, id);
 			return id;
+		}
+	}
+	
+	public void applyMarkupsFromDatabaseToCase(Case nuixCase, boolean addToExisting) throws SQLException {
+		Map<String,MarkupSet> markupSetLookup = new HashMap<String,MarkupSet>();
+		for(MarkupSet existingMarkupSet : nuixCase.getMarkupSets()) {
+			markupSetLookup.put(existingMarkupSet.getName(), existingMarkupSet);
+		}
+		
+		List<Object> bindData = new ArrayList<Object>();
+		
+		for(Map.Entry<String, Long> markupEntry : markupSetIdLookup.entrySet()) {
+			String markupSetName = markupEntry.getKey();
+			long markupSetId = markupEntry.getValue();
+			String markupSetDescription = executeStringScalar("SELECT Description FROM MarkupSet WHERE ID = ?",markupSetId);
+			String markupSetRedactionReason = executeStringScalar("SELECT RedactionReason FROM MarkupSet WHERE ID = ?",markupSetId);
+			
+			// We need to resolve the MarkupSet object, either by obtaining existing one in case or creating new one
+			MarkupSet markupSet = null;
+			if(markupSetLookup.containsKey(markupSetName)) {
+				if(addToExisting) {
+					markupSet = markupSetLookup.get(markupSetName);
+				} else {
+					// When addToExisting is false and we have a name collision, we will attempt to find a usable name
+					int nameSequence = 2;
+					String targetName = markupSetName+"_"+nameSequence;
+					while(markupSetLookup.containsKey(targetName)) {
+						nameSequence++;
+						targetName = markupSetName+"_"+nameSequence;
+					}
+					Map<String,Object> markupSetSettings = new HashMap<String,Object>();
+					markupSetSettings.put("description", markupSetDescription);
+					markupSetSettings.put("redactionReason", markupSetRedactionReason);
+					markupSet = nuixCase.createMarkupSet(targetName, markupSetSettings);
+				}
+			} else {
+				// Markup set does not appear to already exist, so lets create it
+				Map<String,Object> markupSetSettings = new HashMap<String,Object>();
+				markupSetSettings.put("description", markupSetDescription);
+				markupSetSettings.put("redactionReason", markupSetRedactionReason);
+				markupSet = nuixCase.createMarkupSet(markupSetName, markupSetSettings);
+			}
+			
+			final MarkupSet targetMarkupSet = markupSet;
+			
+			// Now that we have a MarkupSet, we need to get ItemMarkup records from DB
+			String itemMarkupSql = "SELECT i.GUID,im.PageNumber,im.IsRedaction,im.X,im.Y,im.Width,im.Height FROM ItemMarkup AS im " + 
+					"INNER JOIN Item AS i ON im.Item_ID = i.ID " + 
+					"WHERE im.MarkupSet_ID = ? " + 
+					"ORDER BY GUID, PageNumber";
+			bindData.clear();
+			bindData.add(markupSetId);
+			executeQuery(itemMarkupSql,bindData,new Consumer<ResultSet>() {
+				@Override
+				public void accept(ResultSet rs) {
+					try {
+						while(rs.next()) {
+							String guid = FormatUtility.bytesToHex(rs.getBytes(1));
+							long pageNumber = rs.getLong(2);
+							boolean isRedaction = rs.getBoolean(3);
+							double x = rs.getDouble(4);
+							double y = rs.getDouble(5);
+							double width = rs.getDouble(6);
+							double height = rs.getDouble(7);
+							
+							Set<Item> items = nuixCase.searchUnsorted("guid:"+guid);
+							
+							for(Item item : items) {
+								MutablePrintedImage itemImage = item.getPrintedImage();
+								List<? extends PrintedPage> pages = itemImage.getPages();
+								MutablePrintedPage page = (MutablePrintedPage)pages.get((int) (pageNumber-1));
+								if(isRedaction) {
+									page.createRedaction(targetMarkupSet, x, y, width, height);
+								} else {
+									page.createHighlight(targetMarkupSet, x, y, width, height);
+								}
+							}
+						}
+					} catch (SQLException exc) {
+						logger.error("Error retrieving ItemMarkup data from database", exc);
+					} catch (IOException exc2) {
+						logger.error("Error retrieving item from case", exc2);
+					}
+				}
+			});
 		}
 	}
 }
