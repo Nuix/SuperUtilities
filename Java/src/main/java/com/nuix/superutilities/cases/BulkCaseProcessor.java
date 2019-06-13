@@ -60,11 +60,11 @@ public class BulkCaseProcessor {
 	}
 	
 	/***
-	 * Begins iterating provided list of cases, passing the following information for each case to the provided callback:
-	 * - The case object
-	 * - Information about the case
-	 * - Current index of the case provided
-	 * - Total number of cases to be iterated
+	 * Begins iterating provided list of cases, passing the following information for each case to the provided callback:<br>
+	 * - The case object<br>
+	 * - Information about the case<br>
+	 * - Current index of the case provided<br>
+	 * - Total number of cases to be iterated<br>
 	 * @param caseWorkFunction Callback which does something with each case.
 	 */
 	public void withEachCase(CaseConsumer caseWorkFunction){
@@ -72,17 +72,17 @@ public class BulkCaseProcessor {
 	}
 	
 	/***
-	 * Begins iterating provided list of cases, passing the following information for each case to the provided callback:
-	 * - The case object
-	 * - Information about the case
-	 * - Current index of the case provided
-	 * - Total number of cases to be iterated
+	 * Begins iterating provided list of cases, passing the following information for each case to the provided callback:<br>
+	 * - The case object<br>
+	 * - Information about the case<br>
+	 * - Current index of the case provided<br>
+	 * - Total number of cases to be iterated<br>
 	 * This method differs from {@link #withEachCase(CaseConsumer)} in that you provide the currently open case in the GUI
-	 * (in Ruby this would usually be $current_case).  If the case open in the GUI matche a case from the list of cases
+	 * (in Ruby this would usually be $current_case).  If the case open in the GUI matches a case from the list of cases
 	 * to be processed, this method will hand the callback the already open case object rather than trying to open the case
-	 * a second time, which will result in an error.  
-	 * @param currentCaseFromGui Case currently open in the GUI, in Ruby scripts this is usually $current_case
-	 * @param caseWorkFunction Callback which does something with each case.
+	 * a second time, which would result in an error.  
+	 * @param currentCaseFromGui Case currently open in the GUI, in Ruby scripts this is usually <code>$current_case</code>
+	 * @param caseWorkFunction Callback which does something with each open case.
 	 */
 	public void withEachCase(Case currentCaseFromGui, CaseConsumer caseWorkFunction){
 		if(caseWorkFunction == null){
@@ -142,7 +142,6 @@ public class BulkCaseProcessor {
 			else
 			{
 				// Case was not locked or was GUI currently open case
-				
 				Case nuixCase = null;
 				try {
 					// Logic is a bit different depending on whether this is GUI current case
@@ -168,7 +167,7 @@ public class BulkCaseProcessor {
 							break;
 						}
 					} catch (Exception e) {
-						// User code threw exception but didnt catch it
+						// User code threw exception but didn't catch it
 						logger.error("Error in user provided case work function:",e);
 						if(userFunctionErrorCallback != null){
 							WorkFunctionErrorEvent userFunctionErrorInfo = new WorkFunctionErrorEvent(caseInfo, e);
