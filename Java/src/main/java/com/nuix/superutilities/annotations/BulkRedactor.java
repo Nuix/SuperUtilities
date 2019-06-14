@@ -258,7 +258,7 @@ public class BulkRedactor {
 				Set<String> entityExpressions = entityValues.stream().map(v -> BulkRedactorSettings.phraseToExpression(v)).collect(Collectors.toSet());
 				List<NuixImageAnnotationRegion> entityRegions = findExpressionsInPdfFile(tempPdf, entityExpressions);
 				if(entityRegions.size() > 0) {
-					for(NuixImageAnnotationRegion region : regions) {
+					for(NuixImageAnnotationRegion region : entityRegions) {
 						region.setItem(item);
 					}
 					allFoundRegions.addAll(regions);
