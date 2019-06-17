@@ -17,7 +17,7 @@
     catch(err) {
     }
 //-->
-var methods = {"i0":9,"i1":9,"i2":9,"i3":9,"i4":9,"i5":9,"i6":9,"i7":9};
+var methods = {"i0":9,"i1":9,"i2":9,"i3":9,"i4":9,"i5":9,"i6":9,"i7":9,"i8":9};
 var tabs = {65535:["t0","All Methods"],1:["t1","Static Methods"],8:["t4","Concrete Methods"]};
 var altColor = "altColor";
 var rowColor = "rowColor";
@@ -159,36 +159,40 @@ extends java.lang.Object</pre>
 </tr>
 <tr id="i2" class="altColor">
 <td class="colFirst"><code>static java.lang.String</code></td>
+<td class="colLast"><code><span class="memberNameLink"><a href="../../../../com/nuix/superutilities/query/QueryHelper.html#markupSetQuery-nuix.MarkupSet-">markupSetQuery</a></span>(nuix.MarkupSet&nbsp;markupSet)</code>&nbsp;</td>
+</tr>
+<tr id="i3" class="rowColor">
+<td class="colFirst"><code>static java.lang.String</code></td>
 <td class="colLast"><code><span class="memberNameLink"><a href="../../../../com/nuix/superutilities/query/QueryHelper.html#namedEntityQuery-java.util.Collection-">namedEntityQuery</a></span>(java.util.Collection&lt;java.lang.String&gt;&nbsp;entityNames)</code>
 <div class="block">Generates a query to find items which have a match for any of the provided named entities.</div>
 </td>
 </tr>
-<tr id="i3" class="rowColor">
+<tr id="i4" class="altColor">
 <td class="colFirst"><code>static java.lang.String</code></td>
 <td class="colLast"><code><span class="memberNameLink"><a href="../../../../com/nuix/superutilities/query/QueryHelper.html#notJoinByOr-java.util.Collection-">notJoinByOr</a></span>(java.util.Collection&lt;java.lang.String&gt;&nbsp;expressions)</code>
 <div class="block">Returns a query in the form: <code>NOT (a OR b OR c)</code> with a,b and c being expressions provided.</div>
 </td>
 </tr>
-<tr id="i4" class="altColor">
+<tr id="i5" class="rowColor">
 <td class="colFirst"><code>static java.lang.String</code></td>
 <td class="colLast"><code><span class="memberNameLink"><a href="../../../../com/nuix/superutilities/query/QueryHelper.html#parenThenJoinByAnd-java.util.Collection-">parenThenJoinByAnd</a></span>(java.util.Collection&lt;java.lang.String&gt;&nbsp;expressions)</code>
 <div class="block">Joins a series of expressions by " AND " after wrapping each expression in parentheses.</div>
 </td>
 </tr>
-<tr id="i5" class="rowColor">
+<tr id="i6" class="altColor">
 <td class="colFirst"><code>static java.lang.String</code></td>
 <td class="colLast"><code><span class="memberNameLink"><a href="../../../../com/nuix/superutilities/query/QueryHelper.html#parenThenJoinByOr-java.util.Collection-">parenThenJoinByOr</a></span>(java.util.Collection&lt;java.lang.String&gt;&nbsp;expressions)</code>
 <div class="block">Joins a series of expressions by " OR " after wrapping each expression in parentheses.</div>
 </td>
 </tr>
-<tr id="i6" class="altColor">
+<tr id="i7" class="rowColor">
 <td class="colFirst"><code>static java.lang.String</code></td>
 <td class="colLast"><code><span class="memberNameLink"><a href="../../../../com/nuix/superutilities/query/QueryHelper.html#yearMonthRangeQuery-int-int-">yearMonthRangeQuery</a></span>(int&nbsp;year,
                    int&nbsp;month)</code>
 <div class="block">Builds an item-date range query for items with a date occurring within the specified year and month.</div>
 </td>
 </tr>
-<tr id="i7" class="rowColor">
+<tr id="i8" class="altColor">
 <td class="colFirst"><code>static java.lang.String</code></td>
 <td class="colLast"><code><span class="memberNameLink"><a href="../../../../com/nuix/superutilities/query/QueryHelper.html#yearRangeQuery-int-">yearRangeQuery</a></span>(int&nbsp;year)</code>
 <div class="block">Builds an item-date Nuix range query for items with a date occurring within the specified year.</div>
@@ -357,7 +361,7 @@ extends java.lang.Object</pre>
 <a name="namedEntityQuery-java.util.Collection-">
 <!--   -->
 </a>
-<ul class="blockListLast">
+<ul class="blockList">
 <li class="blockList">
 <h4>namedEntityQuery</h4>
 <pre>public static&nbsp;java.lang.String&nbsp;namedEntityQuery(java.util.Collection&lt;java.lang.String&gt;&nbsp;entityNames)</pre>
@@ -368,6 +372,15 @@ extends java.lang.Object</pre>
 <dt><span class="returnLabel">Returns:</span></dt>
 <dd>A query for items having matches for any of the specified named entities such as: named-entities:( company;* OR country;* OR credit-card-num;*)</dd>
 </dl>
+</li>
+</ul>
+<a name="markupSetQuery-nuix.MarkupSet-">
+<!--   -->
+</a>
+<ul class="blockListLast">
+<li class="blockList">
+<h4>markupSetQuery</h4>
+<pre>public static&nbsp;java.lang.String&nbsp;markupSetQuery(nuix.MarkupSet&nbsp;markupSet)</pre>
 </li>
 </ul>
 </li>

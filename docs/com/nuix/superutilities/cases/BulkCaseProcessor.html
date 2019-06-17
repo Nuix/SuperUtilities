@@ -215,11 +215,11 @@ extends java.lang.Object</pre>
 <td class="colFirst"><code>void</code></td>
 <td class="colLast"><code><span class="memberNameLink"><a href="../../../../com/nuix/superutilities/cases/BulkCaseProcessor.html#withEachCase-nuix.Case-com.nuix.superutilities.cases.CaseConsumer-">withEachCase</a></span>(nuix.Case&nbsp;currentCaseFromGui,
             <a href="../../../../com/nuix/superutilities/cases/CaseConsumer.html" title="interface in com.nuix.superutilities.cases">CaseConsumer</a>&nbsp;caseWorkFunction)</code>
-<div class="block">Begins iterating provided list of cases, passing the following information for each case to the provided callback:
- - The case object
- - Information about the case
- - Current index of the case provided
- - Total number of cases to be iterated
+<div class="block">Begins iterating provided list of cases, passing the following information for each case to the provided callback:<br>
+ - The case object<br>
+ - Information about the case<br>
+ - Current index of the case provided<br>
+ - Total number of cases to be iterated<br>
  This method differs from <a href="../../../../com/nuix/superutilities/cases/BulkCaseProcessor.html#withEachCase-com.nuix.superutilities.cases.CaseConsumer-"><code>withEachCase(CaseConsumer)</code></a> in that you provide the currently open case in the GUI
  (in Ruby this would usually be $current_case).</div>
 </td>
@@ -227,11 +227,11 @@ extends java.lang.Object</pre>
 <tr id="i10" class="altColor">
 <td class="colFirst"><code>void</code></td>
 <td class="colLast"><code><span class="memberNameLink"><a href="../../../../com/nuix/superutilities/cases/BulkCaseProcessor.html#withEachCase-com.nuix.superutilities.cases.CaseConsumer-">withEachCase</a></span>(<a href="../../../../com/nuix/superutilities/cases/CaseConsumer.html" title="interface in com.nuix.superutilities.cases">CaseConsumer</a>&nbsp;caseWorkFunction)</code>
-<div class="block">Begins iterating provided list of cases, passing the following information for each case to the provided callback:
- - The case object
- - Information about the case
- - Current index of the case provided
- - Total number of cases to be iterated</div>
+<div class="block">Begins iterating provided list of cases, passing the following information for each case to the provided callback:<br>
+ - The case object<br>
+ - Information about the case<br>
+ - Current index of the case provided<br>
+ - Total number of cases to be iterated<br></div>
 </td>
 </tr>
 </table>
@@ -318,11 +318,11 @@ extends java.lang.Object</pre>
 <li class="blockList">
 <h4>withEachCase</h4>
 <pre>public&nbsp;void&nbsp;withEachCase(<a href="../../../../com/nuix/superutilities/cases/CaseConsumer.html" title="interface in com.nuix.superutilities.cases">CaseConsumer</a>&nbsp;caseWorkFunction)</pre>
-<div class="block">Begins iterating provided list of cases, passing the following information for each case to the provided callback:
- - The case object
- - Information about the case
- - Current index of the case provided
- - Total number of cases to be iterated</div>
+<div class="block">Begins iterating provided list of cases, passing the following information for each case to the provided callback:<br>
+ - The case object<br>
+ - Information about the case<br>
+ - Current index of the case provided<br>
+ - Total number of cases to be iterated<br></div>
 <dl>
 <dt><span class="paramLabel">Parameters:</span></dt>
 <dd><code>caseWorkFunction</code> - Callback which does something with each case.</dd>
@@ -337,19 +337,19 @@ extends java.lang.Object</pre>
 <h4>withEachCase</h4>
 <pre>public&nbsp;void&nbsp;withEachCase(nuix.Case&nbsp;currentCaseFromGui,
                          <a href="../../../../com/nuix/superutilities/cases/CaseConsumer.html" title="interface in com.nuix.superutilities.cases">CaseConsumer</a>&nbsp;caseWorkFunction)</pre>
-<div class="block">Begins iterating provided list of cases, passing the following information for each case to the provided callback:
- - The case object
- - Information about the case
- - Current index of the case provided
- - Total number of cases to be iterated
+<div class="block">Begins iterating provided list of cases, passing the following information for each case to the provided callback:<br>
+ - The case object<br>
+ - Information about the case<br>
+ - Current index of the case provided<br>
+ - Total number of cases to be iterated<br>
  This method differs from <a href="../../../../com/nuix/superutilities/cases/BulkCaseProcessor.html#withEachCase-com.nuix.superutilities.cases.CaseConsumer-"><code>withEachCase(CaseConsumer)</code></a> in that you provide the currently open case in the GUI
- (in Ruby this would usually be $current_case).  If the case open in the GUI matche a case from the list of cases
+ (in Ruby this would usually be $current_case).  If the case open in the GUI matches a case from the list of cases
  to be processed, this method will hand the callback the already open case object rather than trying to open the case
- a second time, which will result in an error.</div>
+ a second time, which would result in an error.</div>
 <dl>
 <dt><span class="paramLabel">Parameters:</span></dt>
-<dd><code>currentCaseFromGui</code> - Case currently open in the GUI, in Ruby scripts this is usually $current_case</dd>
-<dd><code>caseWorkFunction</code> - Callback which does something with each case.</dd>
+<dd><code>currentCaseFromGui</code> - Case currently open in the GUI, in Ruby scripts this is usually <code>$current_case</code></dd>
+<dd><code>caseWorkFunction</code> - Callback which does something with each open case.</dd>
 </dl>
 </li>
 </ul>

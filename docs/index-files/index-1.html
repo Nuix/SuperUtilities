@@ -73,6 +73,10 @@
 </a>
 <h2 class="title">A</h2>
 <dl>
+<dt><span class="memberNameLink"><a href="../com/nuix/superutilities/annotations/AnnotationRepository.html#abort--">abort()</a></span> - Method in class com.nuix.superutilities.annotations.<a href="../com/nuix/superutilities/annotations/AnnotationRepository.html" title="class in com.nuix.superutilities.annotations">AnnotationRepository</a></dt>
+<dd>
+<div class="block">Signals that you wish to abort.</div>
+</dd>
 <dt><span class="memberNameLink"><a href="../com/nuix/superutilities/cases/CaseLockedEventInfo.html#abort--">abort()</a></span> - Method in class com.nuix.superutilities.cases.<a href="../com/nuix/superutilities/cases/CaseLockedEventInfo.html" title="class in com.nuix.superutilities.cases">CaseLockedEventInfo</a></dt>
 <dd>
 <div class="block">Notifies <a href="../com/nuix/superutilities/cases/BulkCaseProcessor.html" title="class in com.nuix.superutilities.cases"><code>BulkCaseProcessor</code></a> that all further processing should be aborted</div>
@@ -193,6 +197,20 @@
 <dd>&nbsp;</dd>
 <dt><span class="memberNameLink"><a href="../com/nuix/superutilities/annotations/AnnotationHistoryRepositorySummary.html#AnnotationHistoryRepositorySummary--">AnnotationHistoryRepositorySummary()</a></span> - Constructor for class com.nuix.superutilities.annotations.<a href="../com/nuix/superutilities/annotations/AnnotationHistoryRepositorySummary.html" title="class in com.nuix.superutilities.annotations">AnnotationHistoryRepositorySummary</a></dt>
 <dd>&nbsp;</dd>
+<dt><a href="../com/nuix/superutilities/annotations/AnnotationMatchingMethod.html" title="enum in com.nuix.superutilities.annotations"><span class="typeNameLink">AnnotationMatchingMethod</span></a> - Enum in <a href="../com/nuix/superutilities/annotations/package-summary.html">com.nuix.superutilities.annotations</a></dt>
+<dd>&nbsp;</dd>
+<dt><a href="../com/nuix/superutilities/annotations/AnnotationRepository.html" title="class in com.nuix.superutilities.annotations"><span class="typeNameLink">AnnotationRepository</span></a> - Class in <a href="../com/nuix/superutilities/annotations/package-summary.html">com.nuix.superutilities.annotations</a></dt>
+<dd>
+<div class="block">This class leverages a SQLite database file to export and import annotations between Nuix cases.</div>
+</dd>
+<dt><span class="memberNameLink"><a href="../com/nuix/superutilities/annotations/AnnotationRepository.html#AnnotationRepository-java.lang.String-">AnnotationRepository(String)</a></span> - Constructor for class com.nuix.superutilities.annotations.<a href="../com/nuix/superutilities/annotations/AnnotationRepository.html" title="class in com.nuix.superutilities.annotations">AnnotationRepository</a></dt>
+<dd>
+<div class="block">Creates a new instance associated to the specified SQLite DB file.</div>
+</dd>
+<dt><span class="memberNameLink"><a href="../com/nuix/superutilities/annotations/AnnotationRepository.html#AnnotationRepository-java.io.File-">AnnotationRepository(File)</a></span> - Constructor for class com.nuix.superutilities.annotations.<a href="../com/nuix/superutilities/annotations/AnnotationRepository.html" title="class in com.nuix.superutilities.annotations">AnnotationRepository</a></dt>
+<dd>
+<div class="block">Creates a new instance associated to the specified SQLite DB file.</div>
+</dd>
 <dt><a href="../com/nuix/superutilities/annotations/AnnotationSyncSettings.html" title="class in com.nuix.superutilities.annotations"><span class="typeNameLink">AnnotationSyncSettings</span></a> - Class in <a href="../com/nuix/superutilities/annotations/package-summary.html">com.nuix.superutilities.annotations</a></dt>
 <dd>&nbsp;</dd>
 <dt><span class="memberNameLink"><a href="../com/nuix/superutilities/annotations/AnnotationSyncSettings.html#AnnotationSyncSettings--">AnnotationSyncSettings()</a></span> - Constructor for class com.nuix.superutilities.annotations.<a href="../com/nuix/superutilities/annotations/AnnotationSyncSettings.html" title="class in com.nuix.superutilities.annotations">AnnotationSyncSettings</a></dt>
@@ -204,6 +222,10 @@
 <dt><span class="memberNameLink"><a href="../com/nuix/superutilities/annotations/NuixImageAnnotationRegion.html#applyHighlight-nuix.MarkupSet-">applyHighlight(MarkupSet)</a></span> - Method in class com.nuix.superutilities.annotations.<a href="../com/nuix/superutilities/annotations/NuixImageAnnotationRegion.html" title="class in com.nuix.superutilities.annotations">NuixImageAnnotationRegion</a></dt>
 <dd>
 <div class="block">Applies a highlight based on the region defined by this instance.</div>
+</dd>
+<dt><span class="memberNameLink"><a href="../com/nuix/superutilities/annotations/AnnotationRepository.html#applyMarkupsFromDatabaseToCase-nuix.Case-boolean-com.nuix.superutilities.annotations.AnnotationMatchingMethod-">applyMarkupsFromDatabaseToCase(Case, boolean, AnnotationMatchingMethod)</a></span> - Method in class com.nuix.superutilities.annotations.<a href="../com/nuix/superutilities/annotations/AnnotationRepository.html" title="class in com.nuix.superutilities.annotations">AnnotationRepository</a></dt>
+<dd>
+<div class="block">Applies markups present in the SQLite DB file associated to this instance to the provided Nuix case.</div>
 </dd>
 <dt><span class="memberNameLink"><a href="../com/nuix/superutilities/annotations/NuixImageAnnotationRegion.html#applyRedaction-nuix.MarkupSet-">applyRedaction(MarkupSet)</a></span> - Method in class com.nuix.superutilities.annotations.<a href="../com/nuix/superutilities/annotations/NuixImageAnnotationRegion.html" title="class in com.nuix.superutilities.annotations">NuixImageAnnotationRegion</a></dt>
 <dd>

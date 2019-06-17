@@ -97,9 +97,17 @@
 </dd>
 <dt><span class="memberNameLink"><a href="../com/nuix/superutilities/reporting/IntersectionReport.html#whenMessageGenerated-java.util.function.Consumer-">whenMessageGenerated(Consumer&lt;String&gt;)</a></span> - Method in class com.nuix.superutilities.reporting.<a href="../com/nuix/superutilities/reporting/IntersectionReport.html" title="class in com.nuix.superutilities.reporting">IntersectionReport</a></dt>
 <dd>&nbsp;</dd>
+<dt><span class="memberNameLink"><a href="../com/nuix/superutilities/annotations/AnnotationRepository.html#whenMessageLogged-java.util.function.Consumer-">whenMessageLogged(Consumer&lt;String&gt;)</a></span> - Method in class com.nuix.superutilities.annotations.<a href="../com/nuix/superutilities/annotations/AnnotationRepository.html" title="class in com.nuix.superutilities.annotations">AnnotationRepository</a></dt>
+<dd>
+<div class="block">Allows you to provide a callback which will be invoked when this instance emits a log message.</div>
+</dd>
 <dt><span class="memberNameLink"><a href="../com/nuix/superutilities/annotations/BulkRedactor.html#whenMessageLogged-java.util.function.Consumer-">whenMessageLogged(Consumer&lt;String&gt;)</a></span> - Method in class com.nuix.superutilities.annotations.<a href="../com/nuix/superutilities/annotations/BulkRedactor.html" title="class in com.nuix.superutilities.annotations">BulkRedactor</a></dt>
 <dd>
 <div class="block">Allows you to provide a callback which will be invoked when this instance emits a log message.</div>
+</dd>
+<dt><span class="memberNameLink"><a href="../com/nuix/superutilities/annotations/AnnotationRepository.html#whenProgressUpdated-java.util.function.BiConsumer-">whenProgressUpdated(BiConsumer&lt;Integer, Integer&gt;)</a></span> - Method in class com.nuix.superutilities.annotations.<a href="../com/nuix/superutilities/annotations/AnnotationRepository.html" title="class in com.nuix.superutilities.annotations">AnnotationRepository</a></dt>
+<dd>
+<div class="block">Allows you to provide a callback which will be invoked when this instance emits a progress update.</div>
 </dd>
 <dt><span class="memberNameLink"><a href="../com/nuix/superutilities/annotations/BulkRedactor.html#whenProgressUpdated-java.util.function.Consumer-">whenProgressUpdated(Consumer&lt;BulkRedactorProgressInfo&gt;)</a></span> - Method in class com.nuix.superutilities.annotations.<a href="../com/nuix/superutilities/annotations/BulkRedactor.html" title="class in com.nuix.superutilities.annotations">BulkRedactor</a></dt>
 <dd>
@@ -130,19 +138,19 @@
 </dd>
 <dt><span class="memberNameLink"><a href="../com/nuix/superutilities/cases/BulkCaseProcessor.html#withEachCase-com.nuix.superutilities.cases.CaseConsumer-">withEachCase(CaseConsumer)</a></span> - Method in class com.nuix.superutilities.cases.<a href="../com/nuix/superutilities/cases/BulkCaseProcessor.html" title="class in com.nuix.superutilities.cases">BulkCaseProcessor</a></dt>
 <dd>
-<div class="block">Begins iterating provided list of cases, passing the following information for each case to the provided callback:
- - The case object
- - Information about the case
- - Current index of the case provided
- - Total number of cases to be iterated</div>
+<div class="block">Begins iterating provided list of cases, passing the following information for each case to the provided callback:<br>
+ - The case object<br>
+ - Information about the case<br>
+ - Current index of the case provided<br>
+ - Total number of cases to be iterated<br></div>
 </dd>
 <dt><span class="memberNameLink"><a href="../com/nuix/superutilities/cases/BulkCaseProcessor.html#withEachCase-nuix.Case-com.nuix.superutilities.cases.CaseConsumer-">withEachCase(Case, CaseConsumer)</a></span> - Method in class com.nuix.superutilities.cases.<a href="../com/nuix/superutilities/cases/BulkCaseProcessor.html" title="class in com.nuix.superutilities.cases">BulkCaseProcessor</a></dt>
 <dd>
-<div class="block">Begins iterating provided list of cases, passing the following information for each case to the provided callback:
- - The case object
- - Information about the case
- - Current index of the case provided
- - Total number of cases to be iterated
+<div class="block">Begins iterating provided list of cases, passing the following information for each case to the provided callback:<br>
+ - The case object<br>
+ - Information about the case<br>
+ - Current index of the case provided<br>
+ - Total number of cases to be iterated<br>
  This method differs from <a href="../com/nuix/superutilities/cases/BulkCaseProcessor.html#withEachCase-com.nuix.superutilities.cases.CaseConsumer-"><code>BulkCaseProcessor.withEachCase(CaseConsumer)</code></a> in that you provide the currently open case in the GUI
  (in Ruby this would usually be $current_case).</div>
 </dd>
