@@ -7,6 +7,8 @@ import java.util.stream.Collectors;
 
 import org.joda.time.DateTime;
 
+import nuix.MarkupSet;
+
 public class QueryHelper {
 	/***
 	 * Builds an item-date Nuix range query for items with a date occurring within the specified year.
@@ -124,5 +126,9 @@ public class QueryHelper {
 		Set<String> entityNameFragments = entityNames.stream().map(ne -> String.format("%s;*",ne)).collect(Collectors.toSet());
 		String query = String.format("named-entities:(%s)", String.join(" OR ",entityNameFragments));
 		return query;
+	}
+	
+	public static String markupSetQuery(MarkupSet markupSet) {
+		return String.format("markup-set:\"%s\"", markupSet.getName());
 	}
 }
