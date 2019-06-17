@@ -19,7 +19,7 @@ import org.sqlite.SQLiteConfig.SynchronousMode;
 import org.sqlite.SQLiteConfig.TransactionMode;
 
 /***
- * Provides a wrapper around a SQLite database.  Intended to be extended by other classes which intended to leverage a
+ * Provides a wrapper around a SQLite database.  Intended to be extended by other classes which intend to leverage a
  * SQLite database is some way.
  * @author Jason Wells
  *
@@ -52,7 +52,7 @@ public class SQLiteBacked implements Closeable {
 	/***
 	 * Binds a list of objects to a prepared statement
 	 * @param statement The prepared statement to bind data to
-	 * @param data The data to bind
+	 * @param data The data to bind to the prepared statement
 	 * @throws SQLException If the SQL bits throw an error
 	 */
 	private void bindData(PreparedStatement statement, List<Object> data) throws SQLException{
@@ -64,6 +64,12 @@ public class SQLiteBacked implements Closeable {
 		}
 	}
 	
+	/***
+	 * Binds an array of objects to a prepared statement
+	 * @param statement The prepared statement to find data to
+	 * @param data The data to bind to the prepared statement
+	 * @throws SQLException
+	 */
 	private void bindData(PreparedStatement statement, Object[] data) throws SQLException{
 		if(data != null){
 			for (int i = 0; i < data.length; i++) {
@@ -88,6 +94,13 @@ public class SQLiteBacked implements Closeable {
 		}
 	}
 	
+	/***
+	 * Executes an update query against the SQLite database file
+	 * @param sql The SQL to execute
+	 * @param data Optional list of associated data, can be null
+	 * @return Count of affected records
+	 * @throws SQLException If the SQL bits throw an error
+	 */
 	public int executeUpdate(String sql, Object ...data) throws SQLException{
 		Connection conn = getConnection();
 		try(PreparedStatement statement = conn.prepareStatement(sql)){
@@ -96,6 +109,12 @@ public class SQLiteBacked implements Closeable {
 		}
 	}
 	
+	/***
+	 * Executes an update query against the SQLite database file
+	 * @param sql The SQL to execute
+	 * @return either (1) the row count for SQL Data Manipulation Language (DML) statements or (2) 0 for SQL statements that return nothing
+	 * @throws SQLException
+	 */
 	public int executeUpdate(String sql) throws SQLException{
 		Connection conn = getConnection();
 		try(PreparedStatement statement = conn.prepareStatement(sql)){
@@ -117,6 +136,12 @@ public class SQLiteBacked implements Closeable {
 		}
 	}
 	
+	/***
+	 * Executes an insert query against the SQLite database file
+	 * @param sql The SQL to execute
+	 * @param data Optional list of associated data, can be null
+	 * @throws SQLException If the SQL bits throw an error
+	 */
 	public void executeInsert(String sql, Object ...data) throws SQLException{
 		Connection conn = getConnection();
 		try(PreparedStatement statement = conn.prepareStatement(sql)){
@@ -125,6 +150,13 @@ public class SQLiteBacked implements Closeable {
 		}
 	}
 	
+	/***
+	 * Executes SQL which is expected to return a single long/int value, such as a COUNT statement would.
+	 * @param sql The SQL to execute
+	 * @param data Optional list of associated data, can be null
+	 * @return The single long/int value returned by the provided SQL
+	 * @throws SQLException If the SQL bits throw an error
+	 */
 	public Long executeLongScalar(String sql, Object ...data) throws SQLException{
 		Connection conn = getConnection();
 		try(PreparedStatement statement = conn.prepareStatement(sql)){
@@ -135,6 +167,13 @@ public class SQLiteBacked implements Closeable {
 		}
 	}
 	
+	/***
+	 * Executes SQL which is expected to return a single long/int value, such as a COUNT statement would.
+	 * @param sql The SQL to execute
+	 * @param data Optional list of associated data, can be null
+	 * @return The single long/int value returned by the provided SQL
+	 * @throws SQLException If the SQL bits throw an error
+	 */
 	public Long executeLongScalar(String sql, List<Object> data) throws SQLException{
 		Connection conn = getConnection();
 		try(PreparedStatement statement = conn.prepareStatement(sql)){
@@ -145,6 +184,12 @@ public class SQLiteBacked implements Closeable {
 		}
 	}
 	
+	/***
+	 * Executes SQL which is expected to return a single long/int value, such as a COUNT statement would.
+	 * @param sql The SQL to execute
+	 * @return The single long/int value returned by the provided SQL
+	 * @throws SQLException If the SQL bits throw an error
+	 */
 	public Long executeLongScalar(String sql) throws SQLException{
 		Connection conn = getConnection();
 		try(PreparedStatement statement = conn.prepareStatement(sql)){
@@ -154,6 +199,13 @@ public class SQLiteBacked implements Closeable {
 		}
 	}
 	
+	/***
+	 * Executes SQL which is expected to return a single string value.
+	 * @param sql The SQL to execute
+	 * @param data Optional list of associated data, can be null
+	 * @return The single string value returned by the provided SQL
+	 * @throws SQLException If the SQL bits throw an error
+	 */
 	public String executeStringScalar(String sql, Object ...data) throws SQLException{
 		Connection conn = getConnection();
 		try(PreparedStatement statement = conn.prepareStatement(sql)){
@@ -164,6 +216,13 @@ public class SQLiteBacked implements Closeable {
 		}
 	}
 	
+	/***
+	 * Executes SQL which is expected to return a single string value.
+	 * @param sql The SQL to execute
+	 * @param data Optional list of associated data, can be null
+	 * @return The single string value returned by the provided SQL
+	 * @throws SQLException If the SQL bits throw an error
+	 */
 	public String executeStringScalar(String sql, List<Object> data) throws SQLException{
 		Connection conn = getConnection();
 		try(PreparedStatement statement = conn.prepareStatement(sql)){
@@ -174,6 +233,12 @@ public class SQLiteBacked implements Closeable {
 		}
 	}
 	
+	/***
+	 * Executes SQL which is expected to return a single string value.
+	 * @param sql The SQL to execute
+	 * @return The single string value returned by the provided SQL
+	 * @throws SQLException If the SQL bits throw an error
+	 */
 	public String executeStringScalar(String sql) throws SQLException{
 		Connection conn = getConnection();
 		try(PreparedStatement statement = conn.prepareStatement(sql)){

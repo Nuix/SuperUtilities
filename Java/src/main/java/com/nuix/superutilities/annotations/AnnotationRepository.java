@@ -31,6 +31,11 @@ import nuix.MutablePrintedImage;
 import nuix.MutablePrintedPage;
 import nuix.PrintedPage;
 
+/***
+ * This class leverages a SQLite database file to export and import annotations between Nuix cases.
+ * @author Jason Wells
+ *
+ */
 public class AnnotationRepository extends SQLiteBacked {
 	private static Logger logger = Logger.getLogger(AnnotationRepository.class);
 	
@@ -76,15 +81,29 @@ public class AnnotationRepository extends SQLiteBacked {
 	private HashBiMap<String,Long> itemGuidIdLookup = HashBiMap.create();
 	private HashBiMap<String,Long> markupSetIdLookup = HashBiMap.create();
 	
+	/***
+	 * Creates a new instance associated to the specified SQLite DB file.  File will be created if it does not already exist.
+	 * @param databaseFile The SQLite database file to use.
+	 * @throws SQLException Thrown if there are errors while interacting with the SQLite DB file.
+	 */
 	public AnnotationRepository(String databaseFile) throws SQLException {
 		this(new File(databaseFile));
 	}
 	
+	/***
+	 * Creates a new instance associated to the specified SQLite DB file.  File will be created if it does not already exist.
+	 * @param databaseFile The SQLite database file to use.
+	 * @throws SQLException Thrown if there are errors while interacting with the SQLite DB file.
+	 */
 	public AnnotationRepository(File databaseFile) throws SQLException {
 		super(databaseFile);
 		createTables();
 	}
 	
+	/***
+	 * Ensures the expected tables exist in the associated SQLite DB file.
+	 * @throws SQLException Thrown if there are errors while interacting with the SQLite DB file.
+	 */
 	private void createTables() throws SQLException {
 		// Create item table
 		String createTableItem = "CREATE TABLE IF NOT EXISTS Item ("+
@@ -103,6 +122,10 @@ public class AnnotationRepository extends SQLiteBacked {
 		rebuildXrefs();
 	}
 	
+	/***
+	 * Rebuilds in memory look ups for GUID/MD5 => database record IDs
+	 * @throws SQLException Thrown if there are errors while interacting with the SQLite DB file.
+	 */
 	private void rebuildXrefs() throws SQLException {
 		logMessage("Building GUID lookup from any existing entries in DB...");
 		itemGuidIdLookup.clear();
@@ -141,15 +164,30 @@ public class AnnotationRepository extends SQLiteBacked {
 		});
 	}
 	
+	/***
+	 * Stores all markup sets found in the provided case to the SQLite DB file.
+	 * @param nuixCase The Nuix case to record markup sets from.
+	 * @throws IOException Thrown most likely if there was an issue searching or retrieving printed pages of and item.
+	 * @throws SQLException Thrown if anything goes wrong interacting with the SQLite database file.
+	 */
 	public void storeAllMarkupSets(Case nuixCase) throws IOException, SQLException {
 		abortWasRequested = false;
 		List<MarkupSet> markupSets = nuixCase.getMarkupSets();
 		for(MarkupSet markupSet : markupSets) {
+			// Support aborting
 			if(abortWasRequested) { break; }
+			
 			storeMarkupSet(nuixCase, markupSet);
 		}
 	}
 	
+	/***
+	 * Stores a particular markup set living in the provided Nuix case.
+	 * @param nuixCase The Nuix case containing the provided markup set.
+	 * @param markupSet The specific markup set to store.
+	 * @throws IOException Thrown most likely if there was an issue searching or retrieving printed pages of and item.
+	 * @throws SQLException Thrown if anything goes wrong interacting with the SQLite database file.
+	 */
 	public void storeMarkupSet(Case nuixCase, MarkupSet markupSet) throws IOException, SQLException {
 		abortWasRequested = false;
 		logMessage("Storing markups from MarkupSet: "+markupSet.getName());
@@ -162,7 +200,9 @@ public class AnnotationRepository extends SQLiteBacked {
 		Set<Item> markupSetItems = nuixCase.searchUnsorted(itemQuery);
 		int currentItemIndex = 1;
 		for(Item item : markupSetItems) {
+			// Support aborting
 			if(abortWasRequested) { break; }
+			
 			fireProgressUpdated(currentItemIndex, markupSetItems.size());
 			long itemId = getItemId(item);
 			MutablePrintedImage itemImage = item.getPrintedImage();
@@ -190,6 +230,12 @@ public class AnnotationRepository extends SQLiteBacked {
 		logMessage("Difference: +%s",(itemMarkupCountAfter - itemMarkupCountBefore));
 	}
 	
+	/***
+	 * Gets the sequentially assigned ID value from the Item table for a given item based on its GUID.  Will attempt to get this from a cache first.
+	 * @param item The item to retrieve the DB ID number for.
+	 * @return The DB ID number for the given item, based on finding a record in the Item table with a matching GUID.
+	 * @throws SQLException Thrown if there are errors while interacting with the SQLite DB file.
+	 */
 	public long getItemId(Item item) throws SQLException {
 		String guid = item.getGuid().replaceAll("\\-", "");
 		
@@ -210,6 +256,12 @@ public class AnnotationRepository extends SQLiteBacked {
 		}
 	}
 	
+	/***
+	 * Gets the sequentially assigned ID value from the MarkupSet table for a given markup.  Will attempt to get this from a cache first.
+	 * @param markupSet The markup set to find the DB ID for.
+	 * @return The DB ID number for the given markup set, based on finding a record in the MarkupSet table with a matching name.
+	 * @throws SQLException Thrown if there are errors while interacting with the SQLite DB file.
+	 */
 	public long getMarkupSetId(MarkupSet markupSet) throws SQLException {
 		String name = markupSet.getName();
 		if(markupSetIdLookup.containsKey(name)) {
@@ -226,6 +278,13 @@ public class AnnotationRepository extends SQLiteBacked {
 		}
 	}
 	
+	/***
+	 * Applies markups present in the SQLite DB file associated to this instance to the provided Nuix case.
+	 * @param nuixCase The Nuix case to apply the DB file markups to.
+	 * @param addToExistingMarkupSet Whether to append marukps to existing markup sets of the the same name or create a new markup set with a suffixed name.
+	 * @param matchingMethod Specifies whether to match records in the DB file to item in the case by using GUID or MD5.
+	 * @throws SQLException Thrown if there are errors while interacting with the SQLite DB file.
+	 */
 	public void applyMarkupsFromDatabaseToCase(Case nuixCase, boolean addToExistingMarkupSet, AnnotationMatchingMethod matchingMethod) throws SQLException {
 		abortWasRequested = false;
 		Map<String,MarkupSet> markupSetLookup = new HashMap<String,MarkupSet>();
@@ -236,7 +295,9 @@ public class AnnotationRepository extends SQLiteBacked {
 		List<Object> bindData = new ArrayList<Object>();
 		
 		for(Map.Entry<String, Long> markupEntry : markupSetIdLookup.entrySet()) {
+			// Support aborting
 			if(abortWasRequested) { break; }
+			
 			String markupSetName = markupEntry.getKey();
 			long markupSetId = markupEntry.getValue();
 			String markupSetDescription = executeStringScalar("SELECT Description FROM MarkupSet WHERE ID = ?",markupSetId);
@@ -282,26 +343,34 @@ public class AnnotationRepository extends SQLiteBacked {
 			
 			final MarkupSet targetMarkupSet = markupSet;
 			
-			// Now that we have a MarkupSet, we need to get ItemMarkup records from DB
+			
+			// SQL for info needed to apply markups.  Sorted by MD5/GUID/PageNumber so that we should get markups for the same item
+			// one after another, making our cache defined below more efficiently leveraged.
 			String itemMarkupSql = "SELECT i.GUID,i.MD5,im.PageNumber,im.IsRedaction,im.X,im.Y,im.Width,im.Height FROM ItemMarkup AS im " + 
 					"INNER JOIN Item AS i ON im.Item_ID = i.ID " + 
 					"WHERE im.MarkupSet_ID = ? " + 
 					"ORDER BY MD5,GUID,PageNumber";
+			
+			// SQL to determine total item markup records for the current markup set
 			String itemMarkupTotalCountSql = "SELECT COUNT(*) FROM ItemMarkup AS im " + 
 					"INNER JOIN Item AS i ON im.Item_ID = i.ID " + 
-					"WHERE im.MarkupSet_ID = ? " + 
-					"ORDER BY MD5,GUID,PageNumber";
+					"WHERE im.MarkupSet_ID = ? ";
 			
 			bindData.clear();
 			bindData.add(markupSetId);
 			
 			int totalItemMarkups = executeLongScalar(itemMarkupTotalCountSql,bindData).intValue();
+			
+			// We use a cache for item retrieval, running a serach for the item by GUID or MD5 if requested but
+			// not currently present in the cache.
 			LoadingCache<String,Set<Item>> itemCache = CacheBuilder.newBuilder()
 					.maximumSize(1000)
 					.build(new CacheLoader<String,Set<Item>>(){
 
 						@Override
 						public Set<Item> load(String guidOrMd5) throws Exception {
+							// When a given GUID or MD5 is found to note already be present in our cache
+							// we will need to go find it in our case, cache it and return it.
 							Set<Item> items = new HashSet<Item>();
 							if(matchingMethod == AnnotationMatchingMethod.GUID) {
 								items = nuixCase.searchUnsorted("guid:"+guidOrMd5);
@@ -318,13 +387,17 @@ public class AnnotationRepository extends SQLiteBacked {
 						}
 					});
 			
+			// We now run our SQL to get item markup information, iterating each result and applying it
+			// to matching items in our case.
 			executeQuery(itemMarkupSql,bindData,new Consumer<ResultSet>() {
 				int currentIndex = 1;
 				@Override
 				public void accept(ResultSet rs) {
 					try {
 						while(rs.next()) {
+							// Support aborting
 							if(abortWasRequested) { break; }
+							
 							fireProgressUpdated(currentIndex,totalItemMarkups);
 							String guid = FormatUtility.bytesToHex(rs.getBytes(1));
 							String md5 = FormatUtility.bytesToHex(rs.getBytes(2));
@@ -337,12 +410,14 @@ public class AnnotationRepository extends SQLiteBacked {
 							
 							Set<Item> items = null;
 							
+							// Leverage our cache to minimize unnecessary searching for the same item or items repeatedly
 							if(matchingMethod == AnnotationMatchingMethod.GUID) {
 								items = itemCache.get(guid);
 							} else if(matchingMethod == AnnotationMatchingMethod.MD5) {
 								items = itemCache.get(md5);
 							}
-														
+							
+							// Apply markup to relevant items in the destination case
 							for(Item item : items) {
 								MutablePrintedImage itemImage = item.getPrintedImage();
 								List<? extends PrintedPage> pages = itemImage.getPages();
@@ -369,10 +444,19 @@ public class AnnotationRepository extends SQLiteBacked {
 		}
 	}
 	
+	/***
+	 * Gets the number of markups present in the ItemMarkup table.
+	 * @return The number of markup records present in the ItemMarkup table of the DB file.
+	 * @throws SQLException Thrown if there are errors while interacting with the SQLite DB file.
+	 */
 	public long getItemMarkupCount() throws SQLException {
 		return executeLongScalar("SELECT COUNT(*) FROM ItemMarkup");
 	}
 	
+	/***
+	 * Signals that you wish to abort.  Export and import logic test for the abort signal in various loops and will cut short their iteration when
+	 * the abort signal has been set.
+	 */
 	public void abort() {
 		logMessage("Signalling abort...");
 		abortWasRequested = true;
