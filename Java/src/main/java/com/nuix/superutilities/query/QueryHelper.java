@@ -1,5 +1,6 @@
 package com.nuix.superutilities.query;
 
+import java.util.ArrayList;
 import java.util.Collection;
 import java.util.List;
 import java.util.Set;
@@ -130,5 +131,34 @@ public class QueryHelper {
 	
 	public static String markupSetQuery(MarkupSet markupSet) {
 		return String.format("markup-set:\"%s\"", markupSet.getName());
+	}
+	
+	public static String escapeForSearch(String value) {
+		String result = value.replaceAll("\\", "\\\\");
+		result = result.replaceAll("\\?", "\\\\?");
+		result = result.replaceAll("\\*", "\\\\*");
+		result = result.replaceAll("\"", "\\\"");
+		result = result.replaceAll("\u201C", "\\\u201C");
+		result = result.replaceAll("\u201D", "\\\u201D");
+		result = result.replaceAll("'", "\\'");
+		result = result.replaceAll("{", "\\{");
+		result = result.replaceAll("}", "\\}");
+		return result;
+	}
+	
+	public static String orTagQuery(Collection<String> tags) {
+		List<String> escapedTags = tags.stream()
+				.map(tag -> escapeForSearch(tag))
+				.map(tag -> "\""+tag+"\"")
+				.collect(Collectors.toList());
+		return String.format("tag:(%s)", String.join(" OR ", escapedTags));
+	}
+	
+	public static String orTagQuery(String... tags) {
+		List<String> tagsList = new ArrayList<String>();
+		for (int i = 0; i < tags.length; i++) {
+			tagsList.add(tags[i]);
+		}
+		return orTagQuery(tagsList);
 	}
 }
