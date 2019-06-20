@@ -134,15 +134,15 @@ public class QueryHelper {
 	}
 	
 	public static String escapeForSearch(String value) {
-		String result = value.replaceAll("\\", "\\\\");
+		String result = value.replaceAll("\\\\", "\\\\\\\\");
 		result = result.replaceAll("\\?", "\\\\?");
 		result = result.replaceAll("\\*", "\\\\*");
 		result = result.replaceAll("\"", "\\\"");
 		result = result.replaceAll("\u201C", "\\\u201C");
 		result = result.replaceAll("\u201D", "\\\u201D");
 		result = result.replaceAll("'", "\\'");
-		result = result.replaceAll("{", "\\{");
-		result = result.replaceAll("}", "\\}");
+		result = result.replaceAll("\\{", "\\\\{");
+		result = result.replaceAll("\\}", "\\\\}");
 		return result;
 	}
 	
