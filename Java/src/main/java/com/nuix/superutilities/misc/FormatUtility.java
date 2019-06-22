@@ -43,6 +43,7 @@ public class FormatUtility {
 	 * @return Byte array equivalent.
 	 */
 	public static byte[] hexToBytes(String hex){
+		if(hex == null) { return null; }
 		String normalizedHex = hex.replace("-", "");
 		return DatatypeConverter.parseHexBinary(normalizedHex);
 	}
@@ -53,6 +54,7 @@ public class FormatUtility {
 	 * @return A string representation of the byte array as hexadecimal.
 	 */
 	public static String bytesToHex(byte[] bytes){
+		if(bytes == null) { return null; }
 		return DatatypeConverter.printHexBinary(bytes);
 	}
 	

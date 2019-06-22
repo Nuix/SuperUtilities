@@ -18,11 +18,13 @@ import com.google.common.cache.CacheBuilder;
 import com.google.common.cache.CacheLoader;
 import com.google.common.cache.LoadingCache;
 import com.google.common.collect.HashBiMap;
+import com.nuix.superutilities.SuperUtilities;
 import com.nuix.superutilities.misc.FormatUtility;
 import com.nuix.superutilities.misc.SQLiteBacked;
 import com.nuix.superutilities.query.QueryHelper;
 
 import jxl.common.Logger;
+import nuix.BulkAnnotater;
 import nuix.Case;
 import nuix.Item;
 import nuix.Markup;
@@ -50,6 +52,11 @@ public class AnnotationRepository extends SQLiteBacked {
 		messageLoggedCallback = callback;
 	}
 	
+	/***
+	 * Logs a message, either providing it to the callback supplied in a call to {@link #whenMessageLogged(Consumer)} or in
+	 * absence of that callback, to log4j.
+	 * @param message
+	 */
 	private void logMessage(String message) {
 		if(messageLoggedCallback != null) {
 			messageLoggedCallback.accept(message);
@@ -58,6 +65,13 @@ public class AnnotationRepository extends SQLiteBacked {
 		}
 	}
 	
+	/***
+	 * Logs a message, either providing it to the callback supplied in a call to {@link #whenMessageLogged(Consumer)} or in
+	 * absence of that callback, to log4j.  This method passes the message through a call to String.format with the message
+	 * being provided as the format and the params provided as the params to String.format.
+	 * @param format The message format string, formatted as accepted by String.format.
+	 * @param params Parameters to be inserted into the formatted string, as accepted by String.format.
+	 */
 	private void logMessage(String format, Object... params) {
 		logMessage(String.format(format, params));
 	}
@@ -72,6 +86,11 @@ public class AnnotationRepository extends SQLiteBacked {
 		progressUpdatedCallback = callback;
 	}
 	
+	/***
+	 * Invokes callback previously provided in a call to {@link #whenProgressUpdated(BiConsumer)}, if one has been provided.
+	 * @param current The current progress amount.
+	 * @param total The total amount of work.
+	 */
 	private void fireProgressUpdated(int current, int total) {
 		if(progressUpdatedCallback != null) {
 			progressUpdatedCallback.accept(current,total);
@@ -80,6 +99,7 @@ public class AnnotationRepository extends SQLiteBacked {
 	
 	private HashBiMap<String,Long> itemGuidIdLookup = HashBiMap.create();
 	private HashBiMap<String,Long> markupSetIdLookup = HashBiMap.create();
+	private HashBiMap<String,Long> tagIdLookup = HashBiMap.create();
 	
 	/***
 	 * Creates a new instance associated to the specified SQLite DB file.  File will be created if it does not already exist.
@@ -105,25 +125,38 @@ public class AnnotationRepository extends SQLiteBacked {
 	 * @throws SQLException Thrown if there are errors while interacting with the SQLite DB file.
 	 */
 	private void createTables() throws SQLException {
-		// Create item table
+		// Create table with item info
 		String createTableItem = "CREATE TABLE IF NOT EXISTS Item ("+
 				"ID INTEGER PRIMARY KEY AUTOINCREMENT, Name TEXT, GUID TEXT, MD5 TEXT)";
 		executeUpdate(createTableItem);
 		
+		// Create table with markup set info
 		String createTableMarkupSet = "CREATE TABLE IF NOT EXISTS MarkupSet ("+
 				"ID INTEGER PRIMARY KEY AUTOINCREMENT, Name TEXT, Description TEXT, RedactionReason TEXT)";
 		executeUpdate(createTableMarkupSet);
 		
+		// Create table with markup information
 		String createTableItemMarkup = "CREATE TABLE IF NOT EXISTS ItemMarkup ("+
 				"ID INTEGER PRIMARY KEY AUTOINCREMENT, Item_ID INTEGER, MarkupSet_ID INTEGER, PageNumber INTEGER,"+
 				"IsRedaction INTEGER, X REAL, Y REAL, Width REAL, Height REAL)";
 		executeUpdate(createTableItemMarkup);
 		
+		// Create table with tag info
+		String createTableTag = "CREATE TABLE IF NOT EXISTS Tag ("+
+				"ID INTEGER PRIMARY KEY AUTOINCREMENT, Name TEXT)";
+		executeUpdate(createTableTag);
+		
+		// Create table with tag to item associations
+		String createTableItemTag = "CREATE TABLE IF NOT EXISTS ItemTag ("+
+				"ID INTEGER PRIMARY KEY AUTOINCREMENT, Item_ID INTEGER, Tag_ID INTEGER)";
+		executeUpdate(createTableItemTag);
+		
 		rebuildXrefs();
 	}
 	
 	/***
-	 * Rebuilds in memory look ups for GUID/MD5 => database record IDs
+	 * Rebuilds in memory look ups for GUID/MD5 => database record IDs.  Later as new records are added
+	 * to the database file, these lookup will be updated in tandem as in memory caches.
 	 * @throws SQLException Thrown if there are errors while interacting with the SQLite DB file.
 	 */
 	private void rebuildXrefs() throws SQLException {
@@ -162,6 +195,24 @@ public class AnnotationRepository extends SQLiteBacked {
 				}
 			}
 		});
+		
+		logMessage("Building Tag name lookup from any existing entries in DB...");
+		tagIdLookup.clear();
+		sql = "SELECT Name,ID FROM Tag";
+		executeQuery(sql,null, new Consumer<ResultSet>() {
+			@Override
+			public void accept(ResultSet rs) {
+				try {
+					while(rs.next()) {
+						String name = rs.getString(1);
+						long id = rs.getLong(2);
+						tagIdLookup.put(name, id);
+					}
+				} catch (SQLException exc) {
+					logger.error("Error building Tag Name to ID XREF",exc);
+				}
+			}
+		});
 	}
 	
 	/***
@@ -171,7 +222,6 @@ public class AnnotationRepository extends SQLiteBacked {
 	 * @throws SQLException Thrown if anything goes wrong interacting with the SQLite database file.
 	 */
 	public void storeAllMarkupSets(Case nuixCase) throws IOException, SQLException {
-		abortWasRequested = false;
 		List<MarkupSet> markupSets = nuixCase.getMarkupSets();
 		for(MarkupSet markupSet : markupSets) {
 			// Support aborting
@@ -182,14 +232,243 @@ public class AnnotationRepository extends SQLiteBacked {
 	}
 	
 	/***
-	 * Stores a particular markup set living in the provided Nuix case.
+	 * Gets the sequentially assigned ID value from the Item table for a given item based on its GUID.  Will attempt to get this from a cache first.
+	 * @param item The item to retrieve the DB ID number for.
+	 * @return The DB ID number for the given item, based on finding a record in the Item table with a matching GUID.
+	 * @throws SQLException Thrown if there are errors while interacting with the SQLite DB file.
+	 */
+	public long getItemId(Item item) throws SQLException {
+		String guid = item.getGuid().replaceAll("\\-", "");
+		
+		if(itemGuidIdLookup.containsKey(guid)) {
+			return itemGuidIdLookup.get(guid);
+		} else {
+			String md5 = item.getDigests().getMd5();
+			String name = item.getLocalisedName();
+			
+			byte[] guidBytes = FormatUtility.hexToBytes(guid);
+			byte[] md5Bytes = null;
+			if(md5 == null) {
+				logMessage("Item with GUID %s has no MD5",guid);
+			} else {
+				md5Bytes = FormatUtility.hexToBytes(md5);
+			}
+			
+			String sql = "INSERT INTO Item (GUID,MD5,Name) VALUES (?,?,?)";
+			executeInsert(sql, guidBytes, md5Bytes, name);
+			long id = executeLongScalar("SELECT ID FROM Item WHERE GUID = ?", guidBytes);
+			itemGuidIdLookup.put(guid, id);
+			return id;
+		}
+	}
+	
+	/***
+	 * Gets the sequentially assigned ID value from the MarkupSet table for a given markup.  Will attempt to get this from a cache first.
+	 * @param markupSet The markup set to find the DB ID for.
+	 * @return The DB ID number for the given markup set, based on finding a record in the MarkupSet table with a matching name.
+	 * @throws SQLException Thrown if there are errors while interacting with the SQLite DB file.
+	 */
+	public long getMarkupSetId(MarkupSet markupSet) throws SQLException {
+		String name = markupSet.getName();
+		if(markupSetIdLookup.containsKey(name)) {
+			return markupSetIdLookup.get(name);
+		} else {
+			String description = markupSet.getDescription();
+			String redactionReason = markupSet.getRedactionReason();
+			
+			String sql = "INSERT INTO MarkupSet (Name,Description,RedactionReason) VALUES (?,?,?)";
+			executeInsert(sql,name,description,redactionReason);
+			long id = executeLongScalar("SELECT ID FROM MarkupSet WHERE Name = ?", name);
+			markupSetIdLookup.put(name, id);
+			return id;
+		}
+	}
+	
+	/***
+	 * Gets the sequentially assigned ID value from the Tag table for a given tag name.  Will attempt to get this from a cache first.
+	 * @param tagName Name of the tag you wish to get the ID of.
+	 * @return The DB ID number for the given Tag, based on finding a record in the Tag table with a matching name.
+	 * @throws SQLException Thrown if there are errors while interacting with the SQLite DB file.
+	 */
+	public long getTagId(String tagName) throws SQLException {
+		if(tagIdLookup.containsKey(tagName)) {
+			return tagIdLookup.get(tagName);
+		} else {
+			String sql = "INSERT INTO Tag (Name) VALUES (?)";
+			executeInsert(sql,tagName);
+			long id = executeLongScalar("SELECT ID FROM Tag WHERE Name = ?", tagName);
+			tagIdLookup.put(tagName, id);
+			return id;
+		}
+	}
+	
+	/***
+	 * Stores a specific tag present in the provided case as records in the DB file. 
+	 * @param nuixCase The Nuix case that the specified tag is present in.
+	 * @param tagName The name of the tag in the specified case to store in the DB file.
+	 * @throws IOException Thrown if a search error occurs.
+	 * @throws SQLException Thrown if there are errors while interacting with the SQLite DB file.
+	 */
+	public void storeTag(Case nuixCase, String tagName) throws IOException, SQLException {
+		logMessage("Storing tag: %s",tagName);
+		String insertItemTag = "INSERT INTO ItemTag (Item_ID,Tag_ID) VALUES (?,?)";
+		String itemQuery = QueryHelper.orTagQuery(tagName);
+		Set<Item> tagItems = nuixCase.searchUnsorted(itemQuery);
+		long tagId = getTagId(tagName);
+		int currentItemIndex = 1;
+		for(Item item : tagItems) {
+			// Support aborting
+			if(abortWasRequested) { break; }
+			fireProgressUpdated(currentItemIndex, tagItems.size());
+			long itemId = getItemId(item);
+			executeInsert(insertItemTag,itemId,tagId);
+		}
+	}
+	
+	/***
+	 * Stores all tags present in the provided case as records in the DB file. 
+	 * @param nuixCase The Nuix case to record tags from.
+	 * @throws IOException Thrown if a search error occurs.
+	 * @throws SQLException Thrown if there are errors while interacting with the SQLite DB file.
+	 */
+	public void storeAllTags(Case nuixCase) throws IOException, SQLException {
+		Set<String> tags = nuixCase.getAllTags();
+		for(String tag : tags) {
+			// Support aborting
+			if(abortWasRequested) { break; }
+			storeTag(nuixCase,tag);
+		}
+	}
+	
+	/***
+	 * Applies tags to items in the provided case based on tag records in the DB file associated to this instance.
+	 * @param nuixCase The case in which items will be tagged.
+	 * @param matchingMethod Determines how a record in the DB file is associated to an item in the case to apply tags to it.
+	 * @throws SQLException Thrown if there are errors while interacting with the SQLite DB file.
+	 */
+	public void applyTagsFromDatabaseToCase(Case nuixCase, AnnotationMatchingMethod matchingMethod) throws SQLException {
+		// Will reuse this multiple times to provide values to be bound to prepared SQL statements later
+		List<Object> bindData = new ArrayList<Object>();
+		// Will use this to apply tags later
+		BulkAnnotater annotater = SuperUtilities.getBulkAnnotater();
+		
+		// SQL query to get information about each item a given tag is to be applied to
+		String itemTagSql = "SELECT i.GUID,i.MD5,i.Name FROM ItemTag AS t " + 
+				"INNER JOIN Item AS i ON t.Item_ID = i.ID " + 
+				"WHERE t.Tag_ID = ? " + 
+				"ORDER BY MD5,GUID";
+		
+		// SQL query to get count of items a given tag should be applied to
+		String itemTagCountSql = "SELECT COUNT(*) FROM ItemTag AS t " + 
+				"INNER JOIN Item AS i ON t.Item_ID = i.ID " + 
+				"WHERE t.Tag_ID = ? " + 
+				"ORDER BY MD5,GUID";
+		
+		// Always good to tell the user what you're doing and create a record of the settings in use
+		logMessage("Applying tags to case...");
+		if(matchingMethod == AnnotationMatchingMethod.GUID) {
+			logMessage("Matching DB entries to case items using: GUID");
+		} else if(matchingMethod == AnnotationMatchingMethod.MD5) {
+			logMessage("Matching DB entries to case items using: MD5");
+		}
+		
+		// Since we can apply any given tag to multiple items at once and this is a more efficient approach,
+		// we gather up all the items a given tag will be applied to and then apply that tag in batches.  Periodically
+		// we will apply a batch of tags and clear this collection so we don't need to hold on to all the items receiving
+		// a given tag at once.
+		Set<Item> tagGroupedItems = new HashSet<Item>();
+		
+		// Use our in memory cache of Name->ID to drive application of each tag since it should
+		// already be in memory and synced to the state of the database.
+		for(Map.Entry<String, Long> tagEntry : tagIdLookup.entrySet()) {
+			// Support aborting
+			if(abortWasRequested) { break; }
+			
+			String tagName = tagEntry.getKey();
+			long tagId = tagEntry.getValue();
+			
+			bindData.clear();
+			bindData.add(tagId);
+			
+			// Determine how many items this tag should be applied to based on the number
+			// of ItemTag records associated to this tag.
+			int totalItemTags = executeLongScalar(itemTagCountSql,bindData).intValue();
+			
+			// Here we run the query for ItemTag records associated with the tag we are currently
+			// processing.  We will then collect up the relevant items.  When we get a good batch of
+			// items, we tag them, clear the collection and continue on.
+			logMessage("Applying tag '%s' to %s items",tagName,totalItemTags);
+			executeQuery(itemTagSql,bindData, rs ->{
+				int currentIndex = 1;
+				try {
+					while(rs.next()) {
+						fireProgressUpdated(currentIndex,totalItemTags);
+						
+						// GUID and MD5 are hex strings.  We store them in the database as the byte arrays those hex
+						// strings represent which reduces the storage footprint for these values.  Nuix needs them as
+						// hex strings for use in queries, so we need to convert them back to hex strings here.
+						String guid = FormatUtility.bytesToHex(rs.getBytes(1));
+						String md5 = FormatUtility.bytesToHex(rs.getBytes(2));
+						String itemName = rs.getString(3);
+						
+						// If a given record does not have an MD5 (likely because the source item had no Md5) we can't really
+						// use MD5 matching from database record to destination case item, so we report the issue to the user
+						// and skip this record.
+						if(md5 == null && matchingMethod == AnnotationMatchingMethod.MD5) {
+							logMessage("Record for item named '%s' with GUID %s does not have an MD5 value",itemName,guid);
+							continue;
+						}
+						
+						Set<Item> items = null;
+						
+						// Obtain the relevant item or items depending on the matching method specified
+						if(matchingMethod == AnnotationMatchingMethod.GUID) {
+							items = nuixCase.searchUnsorted("guid:"+guid);
+						} else if(matchingMethod == AnnotationMatchingMethod.MD5) {
+							items = nuixCase.searchUnsorted("md5:"+md5);
+						}
+						
+						// Add all the items we found to our collection
+						tagGroupedItems.addAll(items);
+						
+						// If our collection has 5000 items or more in it now, lets tag those items and then
+						// clear the collection so we aren't holding on to all of the items at once.
+						if(tagGroupedItems.size() > 5000) {
+							logMessage("    Apply tag '%s' to 5000 items",tagName);
+							annotater.addTag(tagName, tagGroupedItems);
+							tagGroupedItems.clear();
+						}
+						
+						currentIndex++;
+					}
+					
+					// If there are any items left in our collection that still need a tag applied, we check and
+					// tag them here.
+					if(tagGroupedItems.size() > 0) {
+						logMessage("    Apply tag '%s' to %s items",tagName,tagGroupedItems.size());
+						annotater.addTag(tagName, tagGroupedItems);
+						tagGroupedItems.clear();
+					}
+					
+				} catch (SQLException e) {
+					logger.error("Error retrieving ItemTag data from database", e);
+					logMessage("Error retrieving ItemTag data from database: %s",e.getMessage());
+				} catch (IOException e) {
+					logger.error("Error retrieving item from case", e);
+					logMessage("Error retrieving item from case: ",e.getMessage());
+				}
+			});
+		}
+	}
+	
+	/***
+	 * Stores a particular markup set present in the provided Nuix case.
 	 * @param nuixCase The Nuix case containing the provided markup set.
 	 * @param markupSet The specific markup set to store.
 	 * @throws IOException Thrown most likely if there was an issue searching or retrieving printed pages of and item.
 	 * @throws SQLException Thrown if anything goes wrong interacting with the SQLite database file.
 	 */
 	public void storeMarkupSet(Case nuixCase, MarkupSet markupSet) throws IOException, SQLException {
-		abortWasRequested = false;
 		logMessage("Storing markups from MarkupSet: "+markupSet.getName());
 		long itemMarkupCountBefore = getItemMarkupCount();
 		logMessage("Item Markup Count Before: %s", itemMarkupCountBefore);
@@ -231,54 +510,6 @@ public class AnnotationRepository extends SQLiteBacked {
 	}
 	
 	/***
-	 * Gets the sequentially assigned ID value from the Item table for a given item based on its GUID.  Will attempt to get this from a cache first.
-	 * @param item The item to retrieve the DB ID number for.
-	 * @return The DB ID number for the given item, based on finding a record in the Item table with a matching GUID.
-	 * @throws SQLException Thrown if there are errors while interacting with the SQLite DB file.
-	 */
-	public long getItemId(Item item) throws SQLException {
-		String guid = item.getGuid().replaceAll("\\-", "");
-		
-		if(itemGuidIdLookup.containsKey(guid)) {
-			return itemGuidIdLookup.get(guid);
-		} else {
-			String md5 = item.getDigests().getMd5();
-			String name = item.getLocalisedName();
-			
-			byte[] guidBytes = FormatUtility.hexToBytes(guid);
-			byte[] md5Bytes = FormatUtility.hexToBytes(md5);
-			
-			String sql = "INSERT INTO Item (GUID,MD5,Name) VALUES (?,?,?)";
-			executeInsert(sql, guidBytes, md5Bytes, name);
-			long id = executeLongScalar("SELECT ID FROM Item WHERE GUID = ?", guidBytes);
-			itemGuidIdLookup.put(guid, id);
-			return id;
-		}
-	}
-	
-	/***
-	 * Gets the sequentially assigned ID value from the MarkupSet table for a given markup.  Will attempt to get this from a cache first.
-	 * @param markupSet The markup set to find the DB ID for.
-	 * @return The DB ID number for the given markup set, based on finding a record in the MarkupSet table with a matching name.
-	 * @throws SQLException Thrown if there are errors while interacting with the SQLite DB file.
-	 */
-	public long getMarkupSetId(MarkupSet markupSet) throws SQLException {
-		String name = markupSet.getName();
-		if(markupSetIdLookup.containsKey(name)) {
-			return markupSetIdLookup.get(name);
-		} else {
-			String description = markupSet.getDescription();
-			String redactionReason = markupSet.getRedactionReason();
-			
-			String sql = "INSERT INTO MarkupSet (Name,Description,RedactionReason) VALUES (?,?,?)";
-			executeInsert(sql,name,description,redactionReason);
-			long id = executeLongScalar("SELECT ID FROM MarkupSet WHERE Name = ?", name);
-			markupSetIdLookup.put(name, id);
-			return id;
-		}
-	}
-	
-	/***
 	 * Applies markups present in the SQLite DB file associated to this instance to the provided Nuix case.
 	 * @param nuixCase The Nuix case to apply the DB file markups to.
 	 * @param addToExistingMarkupSet Whether to append marukps to existing markup sets of the the same name or create a new markup set with a suffixed name.
@@ -286,23 +517,28 @@ public class AnnotationRepository extends SQLiteBacked {
 	 * @throws SQLException Thrown if there are errors while interacting with the SQLite DB file.
 	 */
 	public void applyMarkupsFromDatabaseToCase(Case nuixCase, boolean addToExistingMarkupSet, AnnotationMatchingMethod matchingMethod) throws SQLException {
-		abortWasRequested = false;
-		Map<String,MarkupSet> markupSetLookup = new HashMap<String,MarkupSet>();
+		Map<String,MarkupSet> existingMarkupSetLookup = new HashMap<String,MarkupSet>();
 		for(MarkupSet existingMarkupSet : nuixCase.getMarkupSets()) {
-			markupSetLookup.put(existingMarkupSet.getName(), existingMarkupSet);
+			existingMarkupSetLookup.put(existingMarkupSet.getName(), existingMarkupSet);
 		}
 		
 		List<Object> bindData = new ArrayList<Object>();
 		
+		// Use our in memory cache of Name->ID to drive application of each markup set since it should
+		// already be in memory and synced to the state of the database.
 		for(Map.Entry<String, Long> markupEntry : markupSetIdLookup.entrySet()) {
 			// Support aborting
 			if(abortWasRequested) { break; }
 			
 			String markupSetName = markupEntry.getKey();
 			long markupSetId = markupEntry.getValue();
+			
+			// SQL to get description for this markup set
 			String markupSetDescription = executeStringScalar("SELECT Description FROM MarkupSet WHERE ID = ?",markupSetId);
+			// SQL to get reason for this markup set
 			String markupSetRedactionReason = executeStringScalar("SELECT RedactionReason FROM MarkupSet WHERE ID = ?",markupSetId);
 			
+			// Always good to echo back to user the settings they are using
 			logMessage("Applying markups to case from MarkupSet: %s",markupSetName);
 			if(matchingMethod == AnnotationMatchingMethod.GUID) {
 				logMessage("Matching DB entries to case items using: GUID");
@@ -310,17 +546,18 @@ public class AnnotationRepository extends SQLiteBacked {
 				logMessage("Matching DB entries to case items using: MD5");
 			}
 			
-			// We need to resolve the MarkupSet object, either by obtaining existing one in case or creating new one
+			// We need to resolve the MarkupSet object, either by obtaining an existing one in destination case or creating a new one.
 			MarkupSet markupSet = null;
-			if(markupSetLookup.containsKey(markupSetName)) {
+			if(existingMarkupSetLookup.containsKey(markupSetName)) {
 				if(addToExistingMarkupSet) {
+					// We can just add more annotations the the existing markup set with the same name
 					logMessage("Applying markups in destination case to existing markup set: %s",markupSetName);
-					markupSet = markupSetLookup.get(markupSetName);
+					markupSet = existingMarkupSetLookup.get(markupSetName);
 				} else {
 					// When addToExisting is false and we have a name collision, we will attempt to find a usable name
 					int nameSequence = 2;
 					String targetName = markupSetName+"_"+nameSequence;
-					while(markupSetLookup.containsKey(targetName)) {
+					while(existingMarkupSetLookup.containsKey(targetName)) {
 						nameSequence++;
 						targetName = markupSetName+"_"+nameSequence;
 					}
@@ -346,7 +583,7 @@ public class AnnotationRepository extends SQLiteBacked {
 			
 			// SQL for info needed to apply markups.  Sorted by MD5/GUID/PageNumber so that we should get markups for the same item
 			// one after another, making our cache defined below more efficiently leveraged.
-			String itemMarkupSql = "SELECT i.GUID,i.MD5,im.PageNumber,im.IsRedaction,im.X,im.Y,im.Width,im.Height FROM ItemMarkup AS im " + 
+			String itemMarkupSql = "SELECT i.GUID,i.MD5,i.Name,im.PageNumber,im.IsRedaction,im.X,im.Y,im.Width,im.Height FROM ItemMarkup AS im " + 
 					"INNER JOIN Item AS i ON im.Item_ID = i.ID " + 
 					"WHERE im.MarkupSet_ID = ? " + 
 					"ORDER BY MD5,GUID,PageNumber";
@@ -399,14 +636,27 @@ public class AnnotationRepository extends SQLiteBacked {
 							if(abortWasRequested) { break; }
 							
 							fireProgressUpdated(currentIndex,totalItemMarkups);
+							
+							// GUID and MD5 are stored in database as byte arrays to save space, but we need them as hex strings
+							// for Nuix searching, so we need to convert them back to strings here.
 							String guid = FormatUtility.bytesToHex(rs.getBytes(1));
 							String md5 = FormatUtility.bytesToHex(rs.getBytes(2));
-							long pageNumber = rs.getLong(3);
-							boolean isRedaction = rs.getBoolean(4);
-							double x = rs.getDouble(5);
-							double y = rs.getDouble(6);
-							double width = rs.getDouble(7);
-							double height = rs.getDouble(8);
+							String itemName = rs.getString(3);
+							
+							// Get details needed to apply a markup to the relevant item
+							long pageNumber = rs.getLong(4);
+							boolean isRedaction = rs.getBoolean(5);
+							double x = rs.getDouble(6);
+							double y = rs.getDouble(7);
+							double width = rs.getDouble(8);
+							double height = rs.getDouble(9);
+							
+							// If our matching method is MD5, but the current record does not have an MD5 (likely because the originating item
+							// did not have an MD5, we let the user know and then skip this record.
+							if(md5 == null && matchingMethod == AnnotationMatchingMethod.MD5) {
+								logMessage("Record for item named '%s' with GUID %s does not have an MD5 value",itemName,guid);
+								continue;
+							}
 							
 							Set<Item> items = null;
 							
@@ -421,6 +671,18 @@ public class AnnotationRepository extends SQLiteBacked {
 							for(Item item : items) {
 								MutablePrintedImage itemImage = item.getPrintedImage();
 								List<? extends PrintedPage> pages = itemImage.getPages();
+								
+								if(pages == null || pages.size() < 1) {
+									logMessage("Item named '%s' and GUID %s has no printed pages, generating now...",itemName,guid);
+									itemImage.generate();
+									pages = itemImage.getPages();
+								}
+								
+								if(pages.size() < pageNumber-1) {
+									logMessage("Item named '%s' and GUID %s does not have a page %s",itemName,guid,pageNumber);
+									continue;
+								}
+								
 								MutablePrintedPage page = (MutablePrintedPage)pages.get((int) (pageNumber-1));
 								if(isRedaction) {
 									page.createRedaction(targetMarkupSet, x, y, width, height);
