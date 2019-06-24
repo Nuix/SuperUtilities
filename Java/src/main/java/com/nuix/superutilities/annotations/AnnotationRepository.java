@@ -707,6 +707,60 @@ public class AnnotationRepository extends SQLiteBacked {
 	}
 	
 	/***
+	 * Queries the DB for the names of tags associated with the provided MD5.
+	 * @param md5 The MD5 to find the associated tags of.
+	 * @return A list of 0 or more Tag names associated with the specified MD5.
+	 * @throws SQLException Thrown if there are errors while interacting with the SQLite DB file.
+	 */
+	public List<String> getTagsForMd5(String md5) throws SQLException{
+		String sql = "SELECT t.Name AS TagName FROM Tag AS t "+
+				"INNER JOIN ItemTag AS it ON it.Tag_ID = t.ID "+
+				"INNER JOIN Item AS i ON it.Item_ID = i.ID "+
+				"WHERE i.MD5 = ? ";
+		List<String> result = new ArrayList<String>();
+		List<Object> bindData = new ArrayList<Object>();
+		bindData.add(FormatUtility.hexToBytes(md5));
+		executeQuery(sql,bindData,rs ->{
+			try {
+				while(rs.next()) {
+					String tag = rs.getString(1);
+					result.add(tag);
+				}
+			} catch (SQLException e) {
+				logger.error("Error retrieving tags associated to MD5 "+md5,e);
+			}
+		});
+		return result;
+	}
+	
+	/***
+	 * Queries the DB for the names of tags associated with the provided GUID.
+	 * @param guid The GUID to find the associated tags of.
+	 * @return A list of 0 or more Tag names associated with the specified GUID.
+	 * @throws SQLException Thrown if there are errors while interacting with the SQLite DB file.
+	 */
+	public List<String> getTagsForGuid(String guid) throws SQLException{
+		String sql = "SELECT t.Name AS TagName FROM Tag AS t "+
+				"INNER JOIN ItemTag AS it ON it.Tag_ID = t.ID "+
+				"INNER JOIN Item AS i ON it.Item_ID = i.ID "+
+				"WHERE i.GUID = ? ";
+		List<String> result = new ArrayList<String>();
+		List<Object> bindData = new ArrayList<Object>();
+		bindData.add(FormatUtility.hexToBytes(guid));
+		executeQuery(sql,bindData,rs ->{
+			try {
+				while(rs.next()) {
+					String tag = rs.getString(1);
+					result.add(tag);
+				}
+			} catch (SQLException e) {
+				logger.error("Error retrieving tags associated to GUID "+guid,e);
+			}
+		});
+		return result;
+	}
+	
+	/***
 	 * Gets the number of markups present in the ItemMarkup table.
 	 * @return The number of markup records present in the ItemMarkup table of the DB file.
 	 * @throws SQLException Thrown if there are errors while interacting with the SQLite DB file.
