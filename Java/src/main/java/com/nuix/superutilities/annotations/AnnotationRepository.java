@@ -713,7 +713,7 @@ public class AnnotationRepository extends SQLiteBacked {
 	 * @throws SQLException Thrown if there are errors while interacting with the SQLite DB file.
 	 */
 	public List<String> getTagsForMd5(String md5) throws SQLException{
-		String sql = "SELECT t.Name AS TagName FROM Tag AS t "+
+		String sql = "SELECT DISTINCT t.Name AS TagName FROM Tag AS t "+
 				"INNER JOIN ItemTag AS it ON it.Tag_ID = t.ID "+
 				"INNER JOIN Item AS i ON it.Item_ID = i.ID "+
 				"WHERE i.MD5 = ? ";
@@ -740,7 +740,7 @@ public class AnnotationRepository extends SQLiteBacked {
 	 * @throws SQLException Thrown if there are errors while interacting with the SQLite DB file.
 	 */
 	public List<String> getTagsForGuid(String guid) throws SQLException{
-		String sql = "SELECT t.Name AS TagName FROM Tag AS t "+
+		String sql = "SELECT DISTINCT t.Name AS TagName FROM Tag AS t "+
 				"INNER JOIN ItemTag AS it ON it.Tag_ID = t.ID "+
 				"INNER JOIN Item AS i ON it.Item_ID = i.ID "+
 				"WHERE i.GUID = ? ";
