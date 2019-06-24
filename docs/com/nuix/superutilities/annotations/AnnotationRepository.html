@@ -17,7 +17,7 @@
     catch(err) {
     }
 //-->
-var methods = {"i0":10,"i1":10,"i2":10,"i3":10,"i4":10,"i5":10,"i6":10,"i7":10,"i8":10};
+var methods = {"i0":10,"i1":10,"i2":10,"i3":10,"i4":10,"i5":10,"i6":10,"i7":10,"i8":10,"i9":10,"i10":10,"i11":10,"i12":10};
 var tabs = {65535:["t0","All Methods"],2:["t2","Instance Methods"],8:["t4","Concrete Methods"]};
 var altColor = "altColor";
 var rowColor = "rowColor";
@@ -181,43 +181,69 @@ extends <a href="../../../../com/nuix/superutilities/misc/SQLiteBacked.html" tit
 </td>
 </tr>
 <tr id="i2" class="altColor">
+<td class="colFirst"><code>void</code></td>
+<td class="colLast"><code><span class="memberNameLink"><a href="../../../../com/nuix/superutilities/annotations/AnnotationRepository.html#applyTagsFromDatabaseToCase-nuix.Case-com.nuix.superutilities.annotations.AnnotationMatchingMethod-">applyTagsFromDatabaseToCase</a></span>(nuix.Case&nbsp;nuixCase,
+                           <a href="../../../../com/nuix/superutilities/annotations/AnnotationMatchingMethod.html" title="enum in com.nuix.superutilities.annotations">AnnotationMatchingMethod</a>&nbsp;matchingMethod)</code>
+<div class="block">Applies tags to items in the provided case based on tag records in the DB file associated to this instance.</div>
+</td>
+</tr>
+<tr id="i3" class="rowColor">
 <td class="colFirst"><code>long</code></td>
 <td class="colLast"><code><span class="memberNameLink"><a href="../../../../com/nuix/superutilities/annotations/AnnotationRepository.html#getItemId-nuix.Item-">getItemId</a></span>(nuix.Item&nbsp;item)</code>
 <div class="block">Gets the sequentially assigned ID value from the Item table for a given item based on its GUID.</div>
 </td>
 </tr>
-<tr id="i3" class="rowColor">
+<tr id="i4" class="altColor">
 <td class="colFirst"><code>long</code></td>
 <td class="colLast"><code><span class="memberNameLink"><a href="../../../../com/nuix/superutilities/annotations/AnnotationRepository.html#getItemMarkupCount--">getItemMarkupCount</a></span>()</code>
 <div class="block">Gets the number of markups present in the ItemMarkup table.</div>
 </td>
 </tr>
-<tr id="i4" class="altColor">
+<tr id="i5" class="rowColor">
 <td class="colFirst"><code>long</code></td>
 <td class="colLast"><code><span class="memberNameLink"><a href="../../../../com/nuix/superutilities/annotations/AnnotationRepository.html#getMarkupSetId-nuix.MarkupSet-">getMarkupSetId</a></span>(nuix.MarkupSet&nbsp;markupSet)</code>
 <div class="block">Gets the sequentially assigned ID value from the MarkupSet table for a given markup.</div>
 </td>
 </tr>
-<tr id="i5" class="rowColor">
+<tr id="i6" class="altColor">
+<td class="colFirst"><code>long</code></td>
+<td class="colLast"><code><span class="memberNameLink"><a href="../../../../com/nuix/superutilities/annotations/AnnotationRepository.html#getTagId-java.lang.String-">getTagId</a></span>(java.lang.String&nbsp;tagName)</code>
+<div class="block">Gets the sequentially assigned ID value from the Tag table for a given tag name.</div>
+</td>
+</tr>
+<tr id="i7" class="rowColor">
 <td class="colFirst"><code>void</code></td>
 <td class="colLast"><code><span class="memberNameLink"><a href="../../../../com/nuix/superutilities/annotations/AnnotationRepository.html#storeAllMarkupSets-nuix.Case-">storeAllMarkupSets</a></span>(nuix.Case&nbsp;nuixCase)</code>
 <div class="block">Stores all markup sets found in the provided case to the SQLite DB file.</div>
 </td>
 </tr>
-<tr id="i6" class="altColor">
+<tr id="i8" class="altColor">
+<td class="colFirst"><code>void</code></td>
+<td class="colLast"><code><span class="memberNameLink"><a href="../../../../com/nuix/superutilities/annotations/AnnotationRepository.html#storeAllTags-nuix.Case-">storeAllTags</a></span>(nuix.Case&nbsp;nuixCase)</code>
+<div class="block">Stores all tags present in the provided case as records in the DB file.</div>
+</td>
+</tr>
+<tr id="i9" class="rowColor">
 <td class="colFirst"><code>void</code></td>
 <td class="colLast"><code><span class="memberNameLink"><a href="../../../../com/nuix/superutilities/annotations/AnnotationRepository.html#storeMarkupSet-nuix.Case-nuix.MarkupSet-">storeMarkupSet</a></span>(nuix.Case&nbsp;nuixCase,
               nuix.MarkupSet&nbsp;markupSet)</code>
-<div class="block">Stores a particular markup set living in the provided Nuix case.</div>
+<div class="block">Stores a particular markup set present in the provided Nuix case.</div>
 </td>
 </tr>
-<tr id="i7" class="rowColor">
+<tr id="i10" class="altColor">
+<td class="colFirst"><code>void</code></td>
+<td class="colLast"><code><span class="memberNameLink"><a href="../../../../com/nuix/superutilities/annotations/AnnotationRepository.html#storeTag-nuix.Case-java.lang.String-">storeTag</a></span>(nuix.Case&nbsp;nuixCase,
+        java.lang.String&nbsp;tagName)</code>
+<div class="block">Stores a specific tag present in the provided case as records in the DB file.</div>
+</td>
+</tr>
+<tr id="i11" class="rowColor">
 <td class="colFirst"><code>void</code></td>
 <td class="colLast"><code><span class="memberNameLink"><a href="../../../../com/nuix/superutilities/annotations/AnnotationRepository.html#whenMessageLogged-java.util.function.Consumer-">whenMessageLogged</a></span>(java.util.function.Consumer&lt;java.lang.String&gt;&nbsp;callback)</code>
 <div class="block">Allows you to provide a callback which will be invoked when this instance emits a log message.</div>
 </td>
 </tr>
-<tr id="i8" class="altColor">
+<tr id="i12" class="altColor">
 <td class="colFirst"><code>void</code></td>
 <td class="colLast"><code><span class="memberNameLink"><a href="../../../../com/nuix/superutilities/annotations/AnnotationRepository.html#whenProgressUpdated-java.util.function.BiConsumer-">whenProgressUpdated</a></span>(java.util.function.BiConsumer&lt;java.lang.Integer,java.lang.Integer&gt;&nbsp;callback)</code>
 <div class="block">Allows you to provide a callback which will be invoked when this instance emits a progress update.</div>
@@ -341,27 +367,6 @@ extends <a href="../../../../com/nuix/superutilities/misc/SQLiteBacked.html" tit
 </dl>
 </li>
 </ul>
-<a name="storeMarkupSet-nuix.Case-nuix.MarkupSet-">
-<!--   -->
-</a>
-<ul class="blockList">
-<li class="blockList">
-<h4>storeMarkupSet</h4>
-<pre>public&nbsp;void&nbsp;storeMarkupSet(nuix.Case&nbsp;nuixCase,
-                           nuix.MarkupSet&nbsp;markupSet)
-                    throws java.io.IOException,
-                           java.sql.SQLException</pre>
-<div class="block">Stores a particular markup set living in the provided Nuix case.</div>
-<dl>
-<dt><span class="paramLabel">Parameters:</span></dt>
-<dd><code>nuixCase</code> - The Nuix case containing the provided markup set.</dd>
-<dd><code>markupSet</code> - The specific markup set to store.</dd>
-<dt><span class="throwsLabel">Throws:</span></dt>
-<dd><code>java.io.IOException</code> - Thrown most likely if there was an issue searching or retrieving printed pages of and item.</dd>
-<dd><code>java.sql.SQLException</code> - Thrown if anything goes wrong interacting with the SQLite database file.</dd>
-</dl>
-</li>
-</ul>
 <a name="getItemId-nuix.Item-">
 <!--   -->
 </a>
@@ -397,6 +402,105 @@ extends <a href="../../../../com/nuix/superutilities/misc/SQLiteBacked.html" tit
 <dd>The DB ID number for the given markup set, based on finding a record in the MarkupSet table with a matching name.</dd>
 <dt><span class="throwsLabel">Throws:</span></dt>
 <dd><code>java.sql.SQLException</code> - Thrown if there are errors while interacting with the SQLite DB file.</dd>
+</dl>
+</li>
+</ul>
+<a name="getTagId-java.lang.String-">
+<!--   -->
+</a>
+<ul class="blockList">
+<li class="blockList">
+<h4>getTagId</h4>
+<pre>public&nbsp;long&nbsp;getTagId(java.lang.String&nbsp;tagName)
+              throws java.sql.SQLException</pre>
+<div class="block">Gets the sequentially assigned ID value from the Tag table for a given tag name.  Will attempt to get this from a cache first.</div>
+<dl>
+<dt><span class="paramLabel">Parameters:</span></dt>
+<dd><code>tagName</code> - Name of the tag you wish to get the ID of.</dd>
+<dt><span class="returnLabel">Returns:</span></dt>
+<dd>The DB ID number for the given Tag, based on finding a record in the Tag table with a matching name.</dd>
+<dt><span class="throwsLabel">Throws:</span></dt>
+<dd><code>java.sql.SQLException</code> - Thrown if there are errors while interacting with the SQLite DB file.</dd>
+</dl>
+</li>
+</ul>
+<a name="storeTag-nuix.Case-java.lang.String-">
+<!--   -->
+</a>
+<ul class="blockList">
+<li class="blockList">
+<h4>storeTag</h4>
+<pre>public&nbsp;void&nbsp;storeTag(nuix.Case&nbsp;nuixCase,
+                     java.lang.String&nbsp;tagName)
+              throws java.io.IOException,
+                     java.sql.SQLException</pre>
+<div class="block">Stores a specific tag present in the provided case as records in the DB file.</div>
+<dl>
+<dt><span class="paramLabel">Parameters:</span></dt>
+<dd><code>nuixCase</code> - The Nuix case that the specified tag is present in.</dd>
+<dd><code>tagName</code> - The name of the tag in the specified case to store in the DB file.</dd>
+<dt><span class="throwsLabel">Throws:</span></dt>
+<dd><code>java.io.IOException</code> - Thrown if a search error occurs.</dd>
+<dd><code>java.sql.SQLException</code> - Thrown if there are errors while interacting with the SQLite DB file.</dd>
+</dl>
+</li>
+</ul>
+<a name="storeAllTags-nuix.Case-">
+<!--   -->
+</a>
+<ul class="blockList">
+<li class="blockList">
+<h4>storeAllTags</h4>
+<pre>public&nbsp;void&nbsp;storeAllTags(nuix.Case&nbsp;nuixCase)
+                  throws java.io.IOException,
+                         java.sql.SQLException</pre>
+<div class="block">Stores all tags present in the provided case as records in the DB file.</div>
+<dl>
+<dt><span class="paramLabel">Parameters:</span></dt>
+<dd><code>nuixCase</code> - The Nuix case to record tags from.</dd>
+<dt><span class="throwsLabel">Throws:</span></dt>
+<dd><code>java.io.IOException</code> - Thrown if a search error occurs.</dd>
+<dd><code>java.sql.SQLException</code> - Thrown if there are errors while interacting with the SQLite DB file.</dd>
+</dl>
+</li>
+</ul>
+<a name="applyTagsFromDatabaseToCase-nuix.Case-com.nuix.superutilities.annotations.AnnotationMatchingMethod-">
+<!--   -->
+</a>
+<ul class="blockList">
+<li class="blockList">
+<h4>applyTagsFromDatabaseToCase</h4>
+<pre>public&nbsp;void&nbsp;applyTagsFromDatabaseToCase(nuix.Case&nbsp;nuixCase,
+                                        <a href="../../../../com/nuix/superutilities/annotations/AnnotationMatchingMethod.html" title="enum in com.nuix.superutilities.annotations">AnnotationMatchingMethod</a>&nbsp;matchingMethod)
+                                 throws java.sql.SQLException</pre>
+<div class="block">Applies tags to items in the provided case based on tag records in the DB file associated to this instance.</div>
+<dl>
+<dt><span class="paramLabel">Parameters:</span></dt>
+<dd><code>nuixCase</code> - The case in which items will be tagged.</dd>
+<dd><code>matchingMethod</code> - Determines how a record in the DB file is associated to an item in the case to apply tags to it.</dd>
+<dt><span class="throwsLabel">Throws:</span></dt>
+<dd><code>java.sql.SQLException</code> - Thrown if there are errors while interacting with the SQLite DB file.</dd>
+</dl>
+</li>
+</ul>
+<a name="storeMarkupSet-nuix.Case-nuix.MarkupSet-">
+<!--   -->
+</a>
+<ul class="blockList">
+<li class="blockList">
+<h4>storeMarkupSet</h4>
+<pre>public&nbsp;void&nbsp;storeMarkupSet(nuix.Case&nbsp;nuixCase,
+                           nuix.MarkupSet&nbsp;markupSet)
+                    throws java.io.IOException,
+                           java.sql.SQLException</pre>
+<div class="block">Stores a particular markup set present in the provided Nuix case.</div>
+<dl>
+<dt><span class="paramLabel">Parameters:</span></dt>
+<dd><code>nuixCase</code> - The Nuix case containing the provided markup set.</dd>
+<dd><code>markupSet</code> - The specific markup set to store.</dd>
+<dt><span class="throwsLabel">Throws:</span></dt>
+<dd><code>java.io.IOException</code> - Thrown most likely if there was an issue searching or retrieving printed pages of and item.</dd>
+<dd><code>java.sql.SQLException</code> - Thrown if anything goes wrong interacting with the SQLite database file.</dd>
 </dl>
 </li>
 </ul>

@@ -113,7 +113,7 @@ public class SQLiteBacked implements Closeable {
 	 * Executes an update query against the SQLite database file
 	 * @param sql The SQL to execute
 	 * @return either (1) the row count for SQL Data Manipulation Language (DML) statements or (2) 0 for SQL statements that return nothing
-	 * @throws SQLException
+	 * @throws SQLException If the SQL bits throw an error
 	 */
 	public int executeUpdate(String sql) throws SQLException{
 		Connection conn = getConnection();
