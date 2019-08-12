@@ -17,6 +17,7 @@ import org.joda.time.Duration;
 
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
+import com.nuix.superutilities.SuperUtilities;
 import com.nuix.superutilities.misc.FormatUtility;
 
 import nuix.Address;
@@ -24,6 +25,7 @@ import nuix.Communication;
 import nuix.Item;
 import nuix.ItemType;
 import nuix.SourceItem;
+import nuix.WorkerItem;
 
 public class JsonExporter {
 	//Cache serialized types so we don't re map them over and over
@@ -209,6 +211,29 @@ public class JsonExporter {
 	public void setPrettyPrint(boolean prettyPrint) {
 		this.prettyPrint = prettyPrint;
 	}
+	
+	/***
+	 * This method take a provided WorkerItem and generates a series of nested {@link java.util.Map} instances
+	 * representing the WorkerItem and its data.  The resulting {@link java.util.Map} is later used as input
+	 * to GSON for serializing to JSON.
+	 * 
+	 * Internally this gets the SourceItem for the given WorkerItem and provides that to {@link #mapSourceItem(SourceItem)} to
+	 * build most of the Map.  After that it adds a few additional entries based on what is available from the WorkerItem.
+	 * @param workerItem WorkerItem to serialize into a map
+	 * @return Map representing the WorkerItem and its SourceItem
+	 */
+	public Map<String,Object> mapWorkerItem(WorkerItem workerItem){
+		Map<String,Object> itemMap = new LinkedHashMap<String,Object>();
+		// We can use the source item to get at a majority of the data
+		SourceItem sourceItem = workerItem.getSourceItem();
+		itemMap.putAll(mapSourceItem(sourceItem));
+		// Now we just add a few additional things we can since we have the worker item
+		itemMap.put("GUID", workerItem.getItemGuid());
+		if(includePathGuids) {
+			itemMap.put("PathGUIDs", workerItem.getGuidPath());	
+		}
+		return itemMap;
+	}
 
 	/***
 	 * This method takes a provided SourceItem and generates a series of nested {@link java.util.Map} instances
@@ -231,6 +256,26 @@ public class JsonExporter {
 		itemMap.put("IsEncrypted",sourceItem.isEncrypted());
 		itemMap.put("IsFileData",sourceItem.isFileData());
 		itemMap.put("Communication",mapCommunication(sourceItem.getCommunication()));
+		itemMap.put("PathNames", sourceItem.getPathNames());
+		
+		if(SuperUtilities.getCurrentVersion().isAtLeast("7.4")) {
+			DateTime itemDate = sourceItem.getDate();
+			if(itemDate != null){
+				itemMap.put("ItemDate", sourceItem.getDate().toString());	
+			} else {
+				itemMap.put("ItemDate", null);
+			}
+		
+			itemMap.put("IsTopLevel",sourceItem.isTopLevel());
+		}
+		
+		if(SuperUtilities.getCurrentVersion().isAtLeast("7.6")) {
+			itemMap.put("MD5", sourceItem.getDigests().getMd5());
+			itemMap.put("SHA-1", sourceItem.getDigests().getSha1());
+			itemMap.put("SHA-256", sourceItem.getDigests().getSha256());
+			
+			itemMap.put("ShannonEntropy", sourceItem.getShannonEntropy());
+		}
 		
 		if(includeProperties){
 			itemMap.put("Properties",mapProperties(sourceItem.getProperties()));
@@ -374,6 +419,64 @@ public class JsonExporter {
 	}
 	
 	/***
+	 * Exports an source item as a JSON representation.  The SourceItem's information is first converted into a series of Map objects
+	 * by calling {@link JsonExporter#mapSourceItem(SourceItem)}, the result of which is then converted into JSON.
+	 * @param sourceItem The SourceItem to serialize into JSON
+	 * @param exportFilePath File path to write the JSON result to.
+	 */
+	public void exportSourceItemAsJson(SourceItem sourceItem, File exportFilePath){
+		//Configure JSON instance based on settings
+		Gson gson = null;
+		GsonBuilder gsonBuilder = new GsonBuilder();
+		if(serializeNulls) gsonBuilder.serializeNulls();
+		if(prettyPrint) gsonBuilder.setPrettyPrinting();
+		gson = gsonBuilder.create();
+		
+		FileOutputStream fos = null;
+		BufferedWriter bw = null;
+		try {
+			fos = new FileOutputStream(exportFilePath);
+			bw = new BufferedWriter(new OutputStreamWriter(fos));
+			Map<String,Object> mappedData = mapSourceItem(sourceItem);
+			if(beforeSerializationCallback != null) { beforeSerializationCallback.accept(mappedData); }
+			String asJson = gson.toJson(mappedData);
+			bw.write(asJson);
+			bw.close();
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
+	}
+	
+	/***
+	 * Exports a worker item as a JSON representation.  The WorkerItem's information is first converted into a series of Map objects
+	 * by calling {@link JsonExporter#mapWorkerItem(WorkerItem)}, the result of which is then converted into JSON.
+	 * @param workerItem The WorkerItem to serialize into JSON
+	 * @param exportFilePath File path to write the JSON result to.
+	 */
+	public void exportWorkerItemAsJson(WorkerItem workerItem, File exportFilePath){
+		//Configure JSON instance based on settings
+		Gson gson = null;
+		GsonBuilder gsonBuilder = new GsonBuilder();
+		if(serializeNulls) gsonBuilder.serializeNulls();
+		if(prettyPrint) gsonBuilder.setPrettyPrinting();
+		gson = gsonBuilder.create();
+		
+		FileOutputStream fos = null;
+		BufferedWriter bw = null;
+		try {
+			fos = new FileOutputStream(exportFilePath);
+			bw = new BufferedWriter(new OutputStreamWriter(fos));
+			Map<String,Object> mappedData = mapWorkerItem(workerItem);
+			if(beforeSerializationCallback != null) { beforeSerializationCallback.accept(mappedData); }
+			String asJson = gson.toJson(mappedData);
+			bw.write(asJson);
+			bw.close();
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
+	}
+	
+	/***
 	 * Converts an item to a JSON String representation.  The Item's information is first converted into a series of Map objects
 	 * by calling {@link JsonExporter#mapItem(Item)}, result of which is then serialized into a JSON String and returned.
 	 * @param item The item to serialize into JSON
@@ -387,6 +490,44 @@ public class JsonExporter {
 		if(prettyPrint) gsonBuilder.setPrettyPrinting();
 		gson = gsonBuilder.create();
 		Map<String,Object> mappedData = mapItem(item);
+		if(beforeSerializationCallback != null) { beforeSerializationCallback.accept(mappedData); }
+		String asJson = gson.toJson(mappedData);
+		return asJson;
+	}
+	
+	/***
+	 * Converts a SourceItem to a JSON String representation.  The SourceItem's information is first converted into a series of Map objects
+	 * by calling {@link #mapSourceItem(SourceItem)}, result of which is then serialized into a JSON String and returned.
+	 * @param sourceItem The SourceItem to serialize into JSON
+	 * @return A JSON String representation of the given SourceItem.
+	 */
+	public String convertSourceItemToJsonString(SourceItem sourceItem) {
+		//Configure JSON instance based on settings
+		Gson gson = null;
+		GsonBuilder gsonBuilder = new GsonBuilder();
+		if(serializeNulls) gsonBuilder.serializeNulls();
+		if(prettyPrint) gsonBuilder.setPrettyPrinting();
+		gson = gsonBuilder.create();
+		Map<String,Object> mappedData = mapSourceItem(sourceItem);
+		if(beforeSerializationCallback != null) { beforeSerializationCallback.accept(mappedData); }
+		String asJson = gson.toJson(mappedData);
+		return asJson;
+	}
+	
+	/***
+	 * Converts a WorkerItem to a JSON String representation.  The WorkerItem's information is first converted into a series of Map objects
+	 * by calling {@link #mapWorkerItem(SourceItem)}, result of which is then serialized into a JSON String and returned.
+	 * @param workerItem The WorkerItem to serialize into JSON
+	 * @return A JSON String representation of the given WorkerItem.
+	 */
+	public String convertWorkerItemToJsonString(WorkerItem workerItem) {
+		//Configure JSON instance based on settings
+		Gson gson = null;
+		GsonBuilder gsonBuilder = new GsonBuilder();
+		if(serializeNulls) gsonBuilder.serializeNulls();
+		if(prettyPrint) gsonBuilder.setPrettyPrinting();
+		gson = gsonBuilder.create();
+		Map<String,Object> mappedData = mapWorkerItem(workerItem);
 		if(beforeSerializationCallback != null) { beforeSerializationCallback.accept(mappedData); }
 		String asJson = gson.toJson(mappedData);
 		return asJson;
