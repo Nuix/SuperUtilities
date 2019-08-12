@@ -516,7 +516,7 @@ public class JsonExporter {
 	
 	/***
 	 * Converts a WorkerItem to a JSON String representation.  The WorkerItem's information is first converted into a series of Map objects
-	 * by calling {@link #mapWorkerItem(SourceItem)}, result of which is then serialized into a JSON String and returned.
+	 * by calling {@link #mapWorkerItem(WorkerItem)}, result of which is then serialized into a JSON String and returned.
 	 * @param workerItem The WorkerItem to serialize into JSON
 	 * @return A JSON String representation of the given WorkerItem.
 	 */
