@@ -17,7 +17,7 @@
     catch(err) {
     }
 //-->
-var methods = {"i0":10,"i1":10,"i2":10,"i3":10,"i4":10,"i5":10,"i6":10,"i7":10,"i8":10,"i9":10,"i10":10,"i11":10,"i12":10};
+var methods = {"i0":10,"i1":10,"i2":10,"i3":10,"i4":10,"i5":10,"i6":10,"i7":10,"i8":10,"i9":10,"i10":10,"i11":10,"i12":10,"i13":10,"i14":10};
 var tabs = {65535:["t0","All Methods"],2:["t2","Instance Methods"],8:["t4","Concrete Methods"]};
 var altColor = "altColor";
 var rowColor = "rowColor";
@@ -212,38 +212,50 @@ extends <a href="../../../../com/nuix/superutilities/misc/SQLiteBacked.html" tit
 </td>
 </tr>
 <tr id="i7" class="rowColor">
+<td class="colFirst"><code>java.util.List&lt;java.lang.String&gt;</code></td>
+<td class="colLast"><code><span class="memberNameLink"><a href="../../../../com/nuix/superutilities/annotations/AnnotationRepository.html#getTagsForGuid-java.lang.String-">getTagsForGuid</a></span>(java.lang.String&nbsp;guid)</code>
+<div class="block">Queries the DB for the names of tags associated with the provided GUID.</div>
+</td>
+</tr>
+<tr id="i8" class="altColor">
+<td class="colFirst"><code>java.util.List&lt;java.lang.String&gt;</code></td>
+<td class="colLast"><code><span class="memberNameLink"><a href="../../../../com/nuix/superutilities/annotations/AnnotationRepository.html#getTagsForMd5-java.lang.String-">getTagsForMd5</a></span>(java.lang.String&nbsp;md5)</code>
+<div class="block">Queries the DB for the names of tags associated with the provided MD5.</div>
+</td>
+</tr>
+<tr id="i9" class="rowColor">
 <td class="colFirst"><code>void</code></td>
 <td class="colLast"><code><span class="memberNameLink"><a href="../../../../com/nuix/superutilities/annotations/AnnotationRepository.html#storeAllMarkupSets-nuix.Case-">storeAllMarkupSets</a></span>(nuix.Case&nbsp;nuixCase)</code>
 <div class="block">Stores all markup sets found in the provided case to the SQLite DB file.</div>
 </td>
 </tr>
-<tr id="i8" class="altColor">
+<tr id="i10" class="altColor">
 <td class="colFirst"><code>void</code></td>
 <td class="colLast"><code><span class="memberNameLink"><a href="../../../../com/nuix/superutilities/annotations/AnnotationRepository.html#storeAllTags-nuix.Case-">storeAllTags</a></span>(nuix.Case&nbsp;nuixCase)</code>
 <div class="block">Stores all tags present in the provided case as records in the DB file.</div>
 </td>
 </tr>
-<tr id="i9" class="rowColor">
+<tr id="i11" class="rowColor">
 <td class="colFirst"><code>void</code></td>
 <td class="colLast"><code><span class="memberNameLink"><a href="../../../../com/nuix/superutilities/annotations/AnnotationRepository.html#storeMarkupSet-nuix.Case-nuix.MarkupSet-">storeMarkupSet</a></span>(nuix.Case&nbsp;nuixCase,
               nuix.MarkupSet&nbsp;markupSet)</code>
 <div class="block">Stores a particular markup set present in the provided Nuix case.</div>
 </td>
 </tr>
-<tr id="i10" class="altColor">
+<tr id="i12" class="altColor">
 <td class="colFirst"><code>void</code></td>
 <td class="colLast"><code><span class="memberNameLink"><a href="../../../../com/nuix/superutilities/annotations/AnnotationRepository.html#storeTag-nuix.Case-java.lang.String-">storeTag</a></span>(nuix.Case&nbsp;nuixCase,
         java.lang.String&nbsp;tagName)</code>
 <div class="block">Stores a specific tag present in the provided case as records in the DB file.</div>
 </td>
 </tr>
-<tr id="i11" class="rowColor">
+<tr id="i13" class="rowColor">
 <td class="colFirst"><code>void</code></td>
 <td class="colLast"><code><span class="memberNameLink"><a href="../../../../com/nuix/superutilities/annotations/AnnotationRepository.html#whenMessageLogged-java.util.function.Consumer-">whenMessageLogged</a></span>(java.util.function.Consumer&lt;java.lang.String&gt;&nbsp;callback)</code>
 <div class="block">Allows you to provide a callback which will be invoked when this instance emits a log message.</div>
 </td>
 </tr>
-<tr id="i12" class="altColor">
+<tr id="i14" class="altColor">
 <td class="colFirst"><code>void</code></td>
 <td class="colLast"><code><span class="memberNameLink"><a href="../../../../com/nuix/superutilities/annotations/AnnotationRepository.html#whenProgressUpdated-java.util.function.BiConsumer-">whenProgressUpdated</a></span>(java.util.function.BiConsumer&lt;java.lang.Integer,java.lang.Integer&gt;&nbsp;callback)</code>
 <div class="block">Allows you to provide a callback which will be invoked when this instance emits a progress update.</div>
@@ -520,6 +532,44 @@ extends <a href="../../../../com/nuix/superutilities/misc/SQLiteBacked.html" tit
 <dd><code>nuixCase</code> - The Nuix case to apply the DB file markups to.</dd>
 <dd><code>addToExistingMarkupSet</code> - Whether to append marukps to existing markup sets of the the same name or create a new markup set with a suffixed name.</dd>
 <dd><code>matchingMethod</code> - Specifies whether to match records in the DB file to item in the case by using GUID or MD5.</dd>
+<dt><span class="throwsLabel">Throws:</span></dt>
+<dd><code>java.sql.SQLException</code> - Thrown if there are errors while interacting with the SQLite DB file.</dd>
+</dl>
+</li>
+</ul>
+<a name="getTagsForMd5-java.lang.String-">
+<!--   -->
+</a>
+<ul class="blockList">
+<li class="blockList">
+<h4>getTagsForMd5</h4>
+<pre>public&nbsp;java.util.List&lt;java.lang.String&gt;&nbsp;getTagsForMd5(java.lang.String&nbsp;md5)
+                                               throws java.sql.SQLException</pre>
+<div class="block">Queries the DB for the names of tags associated with the provided MD5.</div>
+<dl>
+<dt><span class="paramLabel">Parameters:</span></dt>
+<dd><code>md5</code> - The MD5 to find the associated tags of.</dd>
+<dt><span class="returnLabel">Returns:</span></dt>
+<dd>A list of 0 or more Tag names associated with the specified MD5.</dd>
+<dt><span class="throwsLabel">Throws:</span></dt>
+<dd><code>java.sql.SQLException</code> - Thrown if there are errors while interacting with the SQLite DB file.</dd>
+</dl>
+</li>
+</ul>
+<a name="getTagsForGuid-java.lang.String-">
+<!--   -->
+</a>
+<ul class="blockList">
+<li class="blockList">
+<h4>getTagsForGuid</h4>
+<pre>public&nbsp;java.util.List&lt;java.lang.String&gt;&nbsp;getTagsForGuid(java.lang.String&nbsp;guid)
+                                                throws java.sql.SQLException</pre>
+<div class="block">Queries the DB for the names of tags associated with the provided GUID.</div>
+<dl>
+<dt><span class="paramLabel">Parameters:</span></dt>
+<dd><code>guid</code> - The GUID to find the associated tags of.</dd>
+<dt><span class="returnLabel">Returns:</span></dt>
+<dd>A list of 0 or more Tag names associated with the specified GUID.</dd>
 <dt><span class="throwsLabel">Throws:</span></dt>
 <dd><code>java.sql.SQLException</code> - Thrown if there are errors while interacting with the SQLite DB file.</dd>
 </dl>
