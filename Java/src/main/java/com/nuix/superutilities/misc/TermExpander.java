@@ -194,8 +194,6 @@ public class TermExpander {
 			float similarity = 0.0f;
 			if(fuzzyResolutionAlgorithm == SimilarityCalculation.JaroWinkler) {
 				similarity = f.calculateJaroWinklerSimilarityTo(termStat.getKey());
-			} else if(fuzzyResolutionAlgorithm == SimilarityCalculation.Levenstein) {
-				similarity = f.calculateLevensteinSimilarityTo(termStat.getKey());
 			} else if(fuzzyResolutionAlgorithm == SimilarityCalculation.LuceneLevenshstein) {
 				similarity = f.calculateLuceneLevenshteinSimilarityTo(termStat.getKey());
 			} else if(fuzzyResolutionAlgorithm == SimilarityCalculation.NGram) {

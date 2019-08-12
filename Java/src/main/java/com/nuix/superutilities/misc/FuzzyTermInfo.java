@@ -4,7 +4,6 @@ import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
 import org.apache.lucene.search.spell.LuceneLevenshteinDistance;
-import org.apache.lucene.search.spell.LevensteinDistance;
 import org.apache.lucene.search.spell.JaroWinklerDistance;
 import org.apache.lucene.search.spell.NGramDistance;
 
@@ -16,7 +15,6 @@ import org.apache.lucene.search.spell.NGramDistance;
 public class FuzzyTermInfo {
 	private static Pattern fuzzyPattern = Pattern.compile("(?<term>([a-z0-9]+))~(?<similarity>([0-1]\\.?[0-9]*)?)",Pattern.CASE_INSENSITIVE);
 	
-	private static LevensteinDistance levDist = new LevensteinDistance();
 	private static LuceneLevenshteinDistance luceneLevDist = new LuceneLevenshteinDistance();
 	private static JaroWinklerDistance jaroDist = new JaroWinklerDistance();
 	private static NGramDistance ngramDist = new NGramDistance();
@@ -44,10 +42,6 @@ public class FuzzyTermInfo {
 			}
 		}
 		return f;
-	}
-	
-	public float calculateLevensteinSimilarityTo(String otherTerm) {
-		return levDist.getDistance(this.term, otherTerm);
 	}
 	
 	public float calculateLuceneLevenshteinSimilarityTo(String otherTerm) {
