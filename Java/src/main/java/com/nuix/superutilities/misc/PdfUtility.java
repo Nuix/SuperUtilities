@@ -8,8 +8,17 @@ import java.util.HashMap;
 import java.util.List;
 
 import com.itextpdf.text.Document;
+import com.itextpdf.text.Element;
+import com.itextpdf.text.Font;
+import com.itextpdf.text.Phrase;
+import com.itextpdf.text.Rectangle;
+import com.itextpdf.text.pdf.ColumnText;
+import com.itextpdf.text.pdf.GrayColor;
+import com.itextpdf.text.pdf.PdfContentByte;
 import com.itextpdf.text.pdf.PdfCopy;
+import com.itextpdf.text.pdf.PdfGState;
 import com.itextpdf.text.pdf.PdfReader;
+import com.itextpdf.text.pdf.PdfStamper;
 
 /***
  * A class containing some helper methods for PDFs.
@@ -93,5 +102,51 @@ public class PdfUtility {
 			jInputFiles.add(new File(inputFile));
 		}
 		mergePdfFiles(jOutputFile,jInputFiles,createBookmarks,bookmarkTitles);
+	}
+	
+	public static void createWaterMarkedPdf(String inputFile, String outputFile, String phrase, int fontSize, float opacity, float rotation) throws Exception {
+		createWaterMarkedPdf(new File(inputFile), new File(outputFile), phrase, fontSize, opacity, rotation);
+	}
+	
+	public static void createWaterMarkedPdf(File inputFile, File outputFile, String phrase, int fontSize, float opacity, float rotation) throws Exception {
+		if(!inputFile.exists()) {
+			throw new IllegalArgumentException("inputFile does not exist");
+		}
+		
+		outputFile.getParentFile().mkdirs();
+		
+		// Based on code found here: https://memorynotfound.com/add-watermark-to-pdf-document-using-itext-and-java/
+		PdfReader reader = new PdfReader(inputFile.getAbsolutePath());
+		OutputStream outputStream = new FileOutputStream(outputFile);
+		PdfStamper stamper = new PdfStamper(reader,outputStream);
+		
+		Font font = new Font(Font.FontFamily.HELVETICA, fontSize, Font.BOLD, new GrayColor(0.5f));
+		
+		Phrase p = new Phrase(phrase, font);
+		
+		PdfContentByte over;
+        Rectangle pagesize;
+        float x, y;
+        
+        int n = reader.getNumberOfPages();
+        for (int i = 1; i <= n; i++) {
+
+            // get page size and position
+            pagesize = reader.getPageSizeWithRotation(i);
+            x = (pagesize.getLeft() + pagesize.getRight()) / 2;
+            y = (pagesize.getTop() + pagesize.getBottom()) / 2;
+            over = stamper.getOverContent(i);
+            over.saveState();
+
+            // set transparency
+            PdfGState state = new PdfGState();
+            state.setFillOpacity(opacity);
+            over.setGState(state);
+
+            ColumnText.showTextAligned(over, Element.ALIGN_CENTER, p, x, y, rotation);
+            over.restoreState();
+        }
+        stamper.close();
+        reader.close();
 	}
 }
