@@ -23,6 +23,8 @@ public class PdfWorkCache {
 	private File tempDirectory = null;
 	private SingleItemExporter pdfExporter = null;
 	
+	private Map<String,Object> printSettings = new HashMap<String,Object>();
+	
 	/***
 	 * Creates a new instance
 	 * @param tempDirectory Temporary directory where PDF files will be saved to.
@@ -31,6 +33,7 @@ public class PdfWorkCache {
 		this.tempDirectory = tempDirectory;
 		this.tempDirectory.mkdirs();
 		pdfExporter =  SuperUtilities.getInstance().getNuixUtilities().getPdfPrintExporter();
+		printSettings.put("regenerateStored", false);
 	}
 	
 	/***
@@ -50,11 +53,30 @@ public class PdfWorkCache {
 			tempPdf = new File(tempPdf,guid.substring(3, 6));
 			tempPdf.mkdirs();
 			tempPdf = new File(tempPdf,item.getGuid()+".pdf");
-			item.getPrintedImage().generate(); // Make sure PDF is generated or exported can have issues
+			item.getPrintedImage().generate(printSettings); // Make sure PDF is generated or export can have issues
 			pdfExporter.exportItem(item, tempPdf);
 			pdfCache.put(item.getGuid(), tempPdf);
 		}
 		return tempPdf;
+	}
+	
+	/***
+	 * Removes PDF from cache and deletes it from the file system.  Should not error if:<br>
+	 * <ul>
+	 * <li>PDF file no longer exists</li>
+	 * <li>There is no entry in cache for given item</li>
+	 * <ul>
+	 * @param item The item to "forget" (remove from cache and delete PDF file)
+	 */
+	public synchronized void forgetItem(Item item) {
+		String guid = item.getGuid();
+		if(pdfCache.containsKey(guid)) {
+			File pdfFile = pdfCache.get(guid);
+			if(pdfFile.exists()) {
+				pdfFile.delete();
+			}
+			pdfCache.remove(guid);
+		}
 	}
 	
 	/***
@@ -63,12 +85,15 @@ public class PdfWorkCache {
 	 * @throws IOException If something goes wrong
 	 */
 	public synchronized void cleanupTemporaryPdfs() throws IOException {
-//		for(Map.Entry<String, File> pdfCacheEntry : pdfCache.entrySet()) {
-//			if(pdfCacheEntry.getValue().exists()) {
-//				pdfCacheEntry.getValue().delete();
-//			}
-//		}
 		FileUtils.deleteDirectory(tempDirectory);
 		pdfCache.clear();
+	}
+	
+	public boolean getRegenerateStored() {
+		return (Boolean)printSettings.get("regenerateStored");
+	}
+	
+	public void setRegenerateStored(boolean value) {
+		printSettings.put("regenerateStored",value);
 	}
 }

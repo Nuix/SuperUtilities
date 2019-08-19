@@ -61,6 +61,7 @@ public class SuperUtilities{
 	public static SuperUtilities init(Utilities util, String nuixVersionString){
 		SuperUtilities.getInstance().util = util;
 		currentVersion = NuixVersion.parse(nuixVersionString);
+		System.out.println("Initialized SuperUtilities from JAR "+instance.getJarFilePath().toString());
 		return SuperUtilities.getInstance();
 	}
 	
@@ -159,7 +160,7 @@ public class SuperUtilities{
 	 * @return File object representing path to JAR file
 	 */
 	public File getJarFile(){
-		return new File(getJarFilePath()).getParentFile();
+		return new File(getJarFilePath());
 	}
 	
 	/***
