@@ -1,5 +1,6 @@
 package com.nuix.superutilities.misc;
 
+import java.io.File;
 import java.math.BigDecimal;
 import java.text.NumberFormat;
 import java.util.ArrayList;
@@ -15,6 +16,8 @@ import javax.xml.bind.DatatypeConverter;
 import org.apache.commons.lang3.StringUtils;
 import org.apache.commons.lang3.exception.ExceptionUtils;
 import org.joda.time.DateTime;
+
+import nuix.Item;
 
 /***
  * Class which offers methods for formatting values.
@@ -347,5 +350,15 @@ public class FormatUtility {
 	
 	public static String debugString(Exception exc) {
 		return ExceptionUtils.getStackTrace(exc);
+	}
+	
+	public static File makeGuidPath(Item item, File rootDirectory, String extension) {
+		File tempFile = null;
+		String guid = item.getGuid();
+		tempFile = new File(rootDirectory,guid.substring(0, 3));
+		tempFile = new File(tempFile,guid.substring(3, 6));
+		tempFile.mkdirs();
+		tempFile = new File(tempFile,item.getGuid()+"."+extension);
+		return tempFile;
 	}
 }
