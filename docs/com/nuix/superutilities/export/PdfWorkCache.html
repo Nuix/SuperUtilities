@@ -17,7 +17,7 @@
     catch(err) {
     }
 //-->
-var methods = {"i0":10,"i1":10};
+var methods = {"i0":10,"i1":10,"i2":10,"i3":10,"i4":10};
 var tabs = {65535:["t0","All Methods"],2:["t2","Instance Methods"],8:["t4","Concrete Methods"]};
 var altColor = "altColor";
 var rowColor = "rowColor";
@@ -161,10 +161,24 @@ extends java.lang.Object</pre>
 </td>
 </tr>
 <tr id="i1" class="rowColor">
+<td class="colFirst"><code>void</code></td>
+<td class="colLast"><code><span class="memberNameLink"><a href="../../../../com/nuix/superutilities/export/PdfWorkCache.html#forgetItem-nuix.Item-">forgetItem</a></span>(nuix.Item&nbsp;item)</code>
+<div class="block">Removes PDF from cache and deletes it from the file system.</div>
+</td>
+</tr>
+<tr id="i2" class="altColor">
 <td class="colFirst"><code>java.io.File</code></td>
 <td class="colLast"><code><span class="memberNameLink"><a href="../../../../com/nuix/superutilities/export/PdfWorkCache.html#getPdfPath-nuix.Item-">getPdfPath</a></span>(nuix.Item&nbsp;item)</code>
 <div class="block">Gets the path to a PDF exported for an item if it is already exported.</div>
 </td>
+</tr>
+<tr id="i3" class="rowColor">
+<td class="colFirst"><code>boolean</code></td>
+<td class="colLast"><code><span class="memberNameLink"><a href="../../../../com/nuix/superutilities/export/PdfWorkCache.html#getRegenerateStored--">getRegenerateStored</a></span>()</code>&nbsp;</td>
+</tr>
+<tr id="i4" class="altColor">
+<td class="colFirst"><code>void</code></td>
+<td class="colLast"><code><span class="memberNameLink"><a href="../../../../com/nuix/superutilities/export/PdfWorkCache.html#setRegenerateStored-boolean-">setRegenerateStored</a></span>(boolean&nbsp;value)</code>&nbsp;</td>
 </tr>
 </table>
 <ul class="blockList">
@@ -230,10 +244,26 @@ extends java.lang.Object</pre>
 </dl>
 </li>
 </ul>
+<a name="forgetItem-nuix.Item-">
+<!--   -->
+</a>
+<ul class="blockList">
+<li class="blockList">
+<h4>forgetItem</h4>
+<pre>public&nbsp;void&nbsp;forgetItem(nuix.Item&nbsp;item)</pre>
+<div class="block">Removes PDF from cache and deletes it from the file system.  Should not error if:<br>
+ - PDF file no longer exists<br>
+ - There is no entry in cache for given item<br></div>
+<dl>
+<dt><span class="paramLabel">Parameters:</span></dt>
+<dd><code>item</code> - The item to "forget" (remove from cache and delete PDF file)</dd>
+</dl>
+</li>
+</ul>
 <a name="cleanupTemporaryPdfs--">
 <!--   -->
 </a>
-<ul class="blockListLast">
+<ul class="blockList">
 <li class="blockList">
 <h4>cleanupTemporaryPdfs</h4>
 <pre>public&nbsp;void&nbsp;cleanupTemporaryPdfs()
@@ -244,6 +274,24 @@ extends java.lang.Object</pre>
 <dt><span class="throwsLabel">Throws:</span></dt>
 <dd><code>java.io.IOException</code> - If something goes wrong</dd>
 </dl>
+</li>
+</ul>
+<a name="getRegenerateStored--">
+<!--   -->
+</a>
+<ul class="blockList">
+<li class="blockList">
+<h4>getRegenerateStored</h4>
+<pre>public&nbsp;boolean&nbsp;getRegenerateStored()</pre>
+</li>
+</ul>
+<a name="setRegenerateStored-boolean-">
+<!--   -->
+</a>
+<ul class="blockListLast">
+<li class="blockList">
+<h4>setRegenerateStored</h4>
+<pre>public&nbsp;void&nbsp;setRegenerateStored(boolean&nbsp;value)</pre>
 </li>
 </ul>
 </li>

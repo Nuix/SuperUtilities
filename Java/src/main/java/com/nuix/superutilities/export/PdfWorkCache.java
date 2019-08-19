@@ -62,10 +62,8 @@ public class PdfWorkCache {
 	
 	/***
 	 * Removes PDF from cache and deletes it from the file system.  Should not error if:<br>
-	 * <ul>
-	 * <li>PDF file no longer exists</li>
-	 * <li>There is no entry in cache for given item</li>
-	 * <ul>
+	 * - PDF file no longer exists<br>
+	 * - There is no entry in cache for given item<br>
 	 * @param item The item to "forget" (remove from cache and delete PDF file)
 	 */
 	public synchronized void forgetItem(Item item) {

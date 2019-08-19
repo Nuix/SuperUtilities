@@ -17,7 +17,7 @@
     catch(err) {
     }
 //-->
-var methods = {"i0":9,"i1":9};
+var methods = {"i0":9,"i1":9,"i2":9,"i3":9,"i4":9,"i5":9};
 var tabs = {65535:["t0","All Methods"],1:["t1","Static Methods"],8:["t4","Concrete Methods"]};
 var altColor = "altColor";
 var rowColor = "rowColor";
@@ -152,6 +152,28 @@ extends java.lang.Object</pre>
 </tr>
 <tr id="i0" class="altColor">
 <td class="colFirst"><code>static void</code></td>
+<td class="colLast"><code><span class="memberNameLink"><a href="../../../../com/nuix/superutilities/misc/PdfUtility.html#createWaterMarkedPdf-java.io.File-java.io.File-java.lang.String-int-float-float-">createWaterMarkedPdf</a></span>(java.io.File&nbsp;inputFile,
+                    java.io.File&nbsp;outputFile,
+                    java.lang.String&nbsp;phrase,
+                    int&nbsp;fontSize,
+                    float&nbsp;opacity,
+                    float&nbsp;rotation)</code>
+<div class="block">Takes a given source PDF file, creates a copy output PDF file in which a watermark has been applied.</div>
+</td>
+</tr>
+<tr id="i1" class="rowColor">
+<td class="colFirst"><code>static void</code></td>
+<td class="colLast"><code><span class="memberNameLink"><a href="../../../../com/nuix/superutilities/misc/PdfUtility.html#createWaterMarkedPdf-java.lang.String-java.lang.String-java.lang.String-int-float-float-">createWaterMarkedPdf</a></span>(java.lang.String&nbsp;inputFile,
+                    java.lang.String&nbsp;outputFile,
+                    java.lang.String&nbsp;phrase,
+                    int&nbsp;fontSize,
+                    float&nbsp;opacity,
+                    float&nbsp;rotation)</code>
+<div class="block">Takes a given source PDF file, creates a copy output PDF file in which a watermark has been applied.</div>
+</td>
+</tr>
+<tr id="i2" class="altColor">
+<td class="colFirst"><code>static void</code></td>
 <td class="colLast"><code><span class="memberNameLink"><a href="../../../../com/nuix/superutilities/misc/PdfUtility.html#mergePdfFiles-java.io.File-java.util.List-boolean-java.util.List-">mergePdfFiles</a></span>(java.io.File&nbsp;outputFile,
              java.util.List&lt;java.io.File&gt;&nbsp;inputFiles,
              boolean&nbsp;createBookmarks,
@@ -159,13 +181,37 @@ extends java.lang.Object</pre>
 <div class="block">Merges multiple PDF files into a single PDF file.</div>
 </td>
 </tr>
-<tr id="i1" class="rowColor">
+<tr id="i3" class="rowColor">
 <td class="colFirst"><code>static void</code></td>
 <td class="colLast"><code><span class="memberNameLink"><a href="../../../../com/nuix/superutilities/misc/PdfUtility.html#mergePdfFiles-java.lang.String-java.util.List-boolean-java.util.List-">mergePdfFiles</a></span>(java.lang.String&nbsp;outputFile,
              java.util.List&lt;java.lang.String&gt;&nbsp;inputFiles,
              boolean&nbsp;createBookmarks,
              java.util.List&lt;java.lang.String&gt;&nbsp;bookmarkTitles)</code>
 <div class="block">Merges multiple PDF files into a single PDF file.</div>
+</td>
+</tr>
+<tr id="i4" class="altColor">
+<td class="colFirst"><code>static void</code></td>
+<td class="colLast"><code><span class="memberNameLink"><a href="../../../../com/nuix/superutilities/misc/PdfUtility.html#waterMarkPrintedImages-java.io.File-java.util.Collection-java.lang.String-int-float-float-java.util.function.BiConsumer-">waterMarkPrintedImages</a></span>(java.io.File&nbsp;tempDirectory,
+                      java.util.Collection&lt;nuix.Item&gt;&nbsp;items,
+                      java.lang.String&nbsp;phrase,
+                      int&nbsp;fontSize,
+                      float&nbsp;opacity,
+                      float&nbsp;rotation,
+                      java.util.function.BiConsumer&lt;java.lang.Integer,java.lang.Integer&gt;&nbsp;progressCallback)</code>
+<div class="block">This method applies water marks to printed images of items.</div>
+</td>
+</tr>
+<tr id="i5" class="rowColor">
+<td class="colFirst"><code>static void</code></td>
+<td class="colLast"><code><span class="memberNameLink"><a href="../../../../com/nuix/superutilities/misc/PdfUtility.html#waterMarkPrintedImages-java.lang.String-java.util.Collection-java.lang.String-int-float-float-java.util.function.BiConsumer-">waterMarkPrintedImages</a></span>(java.lang.String&nbsp;tempDirectory,
+                      java.util.Collection&lt;nuix.Item&gt;&nbsp;items,
+                      java.lang.String&nbsp;phrase,
+                      int&nbsp;fontSize,
+                      float&nbsp;opacity,
+                      float&nbsp;rotation,
+                      java.util.function.BiConsumer&lt;java.lang.Integer,java.lang.Integer&gt;&nbsp;progressCallback)</code>
+<div class="block">This method applies water marks to printed images of items.</div>
 </td>
 </tr>
 </table>
@@ -234,7 +280,7 @@ extends java.lang.Object</pre>
 <a name="mergePdfFiles-java.lang.String-java.util.List-boolean-java.util.List-">
 <!--   -->
 </a>
-<ul class="blockListLast">
+<ul class="blockList">
 <li class="blockList">
 <h4>mergePdfFiles</h4>
 <pre>public static&nbsp;void&nbsp;mergePdfFiles(java.lang.String&nbsp;outputFile,
@@ -252,6 +298,124 @@ extends java.lang.Object</pre>
 <dd><code>bookmarkTitles</code> - Optional list of book mark titles, if not provided sequential numbers will be used.</dd>
 <dt><span class="throwsLabel">Throws:</span></dt>
 <dd><code>java.lang.Exception</code> - Thrown if an error occurs</dd>
+</dl>
+</li>
+</ul>
+<a name="createWaterMarkedPdf-java.lang.String-java.lang.String-java.lang.String-int-float-float-">
+<!--   -->
+</a>
+<ul class="blockList">
+<li class="blockList">
+<h4>createWaterMarkedPdf</h4>
+<pre>public static&nbsp;void&nbsp;createWaterMarkedPdf(java.lang.String&nbsp;inputFile,
+                                        java.lang.String&nbsp;outputFile,
+                                        java.lang.String&nbsp;phrase,
+                                        int&nbsp;fontSize,
+                                        float&nbsp;opacity,
+                                        float&nbsp;rotation)
+                                 throws java.lang.Exception</pre>
+<div class="block">Takes a given source PDF file, creates a copy output PDF file in which a watermark has been applied.</div>
+<dl>
+<dt><span class="paramLabel">Parameters:</span></dt>
+<dd><code>inputFile</code> - The source PDF file</dd>
+<dd><code>outputFile</code> - The destination PDF file</dd>
+<dd><code>phrase</code> - The water mark's phrase</dd>
+<dd><code>fontSize</code> - The font size of the water mark</dd>
+<dd><code>opacity</code> - How transparent the water mark is</dd>
+<dd><code>rotation</code> - How rotated the water mark text should be</dd>
+<dt><span class="throwsLabel">Throws:</span></dt>
+<dd><code>java.lang.Exception</code> - Thrown if: Input file does not exist, error creating stream to output file, error creating PDFReader or PDFStamper.</dd>
+</dl>
+</li>
+</ul>
+<a name="createWaterMarkedPdf-java.io.File-java.io.File-java.lang.String-int-float-float-">
+<!--   -->
+</a>
+<ul class="blockList">
+<li class="blockList">
+<h4>createWaterMarkedPdf</h4>
+<pre>public static&nbsp;void&nbsp;createWaterMarkedPdf(java.io.File&nbsp;inputFile,
+                                        java.io.File&nbsp;outputFile,
+                                        java.lang.String&nbsp;phrase,
+                                        int&nbsp;fontSize,
+                                        float&nbsp;opacity,
+                                        float&nbsp;rotation)
+                                 throws java.lang.Exception</pre>
+<div class="block">Takes a given source PDF file, creates a copy output PDF file in which a watermark has been applied.</div>
+<dl>
+<dt><span class="paramLabel">Parameters:</span></dt>
+<dd><code>inputFile</code> - The source PDF file</dd>
+<dd><code>outputFile</code> - The destination PDF file</dd>
+<dd><code>phrase</code> - The water mark's phrase</dd>
+<dd><code>fontSize</code> - The font size of the water mark</dd>
+<dd><code>opacity</code> - How transparent the water mark is</dd>
+<dd><code>rotation</code> - How rotated the water mark text should be</dd>
+<dt><span class="throwsLabel">Throws:</span></dt>
+<dd><code>java.lang.Exception</code> - Thrown if: Input file does not exist, error creating stream to output file, error creating PDFReader or PDFStamper.</dd>
+</dl>
+</li>
+</ul>
+<a name="waterMarkPrintedImages-java.lang.String-java.util.Collection-java.lang.String-int-float-float-java.util.function.BiConsumer-">
+<!--   -->
+</a>
+<ul class="blockList">
+<li class="blockList">
+<h4>waterMarkPrintedImages</h4>
+<pre>public static&nbsp;void&nbsp;waterMarkPrintedImages(java.lang.String&nbsp;tempDirectory,
+                                          java.util.Collection&lt;nuix.Item&gt;&nbsp;items,
+                                          java.lang.String&nbsp;phrase,
+                                          int&nbsp;fontSize,
+                                          float&nbsp;opacity,
+                                          float&nbsp;rotation,
+                                          java.util.function.BiConsumer&lt;java.lang.Integer,java.lang.Integer&gt;&nbsp;progressCallback)
+                                   throws java.lang.Exception</pre>
+<div class="block">This method applies water marks to printed images of items.  Each item has a PDF exported, from
+ which a water marked copy is generated.  The water marked copy is then imported back in to
+ Nuix as the new printed image of the given item.</div>
+<dl>
+<dt><span class="paramLabel">Parameters:</span></dt>
+<dd><code>tempDirectory</code> - Temp directory PDFs are exported to, generated in and imported from.</dd>
+<dd><code>items</code> - The items which will be water marked.</dd>
+<dd><code>phrase</code> - The water mark's phrase</dd>
+<dd><code>fontSize</code> - The font size of the water mark</dd>
+<dd><code>opacity</code> - How transparent the water mark is</dd>
+<dd><code>rotation</code> - How rotated the water mark text should be</dd>
+<dd><code>progressCallback</code> - A BiConsumer function which will be invoked as progress is made.  Will be provided 2 integers,
+ the first is the current progress value, the second the total progress.</dd>
+<dt><span class="throwsLabel">Throws:</span></dt>
+<dd><code>java.lang.Exception</code> - Thrown if something goes wrong.</dd>
+</dl>
+</li>
+</ul>
+<a name="waterMarkPrintedImages-java.io.File-java.util.Collection-java.lang.String-int-float-float-java.util.function.BiConsumer-">
+<!--   -->
+</a>
+<ul class="blockListLast">
+<li class="blockList">
+<h4>waterMarkPrintedImages</h4>
+<pre>public static&nbsp;void&nbsp;waterMarkPrintedImages(java.io.File&nbsp;tempDirectory,
+                                          java.util.Collection&lt;nuix.Item&gt;&nbsp;items,
+                                          java.lang.String&nbsp;phrase,
+                                          int&nbsp;fontSize,
+                                          float&nbsp;opacity,
+                                          float&nbsp;rotation,
+                                          java.util.function.BiConsumer&lt;java.lang.Integer,java.lang.Integer&gt;&nbsp;progressCallback)
+                                   throws java.lang.Exception</pre>
+<div class="block">This method applies water marks to printed images of items.  Each item has a PDF exported, from
+ which a water marked copy is generated.  The water marked copy is then imported back in to
+ Nuix as the new printed image of the given item.</div>
+<dl>
+<dt><span class="paramLabel">Parameters:</span></dt>
+<dd><code>tempDirectory</code> - Temp directory PDFs are exported to, generated in and imported from.</dd>
+<dd><code>items</code> - The items which will be water marked.</dd>
+<dd><code>phrase</code> - The water mark's phrase</dd>
+<dd><code>fontSize</code> - The font size of the water mark</dd>
+<dd><code>opacity</code> - How transparent the water mark is</dd>
+<dd><code>rotation</code> - How rotated the water mark text should be</dd>
+<dd><code>progressCallback</code> - A BiConsumer function which will be invoked as progress is made.  Will be provided 2 integers,
+ the first is the current progress value, the second the total progress.</dd>
+<dt><span class="throwsLabel">Throws:</span></dt>
+<dd><code>java.lang.Exception</code> - Thrown if something goes wrong.</dd>
 </dl>
 </li>
 </ul>
