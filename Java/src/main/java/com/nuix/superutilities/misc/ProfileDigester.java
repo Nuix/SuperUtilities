@@ -1,5 +1,6 @@
 package com.nuix.superutilities.misc;
 
+import java.nio.charset.Charset;
 import java.security.MessageDigest;
 import java.util.Collection;
 import java.util.HashMap;
@@ -107,7 +108,7 @@ public class ProfileDigester {
 		}
 		
 		if(includeItemText) {
-			md.update(item.getTextObject().toString().getBytes());
+			md.update(item.getTextObject().toString().getBytes(Charset.forName("utf8")));
 		}
 		
 		return md.digest();

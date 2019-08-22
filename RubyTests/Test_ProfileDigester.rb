@@ -8,6 +8,7 @@ $current_case = $utilities.getCaseFactory.open("D:\\cases\\FakeData_8.0")
 
 profile_digester = ProfileDigester.new
 
+include_content_text = true
 items = $current_case.search("kind:email")
 
 profile = $utilities.getMetadataProfileStore.createMetadataProfile
@@ -15,12 +16,15 @@ profile = profile.addMetadata("SPECIAL","Name")
 profile = profile.addMetadata("SPECIAL","Kind")
 
 profile_digester.setProfile(profile)
+profile_digester.setIncludeItemText(include_content_text)
 
 concat_grouped = Hash.new{|h,k| h[k] = [] }
 hash_grouped = Hash.new{|h,k| h[k] = [] }
 
 items.each do |item|
 	concat = profile.getMetadata.map{|field| field.evaluate(item)}.join
+	concat << item.getTextObject.toString if include_content_text
+
 	hash = profile_digester.generateMd5String(item)
 
 	concat_grouped[concat] << item
