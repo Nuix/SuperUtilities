@@ -5,6 +5,10 @@ import java.security.MessageDigest;
 import java.util.Collection;
 import java.util.HashMap;
 import java.util.Map;
+import java.util.function.BiConsumer;
+import java.util.function.Consumer;
+
+import org.apache.log4j.Logger;
 
 import nuix.Case;
 import nuix.Item;
@@ -12,10 +16,65 @@ import nuix.ItemExpression;
 import nuix.ItemSet;
 import nuix.MetadataItem;
 import nuix.MetadataProfile;
+import nuix.ItemEventCallback;
+import nuix.ItemEventInfo;
 
 public class ProfileDigester {
+	private static Logger logger = Logger.getLogger(ProfileDigester.class);
+	
 	private boolean includeItemText = false;
 	private MetadataProfile profile = null;
+	
+	private BiConsumer<Integer,Integer> progressCallback = null;
+	private Consumer<String> infoMessageCallback = null;
+	private BiConsumer<String,Item> errorCallback = null;
+	
+	private void fireProgressUpdate(int current, int total) {
+		if(progressCallback != null) {
+			progressCallback.accept(current, total);
+		}
+	}
+	
+	private void logInfo(String message) {
+		if(infoMessageCallback != null) {
+			infoMessageCallback.accept(message);
+		} else {
+			logger.info(message);
+		}
+	}
+	
+	private void logError(String message, Item item) {
+		if(errorCallback != null) {
+			errorCallback.accept(message, item);
+		} else {
+			logger.error(message);
+		}
+	}
+	
+	/***
+	 * Invoked when progress is updated in {@link #addItemsToItemSet(Case, String, String, Collection)}.  Provides 2 integers, the first is current progress and the second is total progress.
+	 * @param callback Callback to be invoked when progress is updated.
+	 */
+	public void whenProgressUpdated(BiConsumer<Integer,Integer> callback) {
+		progressCallback = callback;
+	}
+	
+	/***
+	 * Invoked when a message is logged by {@link #addItemsToItemSet(Case, String, String, Collection)}.
+	 * @param callback Callback invoked when a message is logged.  If callback is not provided, message is instead sent to Nuix log.
+	 */
+	public void whenMessageLogged(Consumer<String> callback) {
+		infoMessageCallback = callback;
+	}
+	
+	/***
+	 * Invoked when an error occurs in {@link #addItemsToItemSet(Case, String, String, Collection)}.  Provides a message String and the item being processed when
+	 * the error occurred.  If callback is not provided, message will instead be sent to Nuix log.
+	 * @param callback
+	 */
+	public void whenErrorLogged(BiConsumer<String,Item> callback) {
+		errorCallback = callback;
+	}
 	
 	public ProfileDigester() {}
 	public ProfileDigester(MetadataProfile metadataProfile) { profile = metadataProfile; }
@@ -50,11 +109,19 @@ public class ProfileDigester {
 			throw new IllegalArgumentException("deduplicateBy can only be 'FAMILY' or 'INDIVIDUAL', was provided: "+deduplicateBy);
 		}
 		
+		logInfo("Deduplicate By: "+deduplicateBy);
+		String profileName = profile.getName();
+		if(profileName == null || profileName.trim().isEmpty()) {
+			profileName = "<NO NAME>";
+		}
+		logInfo("Using metadata profile "+profileName);
+		
 		// Is there an existing item set with this name?
 		ItemSet targetItemSet = nuixCase.findItemSetByName(itemSetName);
 		
 		// If not, we shall create an item set with this name
 		if(targetItemSet == null) {
+			logInfo("Creating ItemSet with name "+itemSetName);
 			String description = null;
 			if(includeItemText) {
 				description = String.format("Generated using MD5 of profile '%s' field values concatenation and Item Text", profile.getName());
@@ -67,6 +134,8 @@ public class ProfileDigester {
 			itemSetSettings.put("description", description);
 			itemSetSettings.put("deduplicateBy", deduplicateBy);
 			targetItemSet = nuixCase.createItemSet(itemSetName, itemSetSettings);
+		} else {
+			logInfo("Using existing ItemSet with name "+itemSetName);
 		}
 		
 		Map<String,Object> settings = new HashMap<String,Object>();
@@ -76,11 +145,20 @@ public class ProfileDigester {
 				try {
 					return generateMd5String(item);
 				} catch (Exception e) {
-					e.printStackTrace();
+					String message = String.format("Error while generating custom MD5 for item with GUID %s and name %s", item.getGuid(), item.getLocalisedName());
+					logError(message, item);
 					return "ERROR";
 				}
 			}
 		});
+		
+		settings.put("progress", new ItemEventCallback() {
+			@Override
+			public void itemProcessed(ItemEventInfo info) {
+				fireProgressUpdate((int)info.getStageCount(),items.size());
+			}
+		});
+		
 		targetItemSet.addItems(items, settings);
 		
 		// Provide back item set we used/created

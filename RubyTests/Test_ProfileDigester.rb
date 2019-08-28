@@ -18,6 +18,20 @@ profile = profile.addMetadata("SPECIAL","Kind")
 profile_digester.setProfile(profile)
 profile_digester.setIncludeItemText(include_content_text)
 
+profile_digester.whenMessageLogged do |message|
+	puts message
+end
+
+profile_digester.whenProgressUpdated do |current,total|
+	if current == 0 || current == total || current % 100 == 0
+		puts "Progress #{current}/#{total}"
+	end
+end
+
+profile_digester.whenErrorLogged do |message,item|
+	puts message
+end
+
 concat_grouped = Hash.new{|h,k| h[k] = [] }
 hash_grouped = Hash.new{|h,k| h[k] = [] }
 
@@ -69,7 +83,7 @@ if concat_grouped.size == hash_grouped.size
 	# Now we put same items into an item set using ProfileDigester, we expect that the
 	# total number of originals in that item set should match the number of groups in either hash,
 	# 1 original per group, when deduping by individual
-	item_set_name = "Profile Debugger #{Time.now.to_i}"
+	item_set_name = "Profile Digester #{Time.now.to_i}"
 	dedupe_by = "INDIVIDUAL"
 	item_set = profile_digester.addItemsToItemSet($current_case,item_set_name,dedupe_by,items)
 	puts "Item Set Originals: #{item_set.getOriginals.size}, Expected: #{concat_grouped.size}"
