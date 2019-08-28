@@ -19,6 +19,11 @@ import nuix.MetadataProfile;
 import nuix.ItemEventCallback;
 import nuix.ItemEventInfo;
 
+/***
+ * Provides functionality related to generating an MD5 digest for an item based on a concatenation of the values yielded by a MetadataProfile for a given item.
+ * @author Jason Wells
+ *
+ */
 public class ProfileDigester {
 	private static Logger logger = Logger.getLogger(ProfileDigester.class);
 	
@@ -70,7 +75,7 @@ public class ProfileDigester {
 	/***
 	 * Invoked when an error occurs in {@link #addItemsToItemSet(Case, String, String, Collection)}.  Provides a message String and the item being processed when
 	 * the error occurred.  If callback is not provided, message will instead be sent to Nuix log.
-	 * @param callback
+	 * @param callback Callback invoked when an error occurs.  If a callback is not provided, message is instead sent to Nuix log as an error.
 	 */
 	public void whenErrorLogged(BiConsumer<String,Item> callback) {
 		errorCallback = callback;
@@ -88,7 +93,7 @@ public class ProfileDigester {
 	 * @param itemSetName Name of item set.  If item set already exists, existing item set will be used, if not one will be created.  <b>Important:</b> when
 	 * adding items to an existing item set, it is important that items previously added to that item set were added using this method, the same metadata profile
 	 * and same setting for includeItemText, otherwise deduplication results are undefined.
-	 * @param deduplicateBy Valid options are "INDIVIDUAL" and "FAMILY", these settings correspond to the behaviors noted in <a href="https://download.nuix.com/releases/desktop/stable/docs/en/scripting/api/nuix/ItemSet.html#addItems-java.util.Collection-java.util.Map-">addItems(Collection<Item> items, Map<?,?> options)</a>.
+	 * @param deduplicateBy Valid options are "INDIVIDUAL" and "FAMILY", these settings correspond to the behaviors noted in <a href="https://download.nuix.com/releases/desktop/stable/docs/en/scripting/api/nuix/ItemSet.html#addItems-java.util.Collection-java.util.Map-">addItems(Collection&lt;Item&gt; items, Map&lt;?,?&gt; options)</a>.
 	 * @param items The items to add to the item set.
 	 * @return The item set the items were added to.
 	 */
