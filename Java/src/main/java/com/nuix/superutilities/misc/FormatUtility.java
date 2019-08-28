@@ -63,7 +63,7 @@ public class FormatUtility {
 	
 	/***
 	 * Attempts to convert data types, which may be values of metadata properties
-	 * or custom meta data, to a String.  Data types supported:
+	 * or custom metadata, to a String.  Data types supported:
 	 * - String
 	 * - Integer
 	 * - Long Integer
