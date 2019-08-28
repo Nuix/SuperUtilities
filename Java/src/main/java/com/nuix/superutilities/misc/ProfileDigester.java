@@ -138,7 +138,12 @@ public class ProfileDigester {
 			logInfo("Using existing ItemSet with name "+itemSetName);
 		}
 		
+		// Build settings Map for call to addItems which includes:
+		// - Our custom expression which internally generates the custom MD5 for each item using provided metadata profile
+		// - Progress callback which will in turn call fireProgressUpdate
 		Map<String,Object> settings = new HashMap<String,Object>();
+		
+		// Define custom expression
 		settings.put("expression", new ItemExpression<String>() {
 			@Override
 			public String evaluate(Item item) {
@@ -152,6 +157,7 @@ public class ProfileDigester {
 			}
 		});
 		
+		// Define progress callback which will in turn push out progress updates to callback on this instance
 		settings.put("progress", new ItemEventCallback() {
 			@Override
 			public void itemProcessed(ItemEventInfo info) {
@@ -159,6 +165,7 @@ public class ProfileDigester {
 			}
 		});
 		
+		// Add the items to the item set
 		targetItemSet.addItems(items, settings);
 		
 		// Provide back item set we used/created
