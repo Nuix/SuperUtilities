@@ -46,10 +46,13 @@ if concat_grouped.size == hash_grouped.size
 	mismatched = 0
 
 	concat_grouped.size.times do |iteration|
+		# Get next key value pair from each hash
 		c = cge.next
 		h = hge.next
 
+		# For each group, do they have the same number of items?  We expect they should.
 		if c[1].size != h[1].size
+			# If item counts for same group differ, report about it
 			puts "="*20
 			puts "#{c[0]} => #{c[1].size}"
 			puts "#{h[0]} => #{h[1].size}"
@@ -64,7 +67,7 @@ if concat_grouped.size == hash_grouped.size
 	puts "Mismatched: #{mismatched}"
 
 	# Now we put same items into an item set using ProfileDigester, we expect that the
-	# total number of originals in that item set should match the number of groups,
+	# total number of originals in that item set should match the number of groups in either hash,
 	# 1 original per group, when deduping by individual
 	item_set_name = "Profile Debugger #{Time.now.to_i}"
 	dedupe_by = "INDIVIDUAL"
