@@ -17,7 +17,7 @@
     catch(err) {
     }
 //-->
-var methods = {"i0":9,"i1":9,"i2":9,"i3":9,"i4":9,"i5":10,"i6":9,"i7":9,"i8":9,"i9":10,"i10":10,"i11":10,"i12":10,"i13":9,"i14":9,"i15":9,"i16":9,"i17":9,"i18":10,"i19":9,"i20":10,"i21":10,"i22":9};
+var methods = {"i0":9,"i1":9,"i2":9,"i3":9,"i4":9,"i5":10,"i6":9,"i7":9,"i8":9,"i9":10,"i10":10,"i11":10,"i12":10,"i13":9,"i14":9,"i15":9,"i16":9,"i17":9,"i18":9,"i19":10,"i20":9,"i21":10,"i22":10,"i23":9,"i24":9};
 var tabs = {65535:["t0","All Methods"],1:["t1","Static Methods"],2:["t2","Instance Methods"],8:["t4","Concrete Methods"]};
 var altColor = "altColor";
 var rowColor = "rowColor";
@@ -215,63 +215,75 @@ extends java.lang.Object</pre>
 </td>
 </tr>
 <tr id="i13" class="rowColor">
+<td class="colFirst"><code>static java.lang.String</code></td>
+<td class="colLast"><code><span class="memberNameLink"><a href="../../../../com/nuix/superutilities/misc/FormatUtility.html#getHtmlText-java.lang.String-">getHtmlText</a></span>(java.lang.String&nbsp;htmlSource)</code>
+<div class="block">Convenience method for getting the "rendered text" (text as seen in browser) of HTML source code using Jsoup.</div>
+</td>
+</tr>
+<tr id="i14" class="altColor">
 <td class="colFirst"><code>static <a href="../../../../com/nuix/superutilities/misc/FormatUtility.html" title="class in com.nuix.superutilities.misc">FormatUtility</a></code></td>
 <td class="colLast"><code><span class="memberNameLink"><a href="../../../../com/nuix/superutilities/misc/FormatUtility.html#getInstance--">getInstance</a></span>()</code>&nbsp;</td>
 </tr>
-<tr id="i14" class="altColor">
+<tr id="i15" class="rowColor">
 <td class="colFirst"><code>static double</code></td>
 <td class="colLast"><code><span class="memberNameLink"><a href="../../../../com/nuix/superutilities/misc/FormatUtility.html#getUnitBase--">getUnitBase</a></span>()</code>
 <div class="block">Gets the unit base which will be used in size calculations.</div>
 </td>
 </tr>
-<tr id="i15" class="rowColor">
+<tr id="i16" class="altColor">
 <td class="colFirst"><code>static boolean</code></td>
 <td class="colLast"><code><span class="memberNameLink"><a href="../../../../com/nuix/superutilities/misc/FormatUtility.html#getUseSIUnits--">getUseSIUnits</a></span>()</code>
 <div class="block">Gets value indicating whether SI Unit (1000 Bytes = 1 Kilo Byte) will be used.</div>
 </td>
 </tr>
-<tr id="i16" class="altColor">
+<tr id="i17" class="rowColor">
 <td class="colFirst"><code>static byte[]</code></td>
 <td class="colLast"><code><span class="memberNameLink"><a href="../../../../com/nuix/superutilities/misc/FormatUtility.html#hexToBytes-java.lang.String-">hexToBytes</a></span>(java.lang.String&nbsp;hex)</code>
 <div class="block">Convenience method for converting hex string to byte array.</div>
 </td>
 </tr>
-<tr id="i17" class="rowColor">
+<tr id="i18" class="altColor">
 <td class="colFirst"><code>static java.io.File</code></td>
 <td class="colLast"><code><span class="memberNameLink"><a href="../../../../com/nuix/superutilities/misc/FormatUtility.html#makeGuidPath-nuix.Item-java.io.File-java.lang.String-">makeGuidPath</a></span>(nuix.Item&nbsp;item,
             java.io.File&nbsp;rootDirectory,
             java.lang.String&nbsp;extension)</code>&nbsp;</td>
 </tr>
-<tr id="i18" class="altColor">
+<tr id="i19" class="rowColor">
 <td class="colFirst"><code>java.lang.String</code></td>
 <td class="colLast"><code><span class="memberNameLink"><a href="../../../../com/nuix/superutilities/misc/FormatUtility.html#resolvePlaceholders-java.lang.String-java.util.Map-">resolvePlaceholders</a></span>(java.lang.String&nbsp;template,
                    java.util.Map&lt;java.lang.String,java.lang.Object&gt;&nbsp;placeholderValues)</code>
 <div class="block">Simple method to replace place holders with values in a template string.</div>
 </td>
 </tr>
-<tr id="i19" class="rowColor">
+<tr id="i20" class="altColor">
 <td class="colFirst"><code>static double</code></td>
 <td class="colLast"><code><span class="memberNameLink"><a href="../../../../com/nuix/superutilities/misc/FormatUtility.html#round-double-int-">round</a></span>(double&nbsp;value,
      int&nbsp;numberOfDigitsAfterDecimalPoint)</code>
 <div class="block">Helper method for rounding a decimal value to a particular number of decimal places.</div>
 </td>
 </tr>
-<tr id="i20" class="altColor">
+<tr id="i21" class="rowColor">
 <td class="colFirst"><code>java.lang.String</code></td>
 <td class="colLast"><code><span class="memberNameLink"><a href="../../../../com/nuix/superutilities/misc/FormatUtility.html#secondsToElapsedString-java.lang.Double-">secondsToElapsedString</a></span>(java.lang.Double&nbsp;offsetSeconds)</code>
 <div class="block">Converts a value representing some number of seconds to an "elapsed" string.</div>
 </td>
 </tr>
-<tr id="i21" class="rowColor">
+<tr id="i22" class="altColor">
 <td class="colFirst"><code>java.lang.String</code></td>
 <td class="colLast"><code><span class="memberNameLink"><a href="../../../../com/nuix/superutilities/misc/FormatUtility.html#secondsToElapsedString-long-">secondsToElapsedString</a></span>(long&nbsp;offsetSeconds)</code>
 <div class="block">Converts a value representing some number of seconds to an "elapsed" string.</div>
 </td>
 </tr>
-<tr id="i22" class="altColor">
+<tr id="i23" class="rowColor">
 <td class="colFirst"><code>static void</code></td>
 <td class="colLast"><code><span class="memberNameLink"><a href="../../../../com/nuix/superutilities/misc/FormatUtility.html#setUseSIUnits-boolean-">setUseSIUnits</a></span>(boolean&nbsp;useSIUnits)</code>
 <div class="block">Gets value indicating whether SI Unit (1000 Bytes = 1 Kilo Byte) will be used.</div>
+</td>
+</tr>
+<tr id="i24" class="altColor">
+<td class="colFirst"><code>static java.util.List&lt;java.lang.String&gt;</code></td>
+<td class="colLast"><code><span class="memberNameLink"><a href="../../../../com/nuix/superutilities/misc/FormatUtility.html#tokenizeText-java.lang.String-">tokenizeText</a></span>(java.lang.String&nbsp;inputText)</code>
+<div class="block">Convenience method for using Lucene's StandardTokenizer to tokenize arbitrary text.</div>
 </td>
 </tr>
 </table>
@@ -616,6 +628,41 @@ extends java.lang.Object</pre>
 <dd><code>numberOfDigitsAfterDecimalPoint</code> - Number of digits to round to</dd>
 <dt><span class="returnLabel">Returns:</span></dt>
 <dd>The given value rounded off to specified decimal places</dd>
+</dl>
+</li>
+</ul>
+<a name="tokenizeText-java.lang.String-">
+<!--   -->
+</a>
+<ul class="blockList">
+<li class="blockList">
+<h4>tokenizeText</h4>
+<pre>public static&nbsp;java.util.List&lt;java.lang.String&gt;&nbsp;tokenizeText(java.lang.String&nbsp;inputText)
+                                                     throws java.lang.Exception</pre>
+<div class="block">Convenience method for using Lucene's StandardTokenizer to tokenize arbitrary text.</div>
+<dl>
+<dt><span class="paramLabel">Parameters:</span></dt>
+<dd><code>inputText</code> - The text to tokenize</dd>
+<dt><span class="returnLabel">Returns:</span></dt>
+<dd>A list of tokens parsed from inputText by Lucene.</dd>
+<dt><span class="throwsLabel">Throws:</span></dt>
+<dd><code>java.lang.Exception</code> - Most likely thrown if Lucene tokenizer encounters a problem.</dd>
+</dl>
+</li>
+</ul>
+<a name="getHtmlText-java.lang.String-">
+<!--   -->
+</a>
+<ul class="blockList">
+<li class="blockList">
+<h4>getHtmlText</h4>
+<pre>public static&nbsp;java.lang.String&nbsp;getHtmlText(java.lang.String&nbsp;htmlSource)</pre>
+<div class="block">Convenience method for getting the "rendered text" (text as seen in browser) of HTML source code using Jsoup.</div>
+<dl>
+<dt><span class="paramLabel">Parameters:</span></dt>
+<dd><code>htmlSource</code> - The HTML source code to parse the text from.</dd>
+<dt><span class="returnLabel">Returns:</span></dt>
+<dd>The "rendered text" of the provided HTML source code.</dd>
 </dl>
 </li>
 </ul>
