@@ -1,6 +1,7 @@
 package com.nuix.superutilities.misc;
 
 import java.io.File;
+import java.io.StringReader;
 import java.math.BigDecimal;
 import java.text.NumberFormat;
 import java.util.ArrayList;
@@ -15,7 +16,11 @@ import javax.xml.bind.DatatypeConverter;
 
 import org.apache.commons.lang3.StringUtils;
 import org.apache.commons.lang3.exception.ExceptionUtils;
+import org.apache.lucene.analysis.standard.StandardTokenizer;
+import org.apache.lucene.analysis.tokenattributes.CharTermAttribute;
 import org.joda.time.DateTime;
+import org.jsoup.Jsoup;
+import org.jsoup.nodes.Document;
 
 import nuix.Item;
 
@@ -311,6 +316,42 @@ public class FormatUtility {
                 BigDecimal.ROUND_HALF_UP);
         return bigDecimal.doubleValue();
     }
+	
+	/***
+	 * Convenience method for using Lucene's StandardTokenizer to tokenize arbitrary text.
+	 * @param inputText The text to tokenize
+	 * @return A list of tokens parsed from inputText by Lucene.
+	 * @throws Exception Most likely thrown if Lucene tokenizer encounters a problem.
+	 */
+	public static List<String> tokenizeText(String inputText) throws Exception{
+		List<String> tokens = new ArrayList<String>();
+		
+		if(inputText != null) {
+			try(StringReader stringReader = new StringReader(inputText)){
+				try(StandardTokenizer tokenizer = new StandardTokenizer()){
+					tokenizer.setReader(stringReader);
+					CharTermAttribute attribute = tokenizer.getAttribute(CharTermAttribute.class);
+					tokenizer.reset();
+					while(tokenizer.incrementToken()) {
+						tokens.add(attribute.toString());
+					}
+					tokenizer.end();
+				}
+			}
+		}
+		return tokens;
+	}
+	
+	/***
+	 * Convenience method for getting the "rendered text" (text as seen in browser) of HTML source code using Jsoup.
+	 * @param htmlSource The HTML source code to parse the text from.
+	 * @return The "rendered text" of the provided HTML source code.
+	 */
+	public static String getHtmlText(String htmlSource) {
+		Document doc = Jsoup.parse(htmlSource);
+		String result = doc.body().text();
+		return result;
+	}
 	
 	public static String formatAsTextualTable(List<List<String>> rows) {
 		List<Integer> columnWidths = new ArrayList<Integer>();
