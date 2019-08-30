@@ -27,13 +27,22 @@ digest_a_path = File.join(script_directory,"DigestA.hash")
 digest_b_path = File.join(script_directory,"DigestB.hash")
 digest_c_path = File.join(script_directory,"DigestC.hash")
 
+digest_a_file = java.io.File.new(digest_a_path)
+digest_b_file = java.io.File.new(digest_b_path)
+digest_c_file = java.io.File.new(digest_c_path)
+
 digest_a.saveFile(java.io.File.new(digest_a_path))
 digest_b.saveFile(java.io.File.new(digest_b_path))
-DigestList.combineDigestFiles(java.io.File.new(digest_c_path),[digest_a_path,digest_b_path].map{|f|java.io.File.new(f)})
+DigestList.combineDigestFiles(digest_c_file,[digest_a_file,digest_b_file])
 digest_c.importFile(digest_c_path)
 
+# Check whether each digest finds expected number of items
 puts "A: #{iutil.deduplicate(digest_a.findMatchingItems($current_case)).size} | #{items_a.size}"
 puts "B: #{iutil.deduplicate(digest_b.findMatchingItems($current_case)).size} | #{items_b.size}"
 puts "C: #{iutil.deduplicate(digest_c.findMatchingItems($current_case)).size} | #{items_a.size + items_b.size}"
 
+# Cleanup
 $current_case.close
+digest_a_file.delete
+digest_b_file.delete
+digest_c_file.delete
