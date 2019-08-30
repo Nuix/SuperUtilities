@@ -141,7 +141,7 @@ public class DigestList implements Iterable<String> {
 	 * Returns a count of digests present in the given Nuix binary digest list file.  This is really just a convenience
 	 * for the calculation:<br><br>
 	 * DIGEST_COUNT = (FILE_SIZE_BYTES - 13) / 16
-	 * @param sourceDigestList
+	 * @param sourceDigestList The digest list file to calculate the digest count of.
 	 * @return The number of digest lists present in the given file based on file size in bytes.
 	 */
 	public static int getDigestCount(File sourceDigestList) {
@@ -181,6 +181,7 @@ public class DigestList implements Iterable<String> {
 	/***
 	 * Saves a new digest list to a file located at "[CASE_DIRECTORY]\Stores\User Data\Digest Lists\[NAME].hash" (case level digest list location).
 	 * If digest list file already exists, it will be overwritten.
+	 * @param nuixCase The case to save the digest relative to.
 	 * @param name The name of the digest list to save.
 	 * @throws Exception Thrown if there is an error while saving.
 	 */
@@ -220,6 +221,7 @@ public class DigestList implements Iterable<String> {
 	
 	/***
 	 * Imports digests from a file located at "[CASE_DIRECTORY]\Stores\User Data\Digest Lists\[NAME].hash" (case level digest list location).
+	 * @param nuixCase The Nuix case the digest list is relative to.
 	 * @param name The name of the digest list to import.
 	 * @return How many digests were imported from the given input Nuix binary digest list file
 	 * that were not already present in this instance.
@@ -341,7 +343,7 @@ public class DigestList implements Iterable<String> {
 	
 	/***
 	 * Removes the given MD5 from this instance.
-	 * @param md5s MD5 string to remove.
+	 * @param md5 MD5 string to remove.
 	 */
 	public void removeMd5(String md5) {
 		byte[] md5Bytes = FormatUtility.hexToBytes(md5);
