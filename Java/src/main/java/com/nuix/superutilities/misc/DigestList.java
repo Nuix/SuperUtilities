@@ -40,16 +40,6 @@ public class DigestList implements Iterable<String> {
 	
 	private TreeSet<ByteBuffer> digests = new TreeSet<ByteBuffer>();
 	
-	public static void combineDigestFiles(File outputFile, Collection<File> inputFiles) throws Exception {
-		DigestList temp = new DigestList();
-		for(File inputFile : inputFiles) {
-			int importedCount = temp.importFile(inputFile);
-			logger.info(String.format("Imported %s digest from %s", importedCount, inputFile));
-		}
-		logger.info(String.format("Temp digest now contains %s", temp.size()));
-		temp.saveFile(outputFile);
-	}
-	
 	public void saveFile(File digestListFile) throws Exception {
 		try(FileOutputStream outputStream = new FileOutputStream(digestListFile)){
 			outputStream.write("F2DL".getBytes());
@@ -90,14 +80,24 @@ public class DigestList implements Iterable<String> {
 		return importFile(new File(digestListFile));
 	}
 	
+	public static void combineDigestFiles(File outputFile, Collection<File> inputFiles) throws Exception {
+		DigestList temp = new DigestList();
+		for(File inputFile : inputFiles) {
+			int importedCount = temp.importFile(inputFile);
+			logger.info(String.format("Imported %s digest from %s", importedCount, inputFile));
+		}
+		logger.info(String.format("Temp digest now contains %s", temp.size()));
+		temp.saveFile(outputFile);
+	}
+	
 	public int importFile(File digestListFile) throws Exception {
 		int importedCount = 0;
 		try(FileInputStream inputStream = new FileInputStream(digestListFile)){
 			// Skip past the header
 			inputStream.skip(13);
-			// Read rest in 16 byte chunks (each is an MD5)
-			byte[] buffer = new byte[16];
 			while(inputStream.available() != 0) {
+				// Read rest in 16 byte chunks (each is an MD5)
+				byte[] buffer = new byte[16];
 				inputStream.read(buffer);
 				if(!containsMd5(buffer)) {
 					addMd5(buffer);
@@ -176,7 +176,8 @@ public class DigestList implements Iterable<String> {
 	}
 	
 	public boolean containsMd5(byte[] md5Bytes) {
-		return digests.contains(ByteBuffer.wrap(md5Bytes));
+		ByteBuffer bb = ByteBuffer.wrap(md5Bytes);
+		return digests.contains(bb);
 	}
 	
 	public boolean containsMd5(String md5) {
@@ -219,7 +220,7 @@ public class DigestList implements Iterable<String> {
 	public Set<Item> findMatchingItems(Case nuixCase) throws Exception {
 		return findMatchingItems(nuixCase,10000);
 	}
-
+	
 	@Override
 	public Iterator<String> iterator() {
 		DigestIterator iterator = new DigestIterator();
