@@ -13,6 +13,7 @@ import java.util.List;
 import java.util.Set;
 import java.util.TreeSet;
 import java.util.function.Consumer;
+import java.util.stream.Collectors;
 
 import org.apache.log4j.Logger;
 
@@ -101,6 +102,18 @@ public class DigestList implements Iterable<String> {
 		}
 		logger.info(String.format("Temp digest now contains %s", temp.size()));
 		temp.saveFile(outputFile);
+	}
+	
+	/***
+	 * Create a new digest list file from multiple source digest lists.  A convenience method for the process of
+	 * creating a new DigestList instance, importing each source digest list and then saving the combined imported
+	 * results to a new output digest list.
+	 * @param outputFile Location to save output Nuix binary digest list file.
+	 * @param inputFiles Locations of source Nuix binary digest list files.
+	 * @throws Exception Thrown if an exception occurs while importing or saving combined result.
+	 */
+	public static void combineDigestFiles(String outputFile, Collection<String> inputFiles) throws Exception {
+		combineDigestFiles(new File(outputFile),inputFiles.stream().map(p -> new File(p)).collect(Collectors.toList()));
 	}
 	
 	/***
