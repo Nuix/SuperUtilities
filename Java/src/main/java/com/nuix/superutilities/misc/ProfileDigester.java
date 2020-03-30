@@ -13,7 +13,6 @@ import org.apache.log4j.Logger;
 
 import nuix.Case;
 import nuix.Item;
-import nuix.ItemCustomMetadataMap;
 import nuix.ItemExpression;
 import nuix.ItemSet;
 import nuix.MetadataItem;
@@ -170,7 +169,7 @@ public class ProfileDigester {
 				try {
 					String digestString = generateMd5String(item);
 					if(recordDigest) {
-						item.getCustomMetadata().put(digestCustomField, digestString);
+						item.getCustomMetadata().putText(digestCustomField, digestString);
 					}
 					return digestString;
 				} catch (Exception e) {
