@@ -13,12 +13,12 @@ import org.apache.log4j.Logger;
 
 import nuix.Case;
 import nuix.Item;
+import nuix.ItemEventCallback;
+import nuix.ItemEventInfo;
 import nuix.ItemExpression;
 import nuix.ItemSet;
 import nuix.MetadataItem;
 import nuix.MetadataProfile;
-import nuix.ItemEventCallback;
-import nuix.ItemEventInfo;
 
 /***
  * Provides functionality related to generating an MD5 digest for an item based on a concatenation of the values yielded by a MetadataProfile for a given item.
@@ -29,6 +29,8 @@ public class ProfileDigester {
 	private static Logger logger = Logger.getLogger(ProfileDigester.class);
 	
 	private boolean includeItemText = false;
+	private boolean recordDigest = false;
+	private String digestCustomField = "DedupeByProfileDigest";
 	private MetadataProfile profile = null;
 	
 	private BiConsumer<Integer,Integer> progressCallback = null;
@@ -165,7 +167,11 @@ public class ProfileDigester {
 			@Override
 			public String evaluate(Item item) {
 				try {
-					return generateMd5String(item);
+					String digestString = generateMd5String(item);
+					if(recordDigest) {
+						item.getCustomMetadata().putText(digestCustomField, digestString);
+					}
+					return digestString;
 				} catch (Exception e) {
 					String message = String.format("Error while generating custom MD5 for item with GUID %s and name %s", item.getGuid(), item.getLocalisedName());
 					logError(message, item);
@@ -268,5 +274,39 @@ public class ProfileDigester {
 	 */
 	public void setProfile(MetadataProfile profile) {
 		this.profile = profile;
-	}	
+	}
+
+	/***
+	 * Gets whether this instance will record the digest used.
+	 * @return Whether this instance will record the digest used.
+	 */
+	public boolean getRecordDigest() {
+		return recordDigest;
+	}
+
+	/***
+	 * Sets whether this instance will record the digest used.
+	 * @param recordDigest Whether this instance will record the digest used.
+	 */
+	public void setRecordDigest(boolean recordDigest) {
+		this.recordDigest = recordDigest;
+	}
+
+	/***
+	 * Gets the name of the custom metadata field used to record custom digest when
+	 * {@link #getRecordDigest()} returns true.
+	 * @return Name of the custom metadata field used to record custom digest.
+	 */
+	public String getDigestCustomField() {
+		return digestCustomField;
+	}
+
+	/***
+	 * Sets the name of the custom metadata field used to record custom digest when
+	 * {@link #getRecordDigest()} returns true.
+	 * @param digestCustomField Name of the custom metadata field used to record custom digest.
+	 */
+	public void setDigestCustomField(String digestCustomField) {
+		this.digestCustomField = digestCustomField;
+	}
 }
