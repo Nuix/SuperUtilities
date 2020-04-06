@@ -13,12 +13,12 @@ import org.apache.log4j.Logger;
 
 import nuix.Case;
 import nuix.Item;
+import nuix.ItemEventCallback;
+import nuix.ItemEventInfo;
 import nuix.ItemExpression;
 import nuix.ItemSet;
 import nuix.MetadataItem;
 import nuix.MetadataProfile;
-import nuix.ItemEventCallback;
-import nuix.ItemEventInfo;
 
 /***
  * Provides functionality related to generating an MD5 digest for an item based on a concatenation of the values yielded by a MetadataProfile for a given item.
