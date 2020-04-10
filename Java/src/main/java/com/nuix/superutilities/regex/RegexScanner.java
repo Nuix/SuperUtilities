@@ -21,6 +21,7 @@ import org.apache.log4j.Logger;
 import com.nuix.superutilities.misc.FormatUtility;
 
 import nuix.Item;
+import nuix.ItemCustomMetadataMap;
 
 /***
  * Class for scanning a series of items with a series of regular expressions.
@@ -107,7 +108,7 @@ public class RegexScanner {
 			if(error.getLocation() != null){
 				errorMessage.add("\tLocation: "+error.getLocation());	
 			}
-			errorMessage.add("\tItem GUID: "+error.getItem().getGuid());
+			errorMessage.add("\tItem GUID: "+error.getItemGuid());
 			logger.error(errorMessage.toString());
 			logger.error(error.getException());
 		}
@@ -444,12 +445,25 @@ public class RegexScanner {
 	 * @return Map of "stringified" metadata properties for the specified item
 	 */
 	public static Map<String,String> getStringProperties(Item item, Set<String> specificProperties){
+		// Note below String.intern use on property names which likely is highly repetitive
+		
 		Map<String,String> result = new HashMap<String,String>();
-		for (Entry<String, Object> entry : item.getProperties().entrySet()) {
-			if(specificProperties == null || specificProperties.contains(entry.getKey())){
-				result.put(entry.getKey(), FormatUtility.getInstance().convertToString(entry.getValue()));
+		
+		if(specificProperties == null | specificProperties.size() == 0) {
+			// We're scanning all the properties
+			for (Entry<String, Object> entry : item.getProperties().entrySet()) {
+				result.put(entry.getKey().intern(), FormatUtility.getInstance().convertToString(entry.getValue()));
+			}
+		} else {
+			// We're just scanning specific properties
+			Map<String,Object> itemProperties =  item.getProperties();
+			for(String specificProperty : specificProperties) {
+				if(itemProperties.containsKey(specificProperty)) {
+					result.put(specificProperty.intern(), FormatUtility.getInstance().convertToString(itemProperties.get(specificProperty)));
+				}
 			}
 		}
+		
 		return result;
 	}
 	
@@ -462,11 +476,22 @@ public class RegexScanner {
 	 */
 	public static Map<String,String> getStringCustomMetadata(Item item, Set<String> specificFields){
 		Map<String,String> result = new HashMap<String,String>();
-		for (Entry<String, Object> entry : item.getCustomMetadata().entrySet()) {
-			if(specificFields == null || specificFields.contains(entry.getKey())){
-				result.put(entry.getKey(), FormatUtility.getInstance().convertToString(entry.getValue()));
+		
+		if(specificFields == null || specificFields.size() == 0) {
+			// We're scanning all the custom metadata fields
+			for (Entry<String, Object> entry : item.getCustomMetadata().entrySet()) {
+				result.put(entry.getKey().intern(), FormatUtility.getInstance().convertToString(entry.getValue()));
+			}
+		} else {
+			ItemCustomMetadataMap itemCustomMetadata = item.getCustomMetadata();
+			// We're scanning specific custom metadata fields
+			for(String specificField : specificFields) {
+				if(itemCustomMetadata.containsKey(specificField)) {
+					result.put(specificField.intern(),FormatUtility.getInstance().convertToString(itemCustomMetadata.get(specificField)));
+				}
 			}
 		}
+		
 		return result;
 	}
 	

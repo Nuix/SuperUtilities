@@ -1,9 +1,11 @@
 package com.nuix.superutilities.regex;
 
+import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.stream.Collectors;
 
+import nuix.Case;
 import nuix.Item;
 
 /***
@@ -12,7 +14,7 @@ import nuix.Item;
  *
  */
 public class ItemRegexMatchCollection {
-	private Item item = null;
+	private String itemGuid = null;
 	private List<RegexMatch> matchData = new ArrayList<RegexMatch>();
 	
 	/***
@@ -20,15 +22,20 @@ public class ItemRegexMatchCollection {
 	 * @param item The item to associated.
 	 */
 	public ItemRegexMatchCollection(Item item){
-		this.item = item;
+		this.itemGuid = item.getGuid();
 	}
 	
 	/***
 	 * Gets the associated item.
 	 * @return The associated item.
 	 */
-	public Item getItem(){
-		return item;
+	public Item getItem(Case nuixCase){
+		try {
+			return nuixCase.search(String.format("guid:%s", itemGuid)).get(0);
+		} catch (IOException e) {
+			e.printStackTrace();
+			return null;
+		}
 	}
 	
 	/***
@@ -66,7 +73,8 @@ public class ItemRegexMatchCollection {
 	 * @param matchEnd Offset in source text where this match ends
 	 */
 	public void addMatch(PatternInfo patternInfo, String location, boolean isContentMatch, String value, String valueContext, int matchStart, int matchEnd){
-		matchData.add(new RegexMatch(patternInfo,location,isContentMatch,value,valueContext,matchStart,matchEnd));
+		// Intern location in case there is a large amount of duplication of a small set of actual values
+		matchData.add(new RegexMatch(patternInfo,location.intern(),isContentMatch,value,valueContext,matchStart,matchEnd));
 	}
 	
 	/***
