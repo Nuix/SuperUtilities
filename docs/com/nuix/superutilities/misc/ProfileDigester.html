@@ -17,7 +17,7 @@
     catch(err) {
     }
 //-->
-var methods = {"i0":10,"i1":10,"i2":10,"i3":10,"i4":10,"i5":10,"i6":10,"i7":10,"i8":10,"i9":10};
+var methods = {"i0":10,"i1":10,"i2":10,"i3":10,"i4":10,"i5":10,"i6":10,"i7":10,"i8":10,"i9":10,"i10":10,"i11":10,"i12":10,"i13":10};
 var tabs = {65535:["t0","All Methods"],2:["t2","Instance Methods"],8:["t4","Concrete Methods"]};
 var altColor = "altColor";
 var rowColor = "rowColor";
@@ -176,42 +176,68 @@ extends java.lang.Object</pre>
 </td>
 </tr>
 <tr id="i3" class="rowColor">
+<td class="colFirst"><code>java.lang.String</code></td>
+<td class="colLast"><code><span class="memberNameLink"><a href="../../../../com/nuix/superutilities/misc/ProfileDigester.html#getDigestCustomField--">getDigestCustomField</a></span>()</code>
+<div class="block">Gets the name of the custom metadata field used to record custom digest when
+ <a href="../../../../com/nuix/superutilities/misc/ProfileDigester.html#getRecordDigest--"><code>getRecordDigest()</code></a> returns true.</div>
+</td>
+</tr>
+<tr id="i4" class="altColor">
 <td class="colFirst"><code>boolean</code></td>
 <td class="colLast"><code><span class="memberNameLink"><a href="../../../../com/nuix/superutilities/misc/ProfileDigester.html#getIncludeItemText--">getIncludeItemText</a></span>()</code>
 <div class="block">Gets whether this instance should include the item's content text when calculating a digest.</div>
 </td>
 </tr>
-<tr id="i4" class="altColor">
+<tr id="i5" class="rowColor">
 <td class="colFirst"><code>nuix.MetadataProfile</code></td>
 <td class="colLast"><code><span class="memberNameLink"><a href="../../../../com/nuix/superutilities/misc/ProfileDigester.html#getProfile--">getProfile</a></span>()</code>
 <div class="block">Gets the metadata profile used to obtain the values provided to the hash computation.</div>
 </td>
 </tr>
-<tr id="i5" class="rowColor">
+<tr id="i6" class="altColor">
+<td class="colFirst"><code>boolean</code></td>
+<td class="colLast"><code><span class="memberNameLink"><a href="../../../../com/nuix/superutilities/misc/ProfileDigester.html#getRecordDigest--">getRecordDigest</a></span>()</code>
+<div class="block">Gets whether this instance will record the digest used.</div>
+</td>
+</tr>
+<tr id="i7" class="rowColor">
+<td class="colFirst"><code>void</code></td>
+<td class="colLast"><code><span class="memberNameLink"><a href="../../../../com/nuix/superutilities/misc/ProfileDigester.html#setDigestCustomField-java.lang.String-">setDigestCustomField</a></span>(java.lang.String&nbsp;digestCustomField)</code>
+<div class="block">Sets the name of the custom metadata field used to record custom digest when
+ <a href="../../../../com/nuix/superutilities/misc/ProfileDigester.html#getRecordDigest--"><code>getRecordDigest()</code></a> returns true.</div>
+</td>
+</tr>
+<tr id="i8" class="altColor">
 <td class="colFirst"><code>void</code></td>
 <td class="colLast"><code><span class="memberNameLink"><a href="../../../../com/nuix/superutilities/misc/ProfileDigester.html#setIncludeItemText-boolean-">setIncludeItemText</a></span>(boolean&nbsp;includeItemText)</code>
 <div class="block">Sets whether this instance should include the item's content text when calculating a digest.</div>
 </td>
 </tr>
-<tr id="i6" class="altColor">
+<tr id="i9" class="rowColor">
 <td class="colFirst"><code>void</code></td>
 <td class="colLast"><code><span class="memberNameLink"><a href="../../../../com/nuix/superutilities/misc/ProfileDigester.html#setProfile-nuix.MetadataProfile-">setProfile</a></span>(nuix.MetadataProfile&nbsp;profile)</code>
 <div class="block">Sets the metadata profile used to obtain the values provided to the hash computation.</div>
 </td>
 </tr>
-<tr id="i7" class="rowColor">
+<tr id="i10" class="altColor">
+<td class="colFirst"><code>void</code></td>
+<td class="colLast"><code><span class="memberNameLink"><a href="../../../../com/nuix/superutilities/misc/ProfileDigester.html#setRecordDigest-boolean-">setRecordDigest</a></span>(boolean&nbsp;recordDigest)</code>
+<div class="block">Sets whether this instance will record the digest used.</div>
+</td>
+</tr>
+<tr id="i11" class="rowColor">
 <td class="colFirst"><code>void</code></td>
 <td class="colLast"><code><span class="memberNameLink"><a href="../../../../com/nuix/superutilities/misc/ProfileDigester.html#whenErrorLogged-java.util.function.BiConsumer-">whenErrorLogged</a></span>(java.util.function.BiConsumer&lt;java.lang.String,nuix.Item&gt;&nbsp;callback)</code>
 <div class="block">Invoked when an error occurs in <a href="../../../../com/nuix/superutilities/misc/ProfileDigester.html#addItemsToItemSet-nuix.Case-java.lang.String-java.lang.String-java.util.Collection-"><code>addItemsToItemSet(Case, String, String, Collection)</code></a>.</div>
 </td>
 </tr>
-<tr id="i8" class="altColor">
+<tr id="i12" class="altColor">
 <td class="colFirst"><code>void</code></td>
 <td class="colLast"><code><span class="memberNameLink"><a href="../../../../com/nuix/superutilities/misc/ProfileDigester.html#whenMessageLogged-java.util.function.Consumer-">whenMessageLogged</a></span>(java.util.function.Consumer&lt;java.lang.String&gt;&nbsp;callback)</code>
 <div class="block">Invoked when a message is logged by <a href="../../../../com/nuix/superutilities/misc/ProfileDigester.html#addItemsToItemSet-nuix.Case-java.lang.String-java.lang.String-java.util.Collection-"><code>addItemsToItemSet(Case, String, String, Collection)</code></a>.</div>
 </td>
 </tr>
-<tr id="i9" class="rowColor">
+<tr id="i13" class="rowColor">
 <td class="colFirst"><code>void</code></td>
 <td class="colLast"><code><span class="memberNameLink"><a href="../../../../com/nuix/superutilities/misc/ProfileDigester.html#whenProgressUpdated-java.util.function.BiConsumer-">whenProgressUpdated</a></span>(java.util.function.BiConsumer&lt;java.lang.Integer,java.lang.Integer&gt;&nbsp;callback)</code>
 <div class="block">Invoked when progress is updated in <a href="../../../../com/nuix/superutilities/misc/ProfileDigester.html#addItemsToItemSet-nuix.Case-java.lang.String-java.lang.String-java.util.Collection-"><code>addItemsToItemSet(Case, String, String, Collection)</code></a>.</div>
@@ -344,7 +370,10 @@ extends java.lang.Object</pre>
 <pre>public&nbsp;byte[]&nbsp;generateMd5Bytes(nuix.Item&nbsp;item)
                         throws java.lang.Exception</pre>
 <div class="block">Generates MD5 digest byte array for a given item.  Digest is generated by digesting concatenation of values yielded by the
- metadata profile associated with this instance for the given item and optionally including the item's content text.</div>
+ metadata profile associated with this instance for the given item and optionally including the item's content text.
+ Note that method is synchronized due to:
+ - Reuse of MD5 digester
+ - Some metadata profile fields don't seem to play nice when called concurrently</div>
 <dl>
 <dt><span class="paramLabel">Parameters:</span></dt>
 <dd><code>item</code> - The item to generate a custom MD5 digest for.</dd>
@@ -422,7 +451,7 @@ extends java.lang.Object</pre>
 <a name="setProfile-nuix.MetadataProfile-">
 <!--   -->
 </a>
-<ul class="blockListLast">
+<ul class="blockList">
 <li class="blockList">
 <h4>setProfile</h4>
 <pre>public&nbsp;void&nbsp;setProfile(nuix.MetadataProfile&nbsp;profile)</pre>
@@ -430,6 +459,64 @@ extends java.lang.Object</pre>
 <dl>
 <dt><span class="paramLabel">Parameters:</span></dt>
 <dd><code>profile</code> - The metadata profile used to obtain the values provided to the hash computation.</dd>
+</dl>
+</li>
+</ul>
+<a name="getRecordDigest--">
+<!--   -->
+</a>
+<ul class="blockList">
+<li class="blockList">
+<h4>getRecordDigest</h4>
+<pre>public&nbsp;boolean&nbsp;getRecordDigest()</pre>
+<div class="block">Gets whether this instance will record the digest used.</div>
+<dl>
+<dt><span class="returnLabel">Returns:</span></dt>
+<dd>Whether this instance will record the digest used.</dd>
+</dl>
+</li>
+</ul>
+<a name="setRecordDigest-boolean-">
+<!--   -->
+</a>
+<ul class="blockList">
+<li class="blockList">
+<h4>setRecordDigest</h4>
+<pre>public&nbsp;void&nbsp;setRecordDigest(boolean&nbsp;recordDigest)</pre>
+<div class="block">Sets whether this instance will record the digest used.</div>
+<dl>
+<dt><span class="paramLabel">Parameters:</span></dt>
+<dd><code>recordDigest</code> - Whether this instance will record the digest used.</dd>
+</dl>
+</li>
+</ul>
+<a name="getDigestCustomField--">
+<!--   -->
+</a>
+<ul class="blockList">
+<li class="blockList">
+<h4>getDigestCustomField</h4>
+<pre>public&nbsp;java.lang.String&nbsp;getDigestCustomField()</pre>
+<div class="block">Gets the name of the custom metadata field used to record custom digest when
+ <a href="../../../../com/nuix/superutilities/misc/ProfileDigester.html#getRecordDigest--"><code>getRecordDigest()</code></a> returns true.</div>
+<dl>
+<dt><span class="returnLabel">Returns:</span></dt>
+<dd>Name of the custom metadata field used to record custom digest.</dd>
+</dl>
+</li>
+</ul>
+<a name="setDigestCustomField-java.lang.String-">
+<!--   -->
+</a>
+<ul class="blockListLast">
+<li class="blockList">
+<h4>setDigestCustomField</h4>
+<pre>public&nbsp;void&nbsp;setDigestCustomField(java.lang.String&nbsp;digestCustomField)</pre>
+<div class="block">Sets the name of the custom metadata field used to record custom digest when
+ <a href="../../../../com/nuix/superutilities/misc/ProfileDigester.html#getRecordDigest--"><code>getRecordDigest()</code></a> returns true.</div>
+<dl>
+<dt><span class="paramLabel">Parameters:</span></dt>
+<dd><code>digestCustomField</code> - Name of the custom metadata field used to record custom digest.</dd>
 </dl>
 </li>
 </ul>
