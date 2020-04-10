@@ -1,5 +1,8 @@
 package com.nuix.superutilities.regex;
 
+import java.io.IOException;
+
+import nuix.Case;
 import nuix.Item;
 
 /***
@@ -8,7 +11,7 @@ import nuix.Item;
  *
  */
 public class RegexScanError {
-	private Item item = null;
+	private String itemGuid = null;
 	private PatternInfo patternInfo = null;
 	private String location = null;
 	private Exception exception = null;
@@ -21,7 +24,7 @@ public class RegexScanError {
 	 * @param exception The exception which was thrown
 	 */
 	public RegexScanError(Item item, PatternInfo patternInfo, String location, Exception exception){
-		this.item = item;
+		this.itemGuid = item.getGuid();
 		this.patternInfo = patternInfo;
 		this.location = location;
 		this.exception = exception;
@@ -31,8 +34,17 @@ public class RegexScanError {
 	 * Gets the associated item
 	 * @return The associated item
 	 */
-	public Item getItem() {
-		return item;
+	public Item getItem(Case nuixCase) {
+		try {
+			return nuixCase.search(String.format("guid:%s", itemGuid)).get(0);
+		} catch (IOException e) {
+			e.printStackTrace();
+			return null;
+		}
+	}
+	
+	public String getItemGuid() {
+		return this.itemGuid;
 	}
 
 	/***
