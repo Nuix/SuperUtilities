@@ -16,6 +16,7 @@ import java.util.stream.Collectors;
 import com.nuix.superutilities.SuperUtilities;
 
 import nuix.Item;
+import nuix.ItemUtility;
 import nuix.TreePosition;
 
 /***
@@ -43,9 +44,10 @@ public class SuperItemUtility {
 	 * @return A set at most 1 of each item in the provided input item collections
 	 */
 	public Set<Item> unionMany(List<Collection<Item>> itemCollections){
+		ItemUtility iutil = SuperUtilities.getInstance().getNuixUtilities().getItemUtility();
 		Set<Item> result = new HashSet<Item>();
 		for (int i = 0; i < itemCollections.size(); i++) {
-			result.addAll(itemCollections.get(i));
+			result = iutil.union(result, itemCollections.get(i));
 		}
 		return result;
 	}
