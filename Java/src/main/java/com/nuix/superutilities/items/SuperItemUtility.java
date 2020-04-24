@@ -146,7 +146,7 @@ public class SuperItemUtility {
 	
 	/***
 	 * Returns the file system path of an item's physical file ancestor.  Begins by calling {@link #findPhysicalFileAncestor(Item)}.
-	 * If an phsysical file ancestor is located, then gets its URI and attempts to convert that to an actual file system path.
+	 * If an physical file ancestor is located, then gets its URI and attempts to convert that to an actual file system path.
 	 * @param item The item to resolve the physical file ancestor file system path of.
 	 * @return The physical file ancestor file system path (if possible), otherwise null
 	 */
