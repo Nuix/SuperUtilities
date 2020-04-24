@@ -4,23 +4,23 @@ import java.io.BufferedWriter;
 import java.io.File;
 import java.io.FileOutputStream;
 import java.io.OutputStreamWriter;
-import java.util.Collection;
+import java.util.HashMap;
 import java.util.LinkedHashMap;
 import java.util.Map;
 import java.util.Set;
-import java.util.StringJoiner;
+import java.util.TreeMap;
 import java.util.function.Consumer;
 import java.util.stream.Collectors;
 
 import org.joda.time.DateTime;
 import org.joda.time.Duration;
 
+import com.google.code.regexp.Pattern;
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
 import com.nuix.superutilities.SuperUtilities;
 import com.nuix.superutilities.misc.FormatUtility;
 
-import nuix.Address;
 import nuix.Communication;
 import nuix.DigestCollection;
 import nuix.Item;
@@ -33,7 +33,6 @@ public class KendraJsonExporter {
 	private boolean includeCommunication = true;
 	private boolean serializeNulls = true;
 	private boolean prettyPrint = true;
-	
 	private boolean includePathGuids = true;
 	
 	private Consumer<Map<String,Object>> beforeSerializationCallback = null;
@@ -48,6 +47,7 @@ public class KendraJsonExporter {
 	}
 	
 	public Map<String,Object> mapWorkerItem(WorkerItem workerItem){
+		SourceItem sourceItem = workerItem.getSourceItem();
 		Map<String,Object> result = new LinkedHashMap<String,Object>();
 		
 		result.putAll(mapNuixProperties(workerItem));
@@ -57,23 +57,72 @@ public class KendraJsonExporter {
 		if(includeProperties) {
 			result.putAll(mapProperties(workerItem,result.keySet()));
 		}
+		if(includeText) {
+			String itemContentText = sourceItem.getText().toString();
+			result.put("content_text",itemContentText);
+		}
 		
-		return result;
+		// Whole thing needs to be under key "Attributes
+		// https://docs.aws.amazon.com/kendra/latest/dg/custom-attributes.html
+		
+		Map<String,Object> wrappedResults = new HashMap<String,Object>();
+		wrappedResults.put("Attributes",result);
+		return wrappedResults;
 	}
 	
 	public Map<String,Object> mapNuixProperties(WorkerItem workerItem){
 		SourceItem sourceItem = workerItem.getSourceItem();
 		Map<String,Object> result = new LinkedHashMap<String,Object>();
 		
-		result.put("guid",workerItem.getItemGuid());
+		result.put("guid",workerItem.getItemGuid().replace("-", ""));
 		
 		if(includePathGuids) {
 			result.put("path_guids", workerItem.getGuidPath());	
 		}
 		
 		result.put("name",sourceItem.getLocalisedName());
-		String path = String.join("\\",sourceItem.getLocalisedPathNames());
+		String path = String.join("/",sourceItem.getLocalisedPathNames());
 		result.put("path", path);
+		
+		String pathKinds = String.join("/",sourceItem.getPath().stream().map(si -> si.getKind().getName()).collect(Collectors.toList()));
+		result.put("path_kinds", pathKinds);
+		
+//		Amazon Kendra has six reserved attributes that you can use. The attributes are:
+//			_category (String)
+//			_created_at (ISO 8601 encoded string)
+//			_last_updated_at (ISO 8601 encoded string)
+//			_source_uri (String)
+//			_version (String)
+//			_view_count (Long)
+		
+		result.put("_category",sourceItem.getKind().getName());
+		
+		Map<String,Object> properties = sourceItem.getProperties();
+		if (properties.containsKey("File Modified")) {
+			DateTime fileModified = (DateTime)properties.get("File Modified");
+			if(fileModified != null) {
+				result.put("_last_updated_at",fileModified.toString());		
+			}
+		}
+		
+		if (properties.containsKey("File Created")) {
+			DateTime fileCreated = (DateTime)properties.get("File Created");
+			if(fileCreated != null) {
+				result.put("_created_at",fileCreated.toString());		
+			}
+		}
+		
+		// Currently not sure what would make sense to map these to so will leave them
+		// here commented out for easy addition later if a mapping is decided upon.
+//		result.put("_source_uri","NO_MAPPING_YET");
+//		result.put("_version","NO_MAPPING_YET");
+//		result.put("_view_count","NO_MAPPING_YET");
+		
+		result.put("mime_type", sourceItem.getType().getName());
+		result.put("file_size",sourceItem.getFileSize());
+		result.put("is_deleted",sourceItem.isDeleted());
+		result.put("is_encrypted",sourceItem.isEncrypted());
+		result.put("is_file_data",sourceItem.isFileData());
 		
 		// These weren't available until 7.4
 		if(SuperUtilities.getCurrentVersion().isAtLeast("7.4")) {
@@ -127,12 +176,17 @@ public class KendraJsonExporter {
 		return result;
 	}
 	
+	protected static Pattern colonReplacement = Pattern.compile(":\\s+");
+	protected static Pattern whitepsaceReplacement = Pattern.compile("\\s+");
+	
 	public Map<String,Object> mapProperties(WorkerItem workerItem, Set<String> alreadyPresentKeys){
-		Map<String,Object> result = new LinkedHashMap<String,Object>();
+		Map<String,Object> result = new TreeMap<String,Object>();
 		SourceItem sourceItem = workerItem.getSourceItem();
 		Map<String,Object> properties = sourceItem.getProperties();
 		for(Map.Entry<String,Object> property : properties.entrySet()) {
-			String originalKey = property.getKey().toLowerCase().trim(); 
+			String originalKey = property.getKey().toLowerCase().trim();
+			originalKey = colonReplacement.matcher(originalKey).replaceAll("-");
+			originalKey = whitepsaceReplacement.matcher(originalKey).replaceAll("_");
 			String key = originalKey;
 			Object value = property.getValue();
 			
