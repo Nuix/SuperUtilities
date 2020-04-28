@@ -4,10 +4,10 @@ import java.io.BufferedWriter;
 import java.io.File;
 import java.io.FileOutputStream;
 import java.io.OutputStreamWriter;
-import java.util.HashMap;
+import java.util.ArrayList;
 import java.util.LinkedHashMap;
+import java.util.List;
 import java.util.Map;
-import java.util.Set;
 import java.util.TreeMap;
 import java.util.function.Consumer;
 import java.util.stream.Collectors;
@@ -49,25 +49,29 @@ public class KendraJsonExporter {
 	public Map<String,Object> mapWorkerItem(WorkerItem workerItem){
 		SourceItem sourceItem = workerItem.getSourceItem();
 		Map<String,Object> result = new LinkedHashMap<String,Object>();
-		
+			
 		result.putAll(mapNuixProperties(workerItem));
+		
 		if(includeCommunication) {
 			result.putAll(mapCommunication(workerItem));	
 		}
+		
 		if(includeProperties) {
-			result.putAll(mapProperties(workerItem,result.keySet()));
+			result.put("properties",mapProperties(workerItem));
 		}
+		
 		if(includeText) {
 			String itemContentText = sourceItem.getText().toString();
 			result.put("content_text",itemContentText);
 		}
 		
-		// Whole thing needs to be under key "Attributes
-		// https://docs.aws.amazon.com/kendra/latest/dg/custom-attributes.html
-		
-		Map<String,Object> wrappedResults = new HashMap<String,Object>();
-		wrappedResults.put("Attributes",result);
-		return wrappedResults;
+		Map<String,Object> outerObject = new LinkedHashMap<String,Object>();
+		outerObject.put("DocumentId",workerItem.getItemGuid().replace("-", ""));
+		outerObject.put("Attributes",result);
+		outerObject.put("AccessControlList",new String[] {}); //TODO Collect this from user?
+		outerObject.put("Title",sourceItem.getLocalisedName());
+		outerObject.put("ContentType","PLAIN_TEXT");
+		return outerObject;
 	}
 	
 	public Map<String,Object> mapNuixProperties(WorkerItem workerItem){
@@ -86,6 +90,8 @@ public class KendraJsonExporter {
 		
 		String pathKinds = String.join("/",sourceItem.getPath().stream().map(si -> si.getKind().getName()).collect(Collectors.toList()));
 		result.put("path_kinds", pathKinds);
+		
+		result.put("item_date",sourceItem.getDate().toString());
 		
 //		Amazon Kendra has six reserved attributes that you can use. The attributes are:
 //			_category (String)
@@ -157,9 +163,7 @@ public class KendraJsonExporter {
 		if(comm == null) {
 			result.put("comm_date",null);
 			result.put("from",null);
-			result.put("to",null);
-			result.put("cc",null);
-			result.put("bcc",null);
+			result.put("recipients",null);
 		} else {
 			DateTime commDate = comm.getDateTime();
 			if (commDate == null) {
@@ -168,9 +172,13 @@ public class KendraJsonExporter {
 				result.put("comm_date",commDate.toString());
 			}
 			result.put("from",comm.getFrom().stream().map(a -> a.toRfc822String()).collect(Collectors.toList()));
-			result.put("to",comm.getTo().stream().map(a -> a.toRfc822String()).collect(Collectors.toList()));
-			result.put("cc",comm.getCc().stream().map(a -> a.toRfc822String()).collect(Collectors.toList()));
-			result.put("bcc",comm.getBcc().stream().map(a -> a.toRfc822String()).collect(Collectors.toList()));
+			
+			List<String> recipients = new ArrayList<String>();
+			recipients.addAll(comm.getTo().stream().map(a -> a.toRfc822String()).collect(Collectors.toList()));
+			recipients.addAll(comm.getCc().stream().map(a -> a.toRfc822String()).collect(Collectors.toList()));
+			recipients.addAll(comm.getBcc().stream().map(a -> a.toRfc822String()).collect(Collectors.toList()));
+			
+			result.put("recipients",recipients);
 		}
 		
 		return result;
@@ -179,7 +187,7 @@ public class KendraJsonExporter {
 	protected static Pattern colonReplacement = Pattern.compile(":\\s+");
 	protected static Pattern whitepsaceReplacement = Pattern.compile("\\s+");
 	
-	public Map<String,Object> mapProperties(WorkerItem workerItem, Set<String> alreadyPresentKeys){
+	public Map<String,Object> mapProperties(WorkerItem workerItem){
 		Map<String,Object> result = new TreeMap<String,Object>();
 		SourceItem sourceItem = workerItem.getSourceItem();
 		Map<String,Object> properties = sourceItem.getProperties();
@@ -192,7 +200,7 @@ public class KendraJsonExporter {
 			
 			//Check for existing key and suffix key as needed
 			int suffix = 2;
-			while(result.containsKey(key) || alreadyPresentKeys.contains(key)) {
+			while(result.containsKey(key)) {
 				key = originalKey+suffix;
 				suffix++;
 			}
