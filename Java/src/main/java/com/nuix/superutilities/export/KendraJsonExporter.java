@@ -5,15 +5,14 @@ import java.io.File;
 import java.io.FileOutputStream;
 import java.io.OutputStreamWriter;
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
-import java.util.TreeMap;
 import java.util.function.Consumer;
 import java.util.stream.Collectors;
 
 import org.joda.time.DateTime;
-import org.joda.time.Duration;
 
 import com.google.code.regexp.Pattern;
 import com.google.gson.Gson;
@@ -187,10 +186,11 @@ public class KendraJsonExporter {
 	protected static Pattern colonReplacement = Pattern.compile(":\\s+");
 	protected static Pattern whitepsaceReplacement = Pattern.compile("\\s+");
 	
-	public Map<String,Object> mapProperties(WorkerItem workerItem){
-		Map<String,Object> result = new TreeMap<String,Object>();
+	public List<String> mapProperties(WorkerItem workerItem){
+		List<String> result = new ArrayList<String>();
 		SourceItem sourceItem = workerItem.getSourceItem();
 		Map<String,Object> properties = sourceItem.getProperties();
+		
 		for(Map.Entry<String,Object> property : properties.entrySet()) {
 			String originalKey = property.getKey().toLowerCase().trim();
 			originalKey = colonReplacement.matcher(originalKey).replaceAll("-");
@@ -198,31 +198,12 @@ public class KendraJsonExporter {
 			String key = originalKey;
 			Object value = property.getValue();
 			
-			//Check for existing key and suffix key as needed
-			int suffix = 2;
-			while(result.containsKey(key)) {
-				key = originalKey+suffix;
-				suffix++;
-			}
+			String objectStringValue = FormatUtility.getInstance().convertToString(value);
 			
-			// First we check if the value is of a value type that JSON natively supports
-			if(value instanceof Boolean || value instanceof String || value instanceof Integer
-					|| value instanceof Long || value instanceof Float) {
-				result.put(key,value);
-			} else if (value instanceof DateTime) {
-				DateTime dateTimeValue = (DateTime)value;
-				result.put(key,dateTimeValue.toString());
-			} else if (value instanceof Duration) {
-				Duration durationValue = (Duration)value;
-				result.put(key,durationValue.getMillis());
-			} else if (value instanceof byte[]) {
-				byte[] byteArrayValue = (byte[])value;
-				result.put(key,FormatUtility.bytesToHex(byteArrayValue));
-			} else {
-				// Anything else that comes through we will put in and hope for the best
-				result.put(key,value);
-			}
+			result.add(String.format("%s: %s", key, objectStringValue));
 		}
+		
+		Collections.sort(result);
 		return result;
 	}
 	

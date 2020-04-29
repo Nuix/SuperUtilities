@@ -97,6 +97,22 @@ public class FormatUtility {
 			return Double.toString((Double)value);
 		} else if(value instanceof byte[]){
 			return FormatUtility.bytesToHex((byte[])value);
+		} else if (value instanceof String[]) {
+			// Flatten String array property value to single delimited string
+			String[] stringArray = (String[])value;
+			StringJoiner result = new StringJoiner("; ");
+			for (int i = 0; i < stringArray.length; i++) {
+				result.add(this.convertToString(stringArray[i]));
+			}
+			return result.toString();
+		} else if (value instanceof Object[]) {
+			// Flatten String array property value to single delimited string
+			Object[] objectArray = (Object[])value;
+			StringJoiner result = new StringJoiner("; ");
+			for (int i = 0; i < objectArray.length; i++) {
+				result.add(this.convertToString(objectArray[i]));
+			}
+			return result.toString();
 		}
 		else {
 			return value.toString();
