@@ -13,6 +13,7 @@ import java.util.function.Consumer;
 import java.util.stream.Collectors;
 
 import org.joda.time.DateTime;
+import org.joda.time.DateTimeZone;
 
 import com.google.code.regexp.Pattern;
 import com.google.gson.Gson;
@@ -34,7 +35,17 @@ public class KendraJsonExporter {
 	private boolean prettyPrint = true;
 	private boolean includePathGuids = true;
 	
+	private boolean reportIsDeleted = false;
+	private boolean reportIsEncrypted = false;
+	private boolean reportIsFileData = false;
+	
 	private Consumer<Map<String,Object>> beforeSerializationCallback = null;
+	
+	private static DateTime fallbackDate = null;
+	
+	static {
+		fallbackDate = new DateTime(1900,1,1,0,0,DateTimeZone.UTC);	
+	}
 	
 	/***
 	 * Allows you to provide a callback which can inspect or modify the nested series of Maps before they are serialized by GSON to JSON
@@ -103,8 +114,10 @@ public class KendraJsonExporter {
 		result.put("_category",sourceItem.getKind().getName());
 		
 		Map<String,Object> properties = sourceItem.getProperties();
+		
 		if (properties.containsKey("File Modified")) {
 			DateTime fileModified = (DateTime)properties.get("File Modified");
+			fileModified = makeUTC(fileModified);
 			if(fileModified != null) {
 				result.put("_last_updated_at",fileModified.toString());		
 			}
@@ -112,6 +125,7 @@ public class KendraJsonExporter {
 		
 		if (properties.containsKey("File Created")) {
 			DateTime fileCreated = (DateTime)properties.get("File Created");
+			fileCreated = makeUTC(fileCreated);
 			if(fileCreated != null) {
 				result.put("_created_at",fileCreated.toString());		
 			}
@@ -125,17 +139,18 @@ public class KendraJsonExporter {
 		
 		result.put("mime_type", sourceItem.getType().getName());
 		result.put("file_size",sourceItem.getFileSize());
-		result.put("is_deleted",sourceItem.isDeleted());
-		result.put("is_encrypted",sourceItem.isEncrypted());
-		result.put("is_file_data",sourceItem.isFileData());
+		
+		if (reportIsDeleted) { result.put("is_deleted",sourceItem.isDeleted()); }
+		if (reportIsEncrypted) { result.put("is_encrypted",sourceItem.isEncrypted()); }
+		if (reportIsFileData) { result.put("is_file_data",sourceItem.isFileData()); }
 		
 		// These weren't available until 7.4
 		if(SuperUtilities.getCurrentVersion().isAtLeast("7.4")) {
 			DateTime itemDate = sourceItem.getDate();
 			if(itemDate != null){
-				result.put("item_date", sourceItem.getDate().toString());	
+				result.put("item_date",  makeUTC(itemDate).toString());	
 			} else {
-				result.put("item_date", null);
+				result.put("item_date", fallbackDate.toString());
 			}
 		
 			result.put("top_level",sourceItem.isTopLevel());
@@ -160,15 +175,15 @@ public class KendraJsonExporter {
 		Communication comm = sourceItem.getCommunication();
 		
 		if(comm == null) {
-			result.put("comm_date",null);
-			result.put("from",null);
-			result.put("recipients",null);
+			result.put("comm_date", fallbackDate.toString());
+			result.put("from",new String[] {});
+			result.put("recipients",new String[] {});
 		} else {
 			DateTime commDate = comm.getDateTime();
 			if (commDate == null) {
-				result.put("comm_date",null);	
+				result.put("comm_date",fallbackDate.toString());	
 			} else {
-				result.put("comm_date",commDate.toString());
+				result.put("comm_date",makeUTC(commDate).toString());
 			}
 			result.put("from",comm.getFrom().stream().map(a -> a.toRfc822String()).collect(Collectors.toList()));
 			
@@ -197,6 +212,10 @@ public class KendraJsonExporter {
 			originalKey = whitepsaceReplacement.matcher(originalKey).replaceAll("_");
 			String key = originalKey;
 			Object value = property.getValue();
+			
+			if(value instanceof DateTime) {
+				value = makeUTC((DateTime)value);
+			}
 			
 			String objectStringValue = FormatUtility.getInstance().convertToString(value);
 			
@@ -253,6 +272,10 @@ public class KendraJsonExporter {
 		if(beforeSerializationCallback != null) { beforeSerializationCallback.accept(mappedData); }
 		String asJson = gson.toJson(mappedData);
 		return asJson;
+	}
+	
+	public static DateTime makeUTC(DateTime value) {
+		return value.withZone(DateTimeZone.UTC);
 	}
 	
 	/***
