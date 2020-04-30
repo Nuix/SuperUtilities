@@ -153,7 +153,7 @@ public class KendraJsonExporter {
 				result.put("item_date", fallbackDate.toString());
 			}
 		
-			result.put("top_level",sourceItem.isTopLevel());
+			result.put("top_level",Boolean.toString(sourceItem.isTopLevel()));
 		}
 		
 		// These weren't available until 7.6
