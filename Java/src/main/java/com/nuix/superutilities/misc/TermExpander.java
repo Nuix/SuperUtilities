@@ -142,7 +142,7 @@ public class TermExpander {
 			}
 		} else if(FuzzyTermInfo.isFuzzyTerm(term)) {
 			if(fuzzyResolutionAlgorithm == SimilarityCalculation.Nuix) {
-				expandFuzzyWithNuix(nuixCase, content, properties, term, scopeQuery, result);
+				expandFuzzyWithNuix(nuixCase, content, properties, term, scopeQuery, result, allTermStats);
 			} else {
 				expandFuzzyWithSimilarityFiltering(term, result, allTermStats);
 			}
@@ -217,9 +217,10 @@ public class TermExpander {
 	 * @param term The fuzzy term, i.e.: <code>jason~0.5</code>
 	 * @param scopeQuery Optional scope query
 	 * @param result Collection to add results to
+	 * @param allTermStats 
 	 * @throws IOException
 	 */
-	private void expandFuzzyWithNuix(Case nuixCase, boolean content, boolean properties, String term, String scopeQuery, List<ExpandedTermInfo> result)
+	private void expandFuzzyWithNuix(Case nuixCase, boolean content, boolean properties, String term, String scopeQuery, List<ExpandedTermInfo> result, Map<String, Long> allTermStats)
 			throws IOException {
 		// Were going to ask Nuix what terms it gets for the fuzzy search
 		int currentProgress = 0;
@@ -241,6 +242,8 @@ public class TermExpander {
 		if(!scopeQuery.isEmpty()) { queryPieces.add(scopeQuery); }
 		String query = QueryHelper.parenThenJoinByAnd(queryPieces);
 		
+		FuzzyTermInfo f = FuzzyTermInfo.parseFuzzyTerm(term);
+		
 		// Inquire with Nuix what terms each item is responsive to for the given fuzzy query
 		Set<Item> items = nuixCase.searchUnsorted(query);
 		Set<String> distinctTerms = new HashSet<String>();
@@ -257,8 +260,8 @@ public class TermExpander {
 			ExpandedTermInfo eti = new ExpandedTermInfo();
 			eti.setOriginalTerm(term);
 			eti.setMatchedTerm(distinctTerm);
-			eti.setOcurrences(-1);
-			eti.setSimilarity(-1);
+			eti.setOcurrences(allTermStats.get(distinctTerm));
+			eti.setSimilarity(f.calculateLuceneLevenshteinSimilarityTo(distinctTerm));
 			result.add(eti);
 		}
 	}
@@ -321,7 +324,7 @@ public class TermExpander {
 	}
 	
 	/***
-	 * Converts a term with '*' and '?' wildcards into a regular expression Pattern.
+	 * Converts a term with '*' and '?' wild cards into a regular expression Pattern.
 	 * @param term The term to convert
 	 * @return A Pattern with similar matching characteristics as the equivalent Lucene wildcards
 	 */
