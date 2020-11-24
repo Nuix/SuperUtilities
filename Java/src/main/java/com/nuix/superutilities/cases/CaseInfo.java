@@ -107,7 +107,7 @@ public class CaseInfo {
 					return null;
 				}
 
-				@SuppressWarnings("rawtypes")
+				@SuppressWarnings({ "rawtypes", "unchecked" })
 				@Override
 				public Iterator getPrefixes(String arg0) {
 					// TODO Auto-generated method stub

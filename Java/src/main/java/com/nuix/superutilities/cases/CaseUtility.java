@@ -1,6 +1,7 @@
 package com.nuix.superutilities.cases;
 
 import java.io.File;
+import java.io.IOException;
 import java.util.Collection;
 import java.util.List;
 import java.util.stream.Collectors;
@@ -9,6 +10,8 @@ import org.apache.commons.io.FileUtils;
 import org.apache.commons.io.filefilter.RegexFileFilter;
 import org.apache.commons.io.filefilter.TrueFileFilter;
 import org.apache.log4j.Logger;
+
+import com.nuix.superutilities.misc.ZipHelper;
 
 /***
  * Class which provides some additional functionality regarding Nuix cases, mainly finding cases
@@ -89,5 +92,39 @@ public class CaseUtility {
 	 */
 	public List<CaseInfo> findCaseInformation(String rootSearchPath){
 		return findCaseInformation(new File(rootSearchPath));
+	}
+	
+	/***
+	 * Archives a Nuix case into a Zip file, optionally deleting the case once completed.  Based on:
+	 * https://stackoverflow.com/questions/23318383/compress-directory-into-a-zipfile-with-commons-io
+	 * @param nuixCaseDirectory Directory of the Nuix case
+	 * @param archiveFile The Zip file to archive the case into
+	 * @param deleteCaseOnCompletion Whether to delete the case upon completion
+	 * @param compressionLevel The compression level (0-9) with 0 being no compression and 9 being full compression, values outside
+	 * range will be clamped into range.
+	 * @throws IOException Thrown if there are issues creating the archive or deleting the directory.
+	 */
+	public static void archiveCase(String nuixCaseDirectory, String archiveFile, boolean deleteCaseOnCompletion, int compressionLevel) throws IOException {
+		archiveCase(new File(nuixCaseDirectory),new File(archiveFile),deleteCaseOnCompletion,compressionLevel);
+	}
+	
+	/***
+	 * Archives a Nuix case into a Zip file, optionally deleting the case once completed.  Based on:
+	 * https://stackoverflow.com/questions/23318383/compress-directory-into-a-zipfile-with-commons-io
+	 * @param nuixCaseDirectory Directory of the Nuix case
+	 * @param archiveFile The Zip file to archive the case into
+	 * @param deleteCaseOnCompletion Whether to delete the case upon completion
+	 * @param compressionLevel The compression level (0-9) with 0 being no compression and 9 being full compression, values outside
+	 * range will be clamped into range.
+	 * @throws IOException Thrown if there are issues creating the archive or deleting the directory.
+	 */
+	public static void archiveCase(File nuixCaseDirectory, File archiveFile, boolean deleteCaseOnCompletion, int compressionLevel) throws IOException {
+		logger.info("Backing up case at " + nuixCaseDirectory.getAbsolutePath() + " to " + archiveFile.getAbsolutePath());
+		archiveFile.getParentFile().mkdirs();
+	    ZipHelper.compressDirectoryToZipFile(nuixCaseDirectory.getAbsolutePath(), archiveFile.getAbsolutePath(), compressionLevel);
+	    if(deleteCaseOnCompletion && archiveFile.exists()) {
+	    	logger.info("Deleting now archived case " + nuixCaseDirectory.getAbsolutePath());
+	    	FileUtils.deleteDirectory(nuixCaseDirectory);
+	    }
 	}
 }
