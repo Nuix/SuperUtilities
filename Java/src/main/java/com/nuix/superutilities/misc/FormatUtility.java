@@ -2,7 +2,6 @@ package com.nuix.superutilities.misc;
 
 import java.io.File;
 import java.io.StringReader;
-import java.math.BigDecimal;
 import java.text.NumberFormat;
 import java.util.ArrayList;
 import java.util.List;
@@ -16,6 +15,7 @@ import javax.xml.bind.DatatypeConverter;
 
 import org.apache.commons.lang3.StringUtils;
 import org.apache.commons.lang3.exception.ExceptionUtils;
+import org.apache.commons.math3.util.Precision;
 import org.apache.lucene.analysis.standard.StandardTokenizer;
 import org.apache.lucene.analysis.tokenattributes.CharTermAttribute;
 import org.joda.time.DateTime;
@@ -311,10 +311,7 @@ public class FormatUtility {
 	 * @return The given value rounded off to specified decimal places
 	 */
 	public static double round(double value, int numberOfDigitsAfterDecimalPoint) {
-        BigDecimal bigDecimal = new BigDecimal(value);
-        bigDecimal = bigDecimal.setScale(numberOfDigitsAfterDecimalPoint,
-                BigDecimal.ROUND_HALF_UP);
-        return bigDecimal.doubleValue();
+		return Precision.round(value, numberOfDigitsAfterDecimalPoint);
     }
 	
 	/***
