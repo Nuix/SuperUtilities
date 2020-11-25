@@ -27,6 +27,7 @@ public class ItemRegexMatchCollection {
 	
 	/***
 	 * Gets the associated item.
+	 * @param nuixCase The case in which the item resides.
 	 * @return The associated item.
 	 */
 	public Item getItem(Case nuixCase){

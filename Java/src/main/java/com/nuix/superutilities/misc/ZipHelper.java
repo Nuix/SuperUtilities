@@ -12,6 +12,14 @@ import org.apache.commons.io.IOUtils;
 import org.apache.jena.ext.com.google.common.primitives.Ints;
 
 public class ZipHelper {
+	/***
+	 * Compresses the contents of the given directory (files and sub-directories) in to a Zip file.
+	 * @param directory The directory to archive into the Zip file.
+	 * @param zipFile Where to write the Zip file.
+	 * @param compressionLevel What level of compression to use between 0 and 9, with 0 being no compression and 9 being the most compression.
+	 * @throws IOException Thrown if there are issues with IO
+	 * @throws FileNotFoundException Thrown if file is not found
+	 */
 	public static void compressDirectoryToZipFile(String directory, String zipFile, int compressionLevel) throws IOException, FileNotFoundException {
 		ZipOutputStream zipStream = null;
 		try{
@@ -30,7 +38,7 @@ public class ZipHelper {
 	 * @param sourceDir The directory to archive
 	 * @param out The zip output stream
 	 * @throws IOException Thrown if there are issues with IO
-	 * @throws FileNotFoundException Thrown is file is not found
+	 * @throws FileNotFoundException Thrown if file is not found
 	 */
 	private static void compressDirectoryToZipfile(String rootDir, String sourceDir, ZipOutputStream out) throws IOException, FileNotFoundException {
 	    for (File file : new File(sourceDir).listFiles()) {

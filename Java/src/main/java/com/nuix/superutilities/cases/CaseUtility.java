@@ -104,7 +104,7 @@ public class CaseUtility {
 	 * range will be clamped into range.
 	 * @throws IOException Thrown if there are issues creating the archive or deleting the directory.
 	 */
-	public static void archiveCase(String nuixCaseDirectory, String archiveFile, boolean deleteCaseOnCompletion, int compressionLevel) throws IOException {
+	public void archiveCase(String nuixCaseDirectory, String archiveFile, boolean deleteCaseOnCompletion, int compressionLevel) throws IOException {
 		archiveCase(new File(nuixCaseDirectory),new File(archiveFile),deleteCaseOnCompletion,compressionLevel);
 	}
 	
@@ -118,7 +118,7 @@ public class CaseUtility {
 	 * range will be clamped into range.
 	 * @throws IOException Thrown if there are issues creating the archive or deleting the directory.
 	 */
-	public static void archiveCase(File nuixCaseDirectory, File archiveFile, boolean deleteCaseOnCompletion, int compressionLevel) throws IOException {
+	public void archiveCase(File nuixCaseDirectory, File archiveFile, boolean deleteCaseOnCompletion, int compressionLevel) throws IOException {
 		logger.info("Backing up case at " + nuixCaseDirectory.getAbsolutePath() + " to " + archiveFile.getAbsolutePath());
 		archiveFile.getParentFile().mkdirs();
 	    ZipHelper.compressDirectoryToZipFile(nuixCaseDirectory.getAbsolutePath(), archiveFile.getAbsolutePath(), compressionLevel);

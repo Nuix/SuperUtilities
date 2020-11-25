@@ -17,7 +17,7 @@
     catch(err) {
     }
 //-->
-var methods = {"i0":10,"i1":10,"i2":10,"i3":10};
+var methods = {"i0":10,"i1":10,"i2":10,"i3":10,"i4":10};
 var tabs = {65535:["t0","All Methods"],2:["t2","Instance Methods"],8:["t4","Concrete Methods"]};
 var altColor = "altColor";
 var rowColor = "rowColor";
@@ -163,17 +163,21 @@ extends java.lang.Object</pre>
 </tr>
 <tr id="i1" class="rowColor">
 <td class="colFirst"><code>nuix.Item</code></td>
-<td class="colLast"><code><span class="memberNameLink"><a href="../../../../com/nuix/superutilities/regex/RegexScanError.html#getItem--">getItem</a></span>()</code>
+<td class="colLast"><code><span class="memberNameLink"><a href="../../../../com/nuix/superutilities/regex/RegexScanError.html#getItem-nuix.Case-">getItem</a></span>(nuix.Case&nbsp;nuixCase)</code>
 <div class="block">Gets the associated item</div>
 </td>
 </tr>
 <tr id="i2" class="altColor">
 <td class="colFirst"><code>java.lang.String</code></td>
+<td class="colLast"><code><span class="memberNameLink"><a href="../../../../com/nuix/superutilities/regex/RegexScanError.html#getItemGuid--">getItemGuid</a></span>()</code>&nbsp;</td>
+</tr>
+<tr id="i3" class="rowColor">
+<td class="colFirst"><code>java.lang.String</code></td>
 <td class="colLast"><code><span class="memberNameLink"><a href="../../../../com/nuix/superutilities/regex/RegexScanError.html#getLocation--">getLocation</a></span>()</code>
 <div class="block">Gets the associated location</div>
 </td>
 </tr>
-<tr id="i3" class="rowColor">
+<tr id="i4" class="altColor">
 <td class="colFirst"><code><a href="../../../../com/nuix/superutilities/regex/PatternInfo.html" title="class in com.nuix.superutilities.regex">PatternInfo</a></code></td>
 <td class="colLast"><code><span class="memberNameLink"><a href="../../../../com/nuix/superutilities/regex/RegexScanError.html#getPatternInfo--">getPatternInfo</a></span>()</code>
 <div class="block">Gets the associated pattern info</div>
@@ -229,18 +233,29 @@ extends java.lang.Object</pre>
 <!--   -->
 </a>
 <h3>Method Detail</h3>
-<a name="getItem--">
+<a name="getItem-nuix.Case-">
 <!--   -->
 </a>
 <ul class="blockList">
 <li class="blockList">
 <h4>getItem</h4>
-<pre>public&nbsp;nuix.Item&nbsp;getItem()</pre>
+<pre>public&nbsp;nuix.Item&nbsp;getItem(nuix.Case&nbsp;nuixCase)</pre>
 <div class="block">Gets the associated item</div>
 <dl>
+<dt><span class="paramLabel">Parameters:</span></dt>
+<dd><code>nuixCase</code> - The case in which the item resides.</dd>
 <dt><span class="returnLabel">Returns:</span></dt>
 <dd>The associated item</dd>
 </dl>
+</li>
+</ul>
+<a name="getItemGuid--">
+<!--   -->
+</a>
+<ul class="blockList">
+<li class="blockList">
+<h4>getItemGuid</h4>
+<pre>public&nbsp;java.lang.String&nbsp;getItemGuid()</pre>
 </li>
 </ul>
 <a name="getPatternInfo--">
