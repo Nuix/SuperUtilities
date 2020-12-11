@@ -17,7 +17,7 @@
     catch(err) {
     }
 //-->
-var methods = {"i0":10,"i1":10,"i2":10,"i3":10,"i4":10,"i5":10,"i6":10,"i7":10,"i8":10,"i9":10,"i10":10,"i11":10,"i12":10,"i13":10,"i14":10,"i15":10,"i16":10,"i17":10,"i18":10};
+var methods = {"i0":10,"i1":10,"i2":10,"i3":10,"i4":10,"i5":10,"i6":10,"i7":10,"i8":10,"i9":10,"i10":10,"i11":10,"i12":10,"i13":10,"i14":10,"i15":10,"i16":10,"i17":10,"i18":10,"i19":10,"i20":10,"i21":10};
 var tabs = {65535:["t0","All Methods"],2:["t2","Instance Methods"],8:["t4","Concrete Methods"]};
 var altColor = "altColor";
 var rowColor = "rowColor";
@@ -210,57 +210,75 @@ extends java.lang.Object</pre>
 </td>
 </tr>
 <tr id="i10" class="altColor">
+<td class="colFirst"><code>boolean</code></td>
+<td class="colLast"><code><span class="memberNameLink"><a href="../../../../com/nuix/superutilities/export/CustomExporter.html#getKeepOriginalDat--">getKeepOriginalDat</a></span>()</code>
+<div class="block">Gets whether original DAT will be kept by moving it to final export directory.</div>
+</td>
+</tr>
+<tr id="i11" class="rowColor">
 <td class="colFirst"><code>nuix.MetadataProfile</code></td>
 <td class="colLast"><code><span class="memberNameLink"><a href="../../../../com/nuix/superutilities/export/CustomExporter.html#getProfile--">getProfile</a></span>()</code>
 <div class="block">Gets the metadata profile which will be used during export.</div>
 </td>
 </tr>
-<tr id="i11" class="rowColor">
+<tr id="i12" class="altColor">
 <td class="colFirst"><code>void</code></td>
 <td class="colLast"><code><span class="memberNameLink"><a href="../../../../com/nuix/superutilities/export/CustomExporter.html#removeDynamicPlaceholder-java.lang.String-">removeDynamicPlaceholder</a></span>(java.lang.String&nbsp;placeholderName)</code>
 <div class="block">Removes a previously added dynamic placeholder.</div>
 </td>
 </tr>
-<tr id="i12" class="altColor">
+<tr id="i13" class="rowColor">
+<td class="colFirst"><code>void</code></td>
+<td class="colLast"><code><span class="memberNameLink"><a href="../../../../com/nuix/superutilities/export/CustomExporter.html#setColumnRemovals-java.util.Collection-">setColumnRemovals</a></span>(java.util.Collection&lt;java.lang.String&gt;&nbsp;columnHeaders)</code>
+<div class="block">Allows you to provide a list of header names to specify columns to remove.</div>
+</td>
+</tr>
+<tr id="i14" class="altColor">
 <td class="colFirst"><code>void</code></td>
 <td class="colLast"><code><span class="memberNameLink"><a href="../../../../com/nuix/superutilities/export/CustomExporter.html#setDynamicPlaceholder-java.lang.String-java.util.function.BiFunction-">setDynamicPlaceholder</a></span>(java.lang.String&nbsp;placeholderName,
                      java.util.function.BiFunction&lt;nuix.Item,java.lang.String,java.lang.String&gt;&nbsp;function)</code>
 <div class="block">Assigns a dynamically calculated placeholder to this instance.</div>
 </td>
 </tr>
-<tr id="i13" class="rowColor">
+<tr id="i15" class="rowColor">
 <td class="colFirst"><code>void</code></td>
 <td class="colLast"><code><span class="memberNameLink"><a href="../../../../com/nuix/superutilities/export/CustomExporter.html#setExportXlsx-boolean-">setExportXlsx</a></span>(boolean&nbsp;exportXlsx)</code>
 <div class="block">Sets whether DAT contents should additionally be exported as an XLSX spreadsheet.</div>
 </td>
 </tr>
-<tr id="i14" class="altColor">
+<tr id="i16" class="altColor">
 <td class="colFirst"><code>void</code></td>
 <td class="colLast"><code><span class="memberNameLink"><a href="../../../../com/nuix/superutilities/export/CustomExporter.html#setHeaderRenames-java.util.Map-">setHeaderRenames</a></span>(java.util.Map&lt;java.lang.String,java.lang.String&gt;&nbsp;renames)</code>
 <div class="block">Allows you to provide a Map of headers to rename.</div>
 </td>
 </tr>
-<tr id="i15" class="rowColor">
+<tr id="i17" class="rowColor">
 <td class="colFirst"><code>void</code></td>
 <td class="colLast"><code><span class="memberNameLink"><a href="../../../../com/nuix/superutilities/export/CustomExporter.html#setImagingOptions-java.util.Map-">setImagingOptions</a></span>(java.util.Map&lt;?,?&gt;&nbsp;settings)</code>
 <div class="block">Sets the Map of settings which will be passed to <code>BatchExporter.setImagingOptions(Map)</code> when performing
  the temporary export before restructuring.</div>
 </td>
 </tr>
-<tr id="i16" class="altColor">
+<tr id="i18" class="altColor">
+<td class="colFirst"><code>void</code></td>
+<td class="colLast"><code><span class="memberNameLink"><a href="../../../../com/nuix/superutilities/export/CustomExporter.html#setKeepOriginalDat-boolean-">setKeepOriginalDat</a></span>(boolean&nbsp;keepOriginalDat)</code>
+<div class="block">Sets whether final DAT will be kept by moving it to final export directory/</div>
+</td>
+</tr>
+<tr id="i19" class="rowColor">
 <td class="colFirst"><code>void</code></td>
 <td class="colLast"><code><span class="memberNameLink"><a href="../../../../com/nuix/superutilities/export/CustomExporter.html#setParallelProcessingSettings-java.util.Map-">setParallelProcessingSettings</a></span>(java.util.Map&lt;?,?&gt;&nbsp;settings)</code>
 <div class="block">Sets the Map of settings which will be passed to <code>BatchExporter.setParallelProcessingSettings(Map)</code> when performing
  the temporary export before restructuring.</div>
 </td>
 </tr>
-<tr id="i17" class="rowColor">
+<tr id="i20" class="altColor">
 <td class="colFirst"><code>void</code></td>
 <td class="colLast"><code><span class="memberNameLink"><a href="../../../../com/nuix/superutilities/export/CustomExporter.html#setProfile-nuix.MetadataProfile-">setProfile</a></span>(nuix.MetadataProfile&nbsp;profile)</code>
 <div class="block">Sets the metadata profile used during export.</div>
 </td>
 </tr>
-<tr id="i18" class="altColor">
+<tr id="i21" class="rowColor">
 <td class="colFirst"><code>void</code></td>
 <td class="colLast"><code><span class="memberNameLink"><a href="../../../../com/nuix/superutilities/export/CustomExporter.html#setStampingOptions-java.util.Map-">setStampingOptions</a></span>(java.util.Map&lt;?,?&gt;&nbsp;settings)</code>
 <div class="block">Sets the Map of settings which will be passed to <code>BatchExporter.setStampingOptions(Map)</code> when performing
@@ -448,7 +466,7 @@ extends java.lang.Object</pre>
 <h4>setHeaderRenames</h4>
 <pre>public&nbsp;void&nbsp;setHeaderRenames(java.util.Map&lt;java.lang.String,java.lang.String&gt;&nbsp;renames)</pre>
 <div class="block">Allows you to provide a Map of headers to rename.  Intended to provide a way to rename headers that Nuix automatically adds
- to DAT files is generates:<br>
+ to DAT files it generates:<br>
  <code>DOCID</code><br>
  <code>PARENT_DOCID</code><br>
  <code>ATTACH_DOCID</code><br>
@@ -464,6 +482,35 @@ extends java.lang.Object</pre>
 <dl>
 <dt><span class="paramLabel">Parameters:</span></dt>
 <dd><code>renames</code> - A Map with the map key being the header name before and the map value being what you want that header renamed to.  Map key is case sensitive!</dd>
+</dl>
+</li>
+</ul>
+<a name="setColumnRemovals-java.util.Collection-">
+<!--   -->
+</a>
+<ul class="blockList">
+<li class="blockList">
+<h4>setColumnRemovals</h4>
+<pre>public&nbsp;void&nbsp;setColumnRemovals(java.util.Collection&lt;java.lang.String&gt;&nbsp;columnHeaders)</pre>
+<div class="block">Allows you to provide a list of header names to specify columns to remove.  Intended to provide a way to remove columns that Nuix automatically adds
+ to DAT files it generates:<br>
+ <code>DOCID</code><br>
+ <code>PARENT_DOCID</code><br>
+ <code>ATTACH_DOCID</code><br>
+ <code>BEGINBATES</code><br>
+ <code>ENDBATES</code><br>
+ <code>BEGINGROUP</code><br>
+ <code>ENDGROUP</code><br>
+ <code>PAGECOUNT</code><br>
+ <code>ITEMPATH</code> (when exporting natives)<br>
+ <code>TEXTPATH</code> (when exporting text)<br>
+ <code>PDFPATH</code> (when exporting PDFs)<br>
+ <code>TIFFPATH</code> (when exporting TIFFs)<br>
+ Case sensitive and takes priority over column renaming, so make sure you provide original pre-rename headers.</div>
+<dl>
+<dt><span class="paramLabel">Parameters:</span></dt>
+<dd><code>columnHeaders</code> - Collection of column header names for columns to be removed.  Case sensitive and takes priority over column renaming,
+ so make sure you provide original pre-rename headers.</dd>
 </dl>
 </li>
 </ul>
@@ -581,7 +628,7 @@ extends java.lang.Object</pre>
 <a name="setExportXlsx-boolean-">
 <!--   -->
 </a>
-<ul class="blockListLast">
+<ul class="blockList">
 <li class="blockList">
 <h4>setExportXlsx</h4>
 <pre>public&nbsp;void&nbsp;setExportXlsx(boolean&nbsp;exportXlsx)</pre>
@@ -589,6 +636,34 @@ extends java.lang.Object</pre>
 <dl>
 <dt><span class="paramLabel">Parameters:</span></dt>
 <dd><code>exportXlsx</code> - Whether DAT contents should additionally be exported as an XLSX spreadsheet.</dd>
+</dl>
+</li>
+</ul>
+<a name="getKeepOriginalDat--">
+<!--   -->
+</a>
+<ul class="blockList">
+<li class="blockList">
+<h4>getKeepOriginalDat</h4>
+<pre>public&nbsp;boolean&nbsp;getKeepOriginalDat()</pre>
+<div class="block">Gets whether original DAT will be kept by moving it to final export directory.</div>
+<dl>
+<dt><span class="returnLabel">Returns:</span></dt>
+<dd>True if final DAT will be kept</dd>
+</dl>
+</li>
+</ul>
+<a name="setKeepOriginalDat-boolean-">
+<!--   -->
+</a>
+<ul class="blockListLast">
+<li class="blockList">
+<h4>setKeepOriginalDat</h4>
+<pre>public&nbsp;void&nbsp;setKeepOriginalDat(boolean&nbsp;keepOriginalDat)</pre>
+<div class="block">Sets whether final DAT will be kept by moving it to final export directory/</div>
+<dl>
+<dt><span class="paramLabel">Parameters:</span></dt>
+<dd><code>keepOriginalDat</code> - True if final DAT should be kept</dd>
 </dl>
 </li>
 </ul>
