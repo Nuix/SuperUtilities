@@ -2,10 +2,13 @@ package com.nuix.superutilities.export;
 
 import java.io.File;
 import java.util.ArrayList;
+import java.util.Collection;
 import java.util.HashMap;
+import java.util.HashSet;
 import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.Set;
 import java.util.function.BiFunction;
 import java.util.function.Consumer;
 import java.util.regex.Pattern;
@@ -69,8 +72,10 @@ public class CustomExporter {
 	private JsonExporter jsonExporter = null;
 	
 	private boolean exportXlsx = false;
+	private boolean keepOriginalDat = false;
 	
 	private Map<String,String> headerRenames = new HashMap<String,String>();
+	private Set<String> columnRemovals = new HashSet<String>();
 	
 	private Map<?,?> parallelProcessingSettings = new HashMap<String,Object>();
 	private Map<?,?> imagingSettings = new HashMap<String,Object>();
@@ -183,7 +188,12 @@ public class CustomExporter {
 	public void setHeaderRenames(Map<String,String> renames) {
 		this.headerRenames = renames;
 	}
-	
+
+	public void setColumnRemovals(Collection<String> columnHeaders) {
+		this.columnRemovals = new HashSet<String>();
+		this.columnRemovals.addAll(columnHeaders);
+	}
+
 	private void logInfo(String format, Object... params) {
 		String message = String.format(format, params);
 		System.out.println(message);
@@ -414,8 +424,8 @@ public class CustomExporter {
 			// Tracks old relative path and new relative path so that OPT file can be updated
 			Map<String,String> tiffRenames = new HashMap<String,String>();
 			
-			final SimpleXlsx xlsx = new SimpleXlsx(new File(exportDirectory,"loadfile.xlsx"));;
-			SimpleWorksheet worksheet = xlsx.getSheet("Loadfile");;
+			final SimpleXlsx xlsx = new SimpleXlsx(new File(exportDirectory,"loadfile.xlsx"));
+			SimpleWorksheet worksheet = xlsx.getSheet("Loadfile");
 			
 			logInfo("Restructuring export using %s as input, writing to %s as output...",tempDatFile.getAbsolutePath(),finalDatFile.getAbsolutePath());
 			try(DatLoadFileWriter datWriter = new DatLoadFileWriter(finalDatFile)){
@@ -438,18 +448,23 @@ public class CustomExporter {
 						if(headersWrittern == false) {
 							List<String> headers = DatLoadFile.getHeadersFromRecord(record);
 							List<String> outputHeaders = new ArrayList<String>();
+							
 							for(String header : headers) {
-								// Perform any header renaming we may need to do
-								if(headerRenames.containsKey(header)) {
-									outputHeaders.add(headerRenames.get(header));
-								} else {
-									outputHeaders.add(header);
+								// If user specified column should be removed, then we also
+								// don't need to output a header/renamed header for it
+								if(!columnRemovals.contains(header)) {
+									// Perform any header renaming we may need to do
+									if(headerRenames.containsKey(header)) {
+										outputHeaders.add(headerRenames.get(header));
+									} else {
+										outputHeaders.add(header);
+									}
 								}
 							}
 							
 							// If we're exporting JSON files, we need to add our own column to record
 							// the path in the DAT since this is a product we are adding and not Nuix
-							if(exportJson) {
+							if(exportJson  && !columnRemovals.contains("JSONPATH")) {
 								outputHeaders.add("JSONPATH");
 							}
 							
@@ -463,8 +478,6 @@ public class CustomExporter {
 						}
 						
 						String guid = record.get("GUID");
-						// System.out.println("Processing GUID: "+guid);
-						// System.out.println(FormatUtility.debugString(record));
 						
 						try {
 							Item currentItem = nuixCase.search("guid:"+guid).get(0);
@@ -481,7 +494,9 @@ public class CustomExporter {
 								dest = resolveNameCollisions(dest);
 								dest.getParentFile().mkdirs();
 								source.renameTo(dest);
-								record.put("TEXTPATH",getRelativePath(exportDirectory,dest));
+								if(!columnRemovals.contains("TEXTPATH")) {
+									record.put("TEXTPATH",getRelativePath(exportDirectory,dest));
+								}
 							}
 							
 							// Restructure native files if we have them
@@ -493,7 +508,9 @@ public class CustomExporter {
 								dest = resolveNameCollisions(dest);
 								dest.getParentFile().mkdirs();
 								source.renameTo(dest);
-								record.put("ITEMPATH",getRelativePath(exportDirectory,dest));
+								if(!columnRemovals.contains("ITEMPATH")) {
+									record.put("ITEMPATH",getRelativePath(exportDirectory,dest));
+								}
 							}
 							
 							// Restructure PDF files if we have them
@@ -505,7 +522,9 @@ public class CustomExporter {
 								dest = resolveNameCollisions(dest);
 								dest.getParentFile().mkdirs();
 								source.renameTo(dest);
-								record.put("PDFPATH",getRelativePath(exportDirectory,dest));
+								if(!columnRemovals.contains("PDFPATH")) {
+									record.put("PDFPATH",getRelativePath(exportDirectory,dest));
+								}
 							}
 							
 							// Restructure TIFF file if we have them
@@ -519,7 +538,9 @@ public class CustomExporter {
 								source.renameTo(dest);
 								String newTiffRelativePath = getRelativePath(exportDirectory,dest);
 								tiffRenames.put(record.get("TIFFPATH"),newTiffRelativePath);
-								record.put("TIFFPATH",newTiffRelativePath);
+								if(!columnRemovals.contains("TIFFPATH")) {
+									record.put("TIFFPATH",newTiffRelativePath);
+								}
 							}
 							
 							// Produce JSON file if settings specified to do so
@@ -531,13 +552,20 @@ public class CustomExporter {
 								dest.getParentFile().mkdirs();
 								String jsonRelativePath = getRelativePath(exportDirectory,dest);
 								jsonExporter.exportItemAsJson(currentItem, dest);
-								record.put("JSONPATH", jsonRelativePath);
+								if(!columnRemovals.contains("JSONPATH")) {
+									record.put("JSONPATH", jsonRelativePath);
+								}
 							}
 							
 							recordsProcessed++;
 						} catch (Exception e) {
 							logError("Error during export restructuring for item with GUID '%s':\n%s",
 									guid,FormatUtility.debugString(e));
+						}
+						
+						// Remove any columns user asked to not have in output
+						for(String header : columnRemovals) {
+							record.remove(header);
 						}
 						
 						datWriter.writeRecordValues(record);
@@ -585,9 +613,17 @@ public class CustomExporter {
 			summaryReportXml.renameTo(summaryReportXmlDest);
 			tlMd5DigestTxt.renameTo(tlMd5DigestTxtDest);
 			
+			// If we wish to keep a copy of the original DAT from the temporary export then
+			// we need to move it over before we delete the temporary export
+			if(keepOriginalDat) {
+				logInfo("Copying Nuix exported DAT file as nuix_loadfile.dat");
+				File finalOriginalDatFile = new File(exportDirectory,"nuix_loadfile.dat");
+				FileUtils.moveFile(tempDatFile, finalOriginalDatFile);
+			}
+			
 			// Finally, we can delete our temp export as we have moved everything into the final structure
 			logInfo("Deleting temporary export...");
-			FileUtils.deleteDirectory(exportTempDirectory);
+			FileUtils.deleteDirectory(exportTempDirectory);	
 			
 			logInfo("Custom export completed");
 		} catch (Exception e) {
@@ -645,5 +681,13 @@ public class CustomExporter {
 	 */
 	public void setExportXlsx(boolean exportXlsx) {
 		this.exportXlsx = exportXlsx;
+	}
+
+	public boolean getKeepOriginalDat() {
+		return keepOriginalDat;
+	}
+
+	public void setKeepOriginalDat(boolean keepOriginalDat) {
+		this.keepOriginalDat = keepOriginalDat;
 	}
 }

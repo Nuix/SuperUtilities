@@ -5,7 +5,7 @@ $su = SuperUtilities.init($utilities,NUIX_VERSION)
 java_import com.nuix.superutilities.export.CustomExporter
 java_import com.nuix.superutilities.export.JsonExporter
 
-$current_case = $utilities.getCaseFactory.open('D:\cases\FakeData_1552095540_Hare\Pearlie Morar')
+$current_case = $utilities.getCaseFactory.open('D:\cases\Fake Data 20200601_172517')
 
 export_directory = "D:\\temp\\CustomExport_#{Time.now.to_i}"
 items = $current_case.search("kind:email").take(100)
@@ -97,6 +97,25 @@ header_renames = {
 }
 ce.setHeaderRenames(header_renames)
 
+# Allows you specify columns you want removed from the load file during restructuring.
+# Note: Column removal takes priority over column renaming, so specify columns to be
+# removed using original name and not rename specified above!
+column_removals = [
+	"DOCID",
+	"PARENT_DOCID",
+	"ATTACH_DOCID",
+	"BEGINBATES",
+	# "ENDBATES",
+	"BEGINGROUP",
+	"ENDGROUP",
+	"PAGECOUNT",
+	"ITEMPATH",
+	# "TEXTPATH",
+	"PDFPATH",
+	"TIFFPATH",
+]
+ce.setColumnRemovals(column_removals)
+
 # We can additionally export an XLSX file containing the same information at the DAT
 ce.setExportXlsx(true)
 
@@ -119,6 +138,11 @@ ce.setStampingOptions({
 		"customText" => "Exported by CustomExporter Test",
 	}
 })
+
+# When true the original DAT as exported by Nuix will be moved
+# into the final destination as "nuix_loadfile.dat"
+# default is false
+ce.setKeepOriginalDat(true)
 
 # Now that we're all configured, lets get the export under way
 ce.exportItems($current_case,export_directory,items)
