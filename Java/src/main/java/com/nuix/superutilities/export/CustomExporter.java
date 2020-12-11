@@ -170,7 +170,7 @@ public class CustomExporter {
 	
 	/***
 	 * Allows you to provide a Map of headers to rename.  Intended to provide a way to rename headers that Nuix automatically adds
-	 * to DAT files is generates:<br>
+	 * to DAT files it generates:<br>
 	 * <code>DOCID</code><br>
 	 * <code>PARENT_DOCID</code><br>
 	 * <code>ATTACH_DOCID</code><br>
@@ -189,6 +189,25 @@ public class CustomExporter {
 		this.headerRenames = renames;
 	}
 
+	/***
+	 * Allows you to provide a list of header names to specify columns to remove.  Intended to provide a way to remove columns that Nuix automatically adds
+	 * to DAT files it generates:<br>
+	 * <code>DOCID</code><br>
+	 * <code>PARENT_DOCID</code><br>
+	 * <code>ATTACH_DOCID</code><br>
+	 * <code>BEGINBATES</code><br>
+	 * <code>ENDBATES</code><br>
+	 * <code>BEGINGROUP</code><br>
+	 * <code>ENDGROUP</code><br>
+	 * <code>PAGECOUNT</code><br>
+	 * <code>ITEMPATH</code> (when exporting natives)<br>
+	 * <code>TEXTPATH</code> (when exporting text)<br>
+	 * <code>PDFPATH</code> (when exporting PDFs)<br>
+	 * <code>TIFFPATH</code> (when exporting TIFFs)<br>
+	 * Case sensitive and takes priority over column renaming, so make sure you provide original pre-rename headers.
+	 * @param columnHeaders Collection of column header names for columns to be removed.  Case sensitive and takes priority over column renaming,
+	 * so make sure you provide original pre-rename headers.
+	 */
 	public void setColumnRemovals(Collection<String> columnHeaders) {
 		this.columnRemovals = new HashSet<String>();
 		this.columnRemovals.addAll(columnHeaders);
@@ -683,10 +702,18 @@ public class CustomExporter {
 		this.exportXlsx = exportXlsx;
 	}
 
+	/***
+	 * Gets whether original DAT will be kept by moving it to final export directory.
+	 * @return True if final DAT will be kept
+	 */
 	public boolean getKeepOriginalDat() {
 		return keepOriginalDat;
 	}
 
+	/***
+	 * Sets whether final DAT will be kept by moving it to final export directory/
+	 * @param keepOriginalDat True if final DAT should be kept
+	 */
 	public void setKeepOriginalDat(boolean keepOriginalDat) {
 		this.keepOriginalDat = keepOriginalDat;
 	}
