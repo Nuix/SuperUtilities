@@ -26,12 +26,13 @@ public class PatternInfo {
 	 * Compiles the regular expression String provided into a Java Pattern object
 	 * @param caseSensitive Whether it should be case sensitive
 	 */
-	public void compile(boolean caseSensitive){
+	public void compile(boolean caseSensitive, boolean multiline, boolean dotAll){
 		if(pattern == null){
-			if(caseSensitive)
-				pattern = Pattern.compile(expression);
-			else
-				pattern = Pattern.compile(expression,Pattern.CASE_INSENSITIVE);
+			int bitflags = 0;
+			if(!caseSensitive) { bitflags |= Pattern.CASE_INSENSITIVE; }
+			if(multiline) { bitflags |= Pattern.MULTILINE; }
+			if(dotAll) { bitflags |= Pattern.DOTALL; }
+			pattern = Pattern.compile(expression,bitflags);
 		}
 	}
 

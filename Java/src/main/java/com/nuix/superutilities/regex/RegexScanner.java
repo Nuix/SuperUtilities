@@ -50,6 +50,8 @@ public class RegexScanner {
 	
 	private boolean scanContent = true;
 	private boolean caseSensitive = false;
+	private boolean multiline = false;
+	private boolean dotall = false;
 	private boolean captureContextualText = true;
 	private int contextSize = 100;
 	
@@ -134,7 +136,7 @@ public class RegexScanner {
 		List<ItemRegexMatchCollection> result = new ArrayList<ItemRegexMatchCollection>();
 		
 		for (PatternInfo p : patterns) {
-			p.compile(caseSensitive);
+			p.compile(caseSensitive,multiline,dotall);
 		}
 		
 		for (Item item : items) {
@@ -163,7 +165,7 @@ public class RegexScanner {
 		abortWasRequested = false;
 		
 		for (PatternInfo p : patterns) {
-			p.compile(caseSensitive);
+			p.compile(caseSensitive,multiline,dotall);
 		}
 		
 		int itemIndex = 0;
@@ -196,7 +198,7 @@ public class RegexScanner {
 		abortWasRequested = false;
 		
 		for (PatternInfo p : patterns) {
-			p.compile(caseSensitive);
+			p.compile(caseSensitive,multiline,dotall);
 		}
 		
 		AtomicInteger itemIndex = new AtomicInteger(0);
@@ -242,7 +244,7 @@ public class RegexScanner {
 		abortWasRequested = false;
 		
 		for (PatternInfo p : patterns) {
-			p.compile(caseSensitive);
+			p.compile(caseSensitive,multiline,dotall);
 		}
 		
 		AtomicInteger itemIndex = new AtomicInteger(0);
@@ -306,7 +308,7 @@ public class RegexScanner {
 					Set<String> entityValues = item.getEntities(namedEntityType);
 					for(String entityValue : entityValues) {
 						PatternInfo entityPattern = new PatternInfo(namedEntityType, "\\Q"+entityValue+"\\E");
-						entityPattern.compile(caseSensitive);
+						entityPattern.compile(caseSensitive,multiline,dotall);
 						patternsToScanFor.add(entityPattern);
 					}
 				} catch (IOException e) {
@@ -535,6 +537,22 @@ public class RegexScanner {
 
 	public void setCaseSensitive(boolean caseSensitive) {
 		this.caseSensitive = caseSensitive;
+	}
+
+	public boolean getMultiline() {
+		return multiline;
+	}
+
+	public void setMultiline(boolean multiline) {
+		this.multiline = multiline;
+	}
+
+	public boolean getDotall() {
+		return dotall;
+	}
+
+	public void setDotall(boolean dotall) {
+		this.dotall = dotall;
 	}
 
 	public boolean getCaptureContextualText() {
