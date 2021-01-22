@@ -1,7 +1,7 @@
 SuperUtilities
 ==============
 
-![This code was last tested in Nuix 8.8](https://img.shields.io/badge/Tested%20in%20Nuix-8.8-green.svg)
+![This code was last tested in Nuix 9.0](https://img.shields.io/badge/Tested%20in%20Nuix-9.0-green.svg)
 
 # Overview
 
@@ -93,7 +93,7 @@ Load up the code in your favorite IDE and make sure you reference the `\lib\*.ja
 # License
 
 ```
-Copyright 2020 Nuix
+Copyright 2021 Nuix
 
 Licensed under the Apache License, Version 2.0 (the "License");
 you may not use this file except in compliance with the License.
