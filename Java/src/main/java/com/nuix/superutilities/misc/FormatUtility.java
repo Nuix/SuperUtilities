@@ -399,4 +399,18 @@ public class FormatUtility {
 		tempFile = new File(tempFile,item.getGuid()+"."+extension);
 		return tempFile;
 	}
+	
+	public static String escapeTagForSearch(String tagName){
+		String result = tagName;
+		result = result.replace("\\", "\\\\");
+		result = result.replace("?", "\\?");
+		result = result.replace("*", "\\*");
+		result = result.replace("\"", "\\\"");
+		result = result.replace("'", "\\'");
+		result = result.replace("‘", "\\‘");
+		result = result.replace("’", "\\’");
+		result = result.replace("“", "\\“");
+		result = result.replace("�?", "\\�?");
+		return result;
+	}
 }
