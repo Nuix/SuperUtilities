@@ -43,6 +43,7 @@ public class AnnotationRepository extends SQLiteBacked {
 	
 	private boolean abortWasRequested = false;
 	private Consumer<String> messageLoggedCallback = null;
+	private boolean alwaysCreateTagOnImport = false;
 	
 	/***
 	 * Allows you to provide a callback which will be invoked when this instance emits a log message.
@@ -345,6 +346,7 @@ public class AnnotationRepository extends SQLiteBacked {
 	 * @param nuixCase The case in which items will be tagged.
 	 * @param matchingMethod Determines how a record in the DB file is associated to an item in the case to apply tags to it.
 	 * @throws SQLException Thrown if there are errors while interacting with the SQLite DB file.
+	 * @throws  Thrown by Nuix if there is something 
 	 */
 	public void applyTagsFromDatabaseToCase(Case nuixCase, AnnotationMatchingMethod matchingMethod) throws SQLException {
 		// Will reuse this multiple times to provide values to be bound to prepared SQL statements later
@@ -387,6 +389,8 @@ public class AnnotationRepository extends SQLiteBacked {
 			String tagName = tagEntry.getKey();
 			long tagId = tagEntry.getValue();
 			
+			
+			
 			bindData.clear();
 			bindData.add(tagId);
 			
@@ -397,7 +401,19 @@ public class AnnotationRepository extends SQLiteBacked {
 			// Here we run the query for ItemTag records associated with the tag we are currently
 			// processing.  We will then collect up the relevant items.  When we get a good batch of
 			// items, we tag them, clear the collection and continue on.
-			logMessage("Applying tag '%s' to %s items",tagName,totalItemTags);
+			logMessage("Processing tag '%s' and %s items",tagName,totalItemTags);
+			
+			// If we intend to create the tag regardless of whether there are items that
+			// it will be applied to, we can just create it directly in the case.
+			if(alwaysCreateTagOnImport) {
+				try {
+					nuixCase.createTag(tagName);
+				} catch (IOException e) {
+					logger.error("Error creating tag '"+tagName+"' in case: ", e);
+					logMessage("Error creating tag '"+tagName+"' in case: ",e.getMessage());
+				}
+			}
+			
 			executeQuery(itemTagSql,bindData, rs ->{
 				int currentIndex = 1;
 				try {
@@ -434,7 +450,7 @@ public class AnnotationRepository extends SQLiteBacked {
 						// If our collection has 5000 items or more in it now, lets tag those items and then
 						// clear the collection so we aren't holding on to all of the items at once.
 						if(tagGroupedItems.size() > 5000) {
-							logMessage("    Apply tag '%s' to 5000 items",tagName);
+							logMessage("    Tagging batch of %s items",tagGroupedItems.size());
 							annotater.addTag(tagName, tagGroupedItems);
 							tagGroupedItems.clear();
 						}
@@ -445,7 +461,7 @@ public class AnnotationRepository extends SQLiteBacked {
 					// If there are any items left in our collection that still need a tag applied, we check and
 					// tag them here.
 					if(tagGroupedItems.size() > 0) {
-						logMessage("    Apply tag '%s' to %s items",tagName,tagGroupedItems.size());
+						logMessage("    Tagging final batch of %s items",tagGroupedItems.size());
 						annotater.addTag(tagName, tagGroupedItems);
 						tagGroupedItems.clear();
 					}
@@ -776,5 +792,21 @@ public class AnnotationRepository extends SQLiteBacked {
 	public void abort() {
 		logMessage("Signalling abort...");
 		abortWasRequested = true;
+	}
+
+	/***
+	 * Gets whether a tag should always be created even when the source case had no items associated to that tag.
+	 * @return True if tag should be created during import, even if no items are associated.
+	 */
+	public boolean getAlwaysCreateTagOnImport() {
+		return alwaysCreateTagOnImport;
+	}
+
+	/***
+	 * Sets whether a tag should always be created even when the source case had no items associated to that tag.
+	 * @param alwaysCreateTagOnImport True if tag should be created during import, even if no items are associated.
+	 */
+	public void setAlwaysCreateTagOnImport(boolean alwaysCreateTagOnImport) {
+		this.alwaysCreateTagOnImport = alwaysCreateTagOnImport;
 	}
 }
