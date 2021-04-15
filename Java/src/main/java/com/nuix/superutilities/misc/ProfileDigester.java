@@ -13,6 +13,7 @@ import org.apache.log4j.Logger;
 
 import nuix.Case;
 import nuix.Item;
+import nuix.ItemCustomMetadataMap;
 import nuix.ItemEventCallback;
 import nuix.ItemEventInfo;
 import nuix.ItemExpression;
@@ -30,6 +31,7 @@ public class ProfileDigester {
 	
 	private boolean includeItemText = false;
 	private boolean recordDigest = false;
+	private boolean useExistingValueWhenPresent = false;
 	private String digestCustomField = "DedupeByProfileDigest";
 	private MetadataProfile profile = null;
 	
@@ -167,6 +169,21 @@ public class ProfileDigester {
 			@Override
 			public String evaluate(Item item) {
 				try {
+					// Use existing value if settings say to and we have a value we can use
+					if(useExistingValueWhenPresent) {
+						ItemCustomMetadataMap cm = item.getCustomMetadata();
+						if(cm.containsKey(digestCustomField)) {
+							Object rawValue = cm.get(digestCustomField);
+							if(rawValue != null && rawValue instanceof String) {
+								String value = (String)rawValue;
+								if(!value.trim().isEmpty()) {
+									return value;
+								}
+							}
+						}
+					}
+					
+					// Generate value
 					String digestString = generateMd5String(item);
 					if(recordDigest) {
 						item.getCustomMetadata().putText(digestCustomField, digestString);
@@ -308,5 +325,25 @@ public class ProfileDigester {
 	 */
 	public void setDigestCustomField(String digestCustomField) {
 		this.digestCustomField = digestCustomField;
+	}
+
+	/***
+	 * Gets whether an existing value in the specified custom metadata field should be used if present.  When true,
+	 * if an item has the custom field specified by callin {@link #setDigestCustomField(String)) and it has a value, that value will
+	 * be used rather than calculating a value.  If false the value will always be calculated fresh.
+	 * @return Whether an existing value in the specified custom metadata field should be used when present
+	 */
+	public boolean getUseExistingValueWhenPresent() {
+		return useExistingValueWhenPresent;
+	}
+
+	/***
+	 * Sets whether an existing value in the specified custom metadata field should be used if present.  When true,
+	 * if an item has the custom field specified by calling {@link #setDigestCustomField(String)) and it has a value, that value will
+	 * be used rather than calculating a value.  If false the value will always be calculated fresh.
+	 * @param useExistingValueWhenPresent
+	 */
+	public void setUseExistingValueWhenPresent(boolean useExistingValueWhenPresent) {
+		this.useExistingValueWhenPresent = useExistingValueWhenPresent;
 	}
 }
