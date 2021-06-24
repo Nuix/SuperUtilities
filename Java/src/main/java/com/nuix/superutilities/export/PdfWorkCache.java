@@ -53,7 +53,9 @@ public class PdfWorkCache {
 			tempPdf = new File(tempPdf,guid.substring(3, 6));
 			tempPdf.mkdirs();
 			tempPdf = new File(tempPdf,item.getGuid()+".pdf");
-			item.getPrintedImage().generate(printSettings); // Make sure PDF is generated or export can have issues
+			if(!item.getPrintedImage().isStored()) {
+				item.getPrintedImage().generate(printSettings); // Make sure PDF is generated or export can have issues	
+			}
 			pdfExporter.exportItem(item, tempPdf);
 			pdfCache.put(item.getGuid(), tempPdf);
 		}

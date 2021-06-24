@@ -23,7 +23,7 @@ import com.nuix.superutilities.misc.FormatUtility;
 import com.nuix.superutilities.misc.SQLiteBacked;
 import com.nuix.superutilities.query.QueryHelper;
 
-import jxl.common.Logger;
+import org.apache.log4j.Logger;
 import nuix.BulkAnnotater;
 import nuix.Case;
 import nuix.Item;
