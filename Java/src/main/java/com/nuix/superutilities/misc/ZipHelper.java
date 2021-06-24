@@ -27,7 +27,7 @@ public class ZipHelper {
 			zipStream.setLevel(Ints.constrainToRange(compressionLevel, 0, 9));
 			compressDirectoryToZipfile(directory,directory,zipStream);	
 		} finally {
-			IOUtils.closeQuietly(zipStream);	
+			IOUtils.closeQuietly(zipStream);
 		}
 	}
 	

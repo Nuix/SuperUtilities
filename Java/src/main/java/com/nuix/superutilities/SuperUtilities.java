@@ -26,6 +26,7 @@ import com.nuix.superutilities.regex.RegexScanner;
 
 import nuix.BulkAnnotater;
 import nuix.Case;
+import nuix.ItemUtility;
 import nuix.Utilities;
 
 /***
@@ -244,9 +245,17 @@ public class SuperUtilities{
 	
 	/***
 	 * Convenience method to obtain Nuix BulkAnnotater
-	 * @return Nuix bulk annotater obtained from Utilities object
+	 * @return Nuix BulkAnnotater obtained from Utilities object
 	 */
-	public static BulkAnnotater getBulkAnnotater(){
+	public static BulkAnnotater getBulkAnnotater() {
 		return getInstance().getNuixUtilities().getBulkAnnotater();
+	}
+	
+	/***
+	 * Convenience method to obtain Nuix ItemUtility
+	 * @return Nuix ItemUtility obtained from Utilities object
+	 */
+	public static ItemUtility getItemUtility() {
+		return getInstance().getNuixUtilities().getItemUtility();
 	}
 }

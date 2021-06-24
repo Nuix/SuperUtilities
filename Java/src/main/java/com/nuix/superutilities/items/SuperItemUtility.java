@@ -1,5 +1,6 @@
 package com.nuix.superutilities.items;
 
+import java.io.IOException;
 import java.io.UnsupportedEncodingException;
 import java.net.URLDecoder;
 import java.util.ArrayList;
@@ -15,6 +16,7 @@ import java.util.stream.Collectors;
 
 import com.nuix.superutilities.SuperUtilities;
 
+import nuix.Case;
 import nuix.Item;
 import nuix.ItemUtility;
 import nuix.TreePosition;
@@ -44,7 +46,7 @@ public class SuperItemUtility {
 	 * @return A set at most 1 of each item in the provided input item collections
 	 */
 	public Set<Item> unionMany(List<Collection<Item>> itemCollections){
-		ItemUtility iutil = SuperUtilities.getInstance().getNuixUtilities().getItemUtility();
+		ItemUtility iutil = SuperUtilities.getItemUtility();
 		Set<Item> result = new HashSet<Item>();
 		for (int i = 0; i < itemCollections.size(); i++) {
 			result = iutil.union(result, itemCollections.get(i));
@@ -129,10 +131,13 @@ public class SuperItemUtility {
 	public void splitAndMaintainFamilies(Collection<Item> items, int targetChunkSize, Consumer<Collection<Item>> chunkConsumer){
 		List<Item> currentSubSet = new ArrayList<Item>();
 		List<Item> sortedItems = new ArrayList<Item>(items);
-		sortedItems = SuperUtilities.getInstance().getNuixUtilities().getItemSorter().sortItemsByPosition(sortedItems);
+		sortedItems = SuperUtilities.getItemUtility().sortItemsByPosition(sortedItems);
+		
+		Item previousItem = null;
 		for (int i = 0; i < sortedItems.size(); i++) {
 			Item currentItem = sortedItems.get(i);
-			if(currentSubSet.size() >= targetChunkSize && currentItem.isTopLevel()){
+			boolean canCutHere = previousItem == null || currentItem.getTopLevelItem() == null || (currentItem.getTopLevelItem() != previousItem.getTopLevelItem());
+			if(currentSubSet.size() >= targetChunkSize && canCutHere){
 				chunkConsumer.accept(currentSubSet);
 				currentSubSet = new ArrayList<Item>();
 			}
@@ -142,6 +147,27 @@ public class SuperItemUtility {
 		if(currentSubSet.size() > 0){
 			chunkConsumer.accept(currentSubSet);
 		}
+	}
+	
+	/***
+	 * Convenience method for removing items responsive to a query from another collection of items.  Internally this
+	 * method runs a search for the given query and then uses ItemUtility.difference to remove them from the provided
+	 * input items, returning the differenced result.
+	 * @param nuixCase The Nuix case (needed to run the search)
+	 * @param inputItems The items from which you wish to remove items which are responsive to the given query
+	 * @param itemsToRemoveQuery The query used to define items you wish to have removed form the input items
+	 * @return The input items, with items responsive to the query removed
+	 * @throws IOException Likely thrown if there is an issue with the provided query
+	 */
+	public Set<Item> removeItemsResponsiveToQuery(Case nuixCase, Collection<Item> inputItems, String itemsToRemoveQuery) throws IOException {
+		Set<Item> toRemove = nuixCase.searchUnsorted(itemsToRemoveQuery);
+		return SuperUtilities.getItemUtility().difference(inputItems, toRemove);
+	}
+	
+	public Set<Item> findFamiliesWithoutItemsResponsiveToQuery(Case nuixCase, Collection<Item> inputItems, String itemsToRemoveQuery) throws IOException {
+		Set<Item> topLevelItems = SuperUtilities.getItemUtility().findTopLevelItems(inputItems);
+		Set<Item> families = SuperUtilities.getItemUtility().findItemsAndDescendants(topLevelItems);
+		return removeItemsResponsiveToQuery(nuixCase,families,itemsToRemoveQuery);
 	}
 	
 	/***
