@@ -2,9 +2,9 @@ package com.nuix.superutilities.annotations;
 
 import java.util.Collection;
 
+import org.apache.log4j.Logger;
 import org.joda.time.DateTime;
 
-import jxl.common.Logger;
 import nuix.Case;
 import nuix.Item;
 
