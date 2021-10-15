@@ -1,6 +1,7 @@
 package com.nuix.superutilities.annotations;
 
 import java.io.File;
+import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.Comparator;
@@ -152,8 +153,8 @@ public class BulkRedactor {
 			region.setText(text);
 			region.setPageNumber(pageNumber);
 			
-			logger.debug("Resulting Region:");
-			logger.debug(region);
+//			logger.debug("Resulting Region:");
+//			logger.debug(region);
 			
 			result.add(region);
 		}
@@ -309,8 +310,14 @@ public class BulkRedactor {
 		}
 		
 		logMessage("Cleaning up temp directory %s",settings.getTempDirectory());
-		pdfCache.cleanupTemporaryPdfs();
-		logMessage("Temp directory deleted");
+		try {
+			pdfCache.cleanupTemporaryPdfs();
+			logMessage("Temp directory deleted");
+		} catch (IOException e) {
+			String message = String.format("Error while cleaning up temp directory %s",settings.getTempDirectory());
+			logger.error(message,e);
+			logMessage(message);
+		}
 		
 		return allFoundRegions;
 	}
