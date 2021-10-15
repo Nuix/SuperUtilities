@@ -12,6 +12,7 @@ import java.util.List;
 import java.util.Map;
 
 import org.apache.log4j.Logger;
+import org.jruby.embed.LocalContextScope;
 import org.jruby.embed.LocalVariableBehavior;
 import org.jruby.embed.ScriptingContainer;
 import org.xhtmlrenderer.pdf.ITextRenderer;
@@ -32,7 +33,7 @@ public class TemplateExporter {
 	private ScriptingContainer container = null;
 	
 	public TemplateExporter(File erbTemplateFile) throws Exception {
-		container = new ScriptingContainer(LocalVariableBehavior.TRANSIENT);
+		container = new ScriptingContainer(LocalContextScope.SINGLETHREAD,LocalVariableBehavior.TRANSIENT);
 		String erbTemplateSource = null;
 		List<String> lines = Files.readAllLines(Paths.get(erbTemplateFile.getPath()));
 		erbTemplateSource = Joiner.on("\n").join(lines);
@@ -40,19 +41,18 @@ public class TemplateExporter {
 				"#coding: UTF-8\n"+
 				"require 'erb'\n"+
 				"include ERB::Util\n" +
-				"$compiled_erb = ERB.new($template_source,0,'<>')\n"+
+				"@compiled_erb = ERB.new(@template_source,0,'<>')\n"+
 				"def render(item,data)\n"+
 				"   b = binding\n"+
-				"	$result = $compiled_erb.result(b)\n"+
+				"	return @compiled_erb.result(b)\n"+
 				"end\n";
 		
-		container.put("$template_source", erbTemplateSource);
+		container.put("@template_source", erbTemplateSource);
 		container.runScriptlet(scriptlet);
 	}
 	
 	public String render(Item item){
-		container.callMethod("", "render", new Object[]{item});
-		return (String) container.get("$result");
+		return (String) container.callMethod("", "render", new Object[]{item});
 	}
 	
 	public String render(Item item, Map<String,Object> data){
@@ -60,8 +60,7 @@ public class TemplateExporter {
 		for (Map.Entry<String, Object> entry : data.entrySet()){
 			toSend.put(entry.getKey(), entry.getValue());
 		}
-		container.callMethod("", "render", new Object[]{item,toSend});
-		return (String) container.get("$result");
+		return (String) container.callMethod("", "render", new Object[]{item,toSend});
 	}
 	
 	public void renderToFile(Item item, File outputFile, Map<String,Object> data) throws Exception{
