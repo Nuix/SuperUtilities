@@ -20,6 +20,7 @@ public class ZipHelper {
 	 * @throws IOException Thrown if there are issues with IO
 	 * @throws FileNotFoundException Thrown if file is not found
 	 */
+	@SuppressWarnings("deprecation")
 	public static void compressDirectoryToZipFile(String directory, String zipFile, int compressionLevel) throws IOException, FileNotFoundException {
 		ZipOutputStream zipStream = null;
 		try{
@@ -40,6 +41,7 @@ public class ZipHelper {
 	 * @throws IOException Thrown if there are issues with IO
 	 * @throws FileNotFoundException Thrown if file is not found
 	 */
+	@SuppressWarnings("deprecation")
 	private static void compressDirectoryToZipfile(String rootDir, String sourceDir, ZipOutputStream out) throws IOException, FileNotFoundException {
 	    for (File file : new File(sourceDir).listFiles()) {
 	        if (file.isDirectory()) {
