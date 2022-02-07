@@ -47,9 +47,9 @@ public class ZipHelper {
 	        if (file.isDirectory()) {
 	            compressDirectoryToZipfile(rootDir, sourceDir + File.separator + file.getName(), out);
 	        } else {
-	            ZipEntry entry = new ZipEntry(sourceDir.replace(rootDir, "") + file.getName());
+	            ZipEntry entry = new ZipEntry(sourceDir.replace(rootDir, "") + File.separator + file.getName());
 	            out.putNextEntry(entry);
-	            FileInputStream in = new FileInputStream(sourceDir + "/" + file.getName());
+	            FileInputStream in = new FileInputStream(sourceDir + File.separator + file.getName());
 	            IOUtils.copy(in, out);
 	            IOUtils.closeQuietly(in);
 	        }
