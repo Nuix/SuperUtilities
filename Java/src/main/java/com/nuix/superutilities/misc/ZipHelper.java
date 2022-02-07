@@ -43,11 +43,18 @@ public class ZipHelper {
 	 */
 	@SuppressWarnings("deprecation")
 	private static void compressDirectoryToZipfile(String rootDir, String sourceDir, ZipOutputStream out) throws IOException, FileNotFoundException {
-	    for (File file : new File(sourceDir).listFiles()) {
+		for (File file : new File(sourceDir).listFiles()) {
 	        if (file.isDirectory()) {
 	            compressDirectoryToZipfile(rootDir, sourceDir + File.separator + file.getName(), out);
 	        } else {
-	            ZipEntry entry = new ZipEntry(sourceDir.replace(rootDir, "") + File.separator + file.getName());
+	        	String dir = sourceDir.replace(rootDir, "");
+	        	ZipEntry entry;
+	        	if (!dir.trim().isEmpty()) {
+	        		entry = new ZipEntry(dir + File.separator + file.getName());	
+	        	} else {
+	        		entry = new ZipEntry(file.getName());
+	        	}
+	            
 	            out.putNextEntry(entry);
 	            FileInputStream in = new FileInputStream(sourceDir + File.separator + file.getName());
 	            IOUtils.copy(in, out);
