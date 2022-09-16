@@ -13,6 +13,7 @@ import com.aspose.cells.Color;
 import com.aspose.cells.Style;
 import com.nuix.superutilities.misc.FormatUtility;
 
+import nuix.BatchLoadDetails;
 import nuix.Case;
 
 /***
@@ -157,6 +158,53 @@ public class IntersectionReport {
 		
 		List<Object> rowValues = new ArrayList<Object>();
 		String parenScopeQuery = parenExpression(sheetConfig.getScopeQuery());
+		
+		// If we have batch load dates we wish to constrain the results to, we must go look at all the batch loads
+		// in the case and filter to those within our date range.  Using that filtered set we then get their batch
+		// load GUIDs and use that to attach additional scope query for those batch loads.
+		if(sheetConfig.hasBatchLoadDateCriteria()) {
+			List<String> inRangeBatchLoadGuids = new ArrayList<String>();
+			List<BatchLoadDetails> allBatchLoads = nuixCase.getBatchLoads();
+			
+			// Filter all batch loads by whether their loaded date falls within
+			// the range specifies by the min/max values
+			for(BatchLoadDetails bld : allBatchLoads) {
+				boolean satisfiesMin = true;
+				boolean satisfiesMax = true;
+				
+				if(sheetConfig.getBatchLoadMinDate() != null) {
+					satisfiesMin = bld.getLoaded().isAfter(sheetConfig.getBatchLoadMinDate());
+				}
+				
+				if(sheetConfig.getBatchLoadMaxDate() != null) {
+					satisfiesMax = bld.getLoaded().isBefore(sheetConfig.getBatchLoadMaxDate());
+				}
+				
+				if(satisfiesMin && satisfiesMax) {
+					inRangeBatchLoadGuids.add(bld.getBatchId());
+				}
+			}
+			
+			String batchLoadGuidQuery = "";
+			if(inRangeBatchLoadGuids.size() > 0) {
+				// We have batch loads that met our criteria so we update the scope
+				// query to restrict to those batch loads
+				batchLoadGuidQuery = String.format("(batch-load-guid:%s)",String.join(" OR ", inRangeBatchLoadGuids));
+				
+			} else {
+				// We have a funny situation now, user specified to filter to particular batch loads based on their
+				// loaded date and no batch loads met the required criteria.  If we do nothing now, effectively no
+				// batch loads matching is the same as all batch loads matching.  We are going to better represent no
+				// batch loads matching by modifying scope criteria to accept no batch loads.  This will yield 0 results in the
+				// report, which technically is an accurate representation of our results.  Should probably have logic long
+				// before we reach this point that would catch batch load date criteria matching nothing and warning that user
+				// then, before we have reached this point.
+				batchLoadGuidQuery = "(NOT batch-load-guid:*)";
+			}
+			
+			// Add batch load criteria we calculated above to the scope query
+			parenScopeQuery = andExpressions(parenScopeQuery,batchLoadGuidQuery);
+		}
 		
 		// Start out by building out headers
 		fireMessage("Building headers...");

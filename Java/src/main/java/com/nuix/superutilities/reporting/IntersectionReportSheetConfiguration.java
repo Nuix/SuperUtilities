@@ -4,6 +4,8 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.function.BiFunction;
 
+import org.joda.time.DateTime;
+
 import nuix.Case;
 
 public class IntersectionReportSheetConfiguration {
@@ -14,6 +16,8 @@ public class IntersectionReportSheetConfiguration {
 	private String rowCategoryLabel = "Term";
 	private String colPrimaryCategoryLabel = "Column Category";
 	private String scopeQuery = "";
+	private DateTime batchLoadMinDate = null;
+	private DateTime batchLoadMaxDate = null;
 	private boolean freezePanes = false;
 	
 	/***
@@ -163,6 +167,42 @@ public class IntersectionReportSheetConfiguration {
 	 */
 	public void setScopeQuery(String scopeQuery) {
 		this.scopeQuery = scopeQuery;
+	}
+	
+	/***
+	 * Gets the minimum batch load date an item must have to be reported.  A null value means batch load date is not to be considered.
+	 * @return the minimum batch load date an item must have to be reported
+	 */
+	public DateTime getBatchLoadMinDate() {
+		return batchLoadMinDate;
+	}
+
+	/***
+	 * Sets the minimum batch load date an item must have to be reported.  A null value means batch load date is not to be considered.
+	 * @param batchLoadMinDate the minimum batch load date an item must have to be reported
+	 */
+	public void setBatchLoadMinDate(DateTime batchLoadMinDate) {
+		this.batchLoadMinDate = batchLoadMinDate;
+	}
+
+	/***
+	 * Gets the maximum batch load date an item must have to be reported.  A null value means batch load date is not to be considered.
+	 * @return the maximum batch load date an item must have to be reported
+	 */
+	public DateTime getBatchLoadMaxDate() {
+		return batchLoadMaxDate;
+	}
+
+	/***
+	 * Sets the maximum batch load date an item must have to be reported.  A null value means batch load date is not to be considered.
+	 * @param batchLoadMaxDate the maximum batch load date an item must have to be reported
+	 */
+	public void setBatchLoadMaxDate(DateTime batchLoadMaxDate) {
+		this.batchLoadMaxDate = batchLoadMaxDate;
+	}
+	
+	public boolean hasBatchLoadDateCriteria() {
+		return batchLoadMinDate != null || batchLoadMaxDate != null;
 	}
 
 	/***
