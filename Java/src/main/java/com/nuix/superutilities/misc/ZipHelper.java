@@ -1,5 +1,7 @@
 package com.nuix.superutilities.misc;
 
+import java.io.BufferedInputStream;
+import java.io.BufferedOutputStream;
 import java.io.File;
 import java.io.FileInputStream;
 import java.io.FileNotFoundException;
@@ -8,10 +10,45 @@ import java.io.IOException;
 import java.util.zip.ZipEntry;
 import java.util.zip.ZipOutputStream;
 
+import org.apache.commons.compress.archivers.sevenz.SevenZArchiveEntry;
+import org.apache.commons.compress.archivers.sevenz.SevenZMethod;
+import org.apache.commons.compress.archivers.sevenz.SevenZOutputFile;
 import org.apache.commons.io.IOUtils;
 import org.apache.jena.ext.com.google.common.primitives.Ints;
 
 public class ZipHelper {
+	
+	public static void compressDirectoryToSevenZipFile(String directory, String sevenZipFile) throws IOException {
+		SevenZOutputFile sevenZipOutput = new SevenZOutputFile(new File(sevenZipFile));
+		sevenZipOutput.setContentCompression(SevenZMethod.DEFLATE);
+		compressDirectoryToSevenZipFile(directory, directory, sevenZipOutput);
+		sevenZipOutput.finish();
+		sevenZipOutput.close();
+	}
+	
+	private static void compressDirectoryToSevenZipFile(String rootDir, String sourceDir, SevenZOutputFile sevenZipOutput) throws IOException {
+		for (File file : new File(sourceDir).listFiles()) {
+	        if (file.isDirectory()) {
+	        	compressDirectoryToSevenZipFile(rootDir, sourceDir + File.separator + file.getName(), sevenZipOutput);
+	        } else {
+	        	String dir = sourceDir.replace(rootDir, "");
+	        	SevenZArchiveEntry entry = null;
+	        	if (!dir.trim().isEmpty()) {
+	        		entry = sevenZipOutput.createArchiveEntry(file,dir + File.separator + file.getName());	
+	        	} else {
+	        		entry = sevenZipOutput.createArchiveEntry(file,file.getName());
+	        	}
+	        	sevenZipOutput.putArchiveEntry(entry);
+	        	FileInputStream in = new FileInputStream(sourceDir + File.separator + file.getName());
+	            BufferedInputStream bufferedIn = new BufferedInputStream(in);
+	        	sevenZipOutput.write(bufferedIn);
+	        	bufferedIn.close();
+	        	in.close();
+	        	sevenZipOutput.closeArchiveEntry();
+	        }
+		}
+	}
+	
 	/***
 	 * Compresses the contents of the given directory (files and sub-directories) in to a Zip file.
 	 * @param directory The directory to archive into the Zip file.
@@ -23,8 +60,12 @@ public class ZipHelper {
 	@SuppressWarnings("deprecation")
 	public static void compressDirectoryToZipFile(String directory, String zipFile, int compressionLevel) throws IOException, FileNotFoundException {
 		ZipOutputStream zipStream = null;
+		FileOutputStream fileOutStream = null;
+		BufferedOutputStream bufferedOutStream = null;
 		try{
-			zipStream = new ZipOutputStream(new FileOutputStream(zipFile));
+			fileOutStream = new FileOutputStream(zipFile);
+			bufferedOutStream = new BufferedOutputStream(fileOutStream);
+			zipStream = new ZipOutputStream(bufferedOutStream);
 			zipStream.setLevel(Ints.constrainToRange(compressionLevel, 0, 9));
 			compressDirectoryToZipfile(directory,directory,zipStream);	
 		} finally {
@@ -57,7 +98,8 @@ public class ZipHelper {
 	            
 	            out.putNextEntry(entry);
 	            FileInputStream in = new FileInputStream(sourceDir + File.separator + file.getName());
-	            IOUtils.copy(in, out);
+	            BufferedInputStream bufferedIn = new BufferedInputStream(in);
+	            IOUtils.copy(bufferedIn, out);
 	            IOUtils.closeQuietly(in);
 	        }
 	    }

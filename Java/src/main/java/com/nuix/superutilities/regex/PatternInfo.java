@@ -25,6 +25,8 @@ public class PatternInfo {
 	/***
 	 * Compiles the regular expression String provided into a Java Pattern object
 	 * @param caseSensitive Whether it should be case sensitive
+	 * @param multiline Whether the multi-line matching flag should be set
+	 * @param dotAll Whether the dot matches all flag should be set
 	 */
 	public void compile(boolean caseSensitive, boolean multiline, boolean dotAll){
 		if(pattern == null){
@@ -53,8 +55,8 @@ public class PatternInfo {
 	}
 
 	/***
-	 * Gets the compiled Pattern object.  Note this will return null until {@link #compile(boolean)} is called.
-	 * @return The compiled Pattern object or null if {@link #compile(boolean)} has not yet been called.
+	 * Gets the compiled Pattern object.  Note this will return null until {@link #compile(boolean, boolean, boolean)} is called.
+	 * @return The compiled Pattern object or null if {@link #compile(boolean, boolean, boolean)} has not yet been called.
 	 */
 	public Pattern getPattern() {
 		return pattern;

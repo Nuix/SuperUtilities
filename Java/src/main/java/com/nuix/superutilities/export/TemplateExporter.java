@@ -63,7 +63,7 @@ public class TemplateExporter {
 		return (String) container.callMethod("", "render", new Object[]{item,toSend});
 	}
 	
-	public void renderToFile(Item item, File outputFile, Map<String,Object> data) throws Exception{
+	public void renderToFile(Item item, File outputFile, Map<String,Object> data) throws Exception {
 		FileOutputStream fos = null;
 		BufferedWriter bw = null;
 		

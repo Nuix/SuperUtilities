@@ -7,6 +7,7 @@ import java.util.function.Consumer;
 import java.util.stream.Collectors;
 
 import org.apache.log4j.Logger;
+import org.joda.time.DateTime;
 
 import com.aspose.cells.BackgroundType;
 import com.aspose.cells.Color;
@@ -31,6 +32,40 @@ import nuix.Case;
 public class IntersectionReport {
 	
 	private static Logger logger = Logger.getLogger(IntersectionReport.class);
+	
+	/***
+	 * Analyzes batch loads in the given case, determining which have a loaded datetime that falls
+	 * within the specified range, returning the GUIDs of the batch loads which qualify.
+	 * @param nuixCase The case to analyze
+	 * @param min The minimum date time, can be null
+	 * @param max The maximum date time, can be null
+	 * @return Returns a list of zero or more GUIDs for the batch loads loaded within the given date range
+	 */
+	public static List<String> findBatchLoadsInDateRange(Case nuixCase, DateTime min, DateTime max) {
+		List<String> inRangeBatchLoadGuids = new ArrayList<String>();
+		List<BatchLoadDetails> allBatchLoads = nuixCase.getBatchLoads();
+		
+		// Filter all batch loads by whether their loaded date falls within
+		// the range specifies by the min/max values
+		for(BatchLoadDetails bld : allBatchLoads) {
+			boolean satisfiesMin = true;
+			boolean satisfiesMax = true;
+			
+			if(min != null) {
+				satisfiesMin = bld.getLoaded().isAfter(min);
+			}
+			
+			if(max != null) {
+				satisfiesMax = bld.getLoaded().isBefore(max);
+			}
+			
+			if(satisfiesMin && satisfiesMax) {
+				inRangeBatchLoadGuids.add(bld.getBatchId());
+			}
+		}
+		
+		return inRangeBatchLoadGuids;
+	}
 	
 	private SimpleXlsx xlsx = null;
 	
@@ -163,27 +198,8 @@ public class IntersectionReport {
 		// in the case and filter to those within our date range.  Using that filtered set we then get their batch
 		// load GUIDs and use that to attach additional scope query for those batch loads.
 		if(sheetConfig.hasBatchLoadDateCriteria()) {
-			List<String> inRangeBatchLoadGuids = new ArrayList<String>();
-			List<BatchLoadDetails> allBatchLoads = nuixCase.getBatchLoads();
-			
-			// Filter all batch loads by whether their loaded date falls within
-			// the range specifies by the min/max values
-			for(BatchLoadDetails bld : allBatchLoads) {
-				boolean satisfiesMin = true;
-				boolean satisfiesMax = true;
-				
-				if(sheetConfig.getBatchLoadMinDate() != null) {
-					satisfiesMin = bld.getLoaded().isAfter(sheetConfig.getBatchLoadMinDate());
-				}
-				
-				if(sheetConfig.getBatchLoadMaxDate() != null) {
-					satisfiesMax = bld.getLoaded().isBefore(sheetConfig.getBatchLoadMaxDate());
-				}
-				
-				if(satisfiesMin && satisfiesMax) {
-					inRangeBatchLoadGuids.add(bld.getBatchId());
-				}
-			}
+			List<String> inRangeBatchLoadGuids = findBatchLoadsInDateRange(nuixCase,
+					sheetConfig.getBatchLoadMinDate(),sheetConfig.getBatchLoadMaxDate());
 			
 			String batchLoadGuidQuery = "";
 			if(inRangeBatchLoadGuids.size() > 0) {

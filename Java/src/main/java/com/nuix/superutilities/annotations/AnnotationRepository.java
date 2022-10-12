@@ -346,7 +346,6 @@ public class AnnotationRepository extends SQLiteBacked {
 	 * @param nuixCase The case in which items will be tagged.
 	 * @param matchingMethod Determines how a record in the DB file is associated to an item in the case to apply tags to it.
 	 * @throws SQLException Thrown if there are errors while interacting with the SQLite DB file.
-	 * @throws  Thrown by Nuix if there is something 
 	 */
 	public void applyTagsFromDatabaseToCase(Case nuixCase, AnnotationMatchingMethod matchingMethod) throws SQLException {
 		// Will reuse this multiple times to provide values to be bound to prepared SQL statements later

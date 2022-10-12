@@ -329,7 +329,7 @@ public class ProfileDigester {
 
 	/***
 	 * Gets whether an existing value in the specified custom metadata field should be used if present.  When true,
-	 * if an item has the custom field specified by callin {@link #setDigestCustomField(String)) and it has a value, that value will
+	 * if an item has the custom field specified by calling {@link #setDigestCustomField(String)} and it has a value, that value will
 	 * be used rather than calculating a value.  If false the value will always be calculated fresh.
 	 * @return Whether an existing value in the specified custom metadata field should be used when present
 	 */
@@ -339,9 +339,9 @@ public class ProfileDigester {
 
 	/***
 	 * Sets whether an existing value in the specified custom metadata field should be used if present.  When true,
-	 * if an item has the custom field specified by calling {@link #setDigestCustomField(String)) and it has a value, that value will
+	 * if an item has the custom field specified by calling {@link #setDigestCustomField(String)} and it has a value, that value will
 	 * be used rather than calculating a value.  If false the value will always be calculated fresh.
-	 * @param useExistingValueWhenPresent
+	 * @param useExistingValueWhenPresent whether an existing value in the specified custom metadata field should be used if present
 	 */
 	public void setUseExistingValueWhenPresent(boolean useExistingValueWhenPresent) {
 		this.useExistingValueWhenPresent = useExistingValueWhenPresent;

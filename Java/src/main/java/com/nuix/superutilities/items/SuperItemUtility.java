@@ -5,6 +5,7 @@ import java.io.UnsupportedEncodingException;
 import java.net.URLDecoder;
 import java.util.ArrayList;
 import java.util.Collection;
+import java.util.Collections;
 import java.util.HashMap;
 import java.util.HashSet;
 import java.util.List;
@@ -266,5 +267,37 @@ public class SuperItemUtility {
 		}
 		
 		return true;
+	}
+	
+	/***
+	 * Gets items and sibling items within a certain ordinal distance.
+	 * @param items The items to obtain the neighboring siblings of
+	 * @param itemsBefore How many siblings before each item to include
+	 * @param itemsAfter How many siblings after each item to include
+	 * @return A new list of items which includes both input items and neighboring siblings, sorted by position
+	 */
+	public List<Item> getItemsAndNeighboringSiblings(List<Item> items, int itemsBefore, int itemsAfter){
+		if(itemsBefore < 0) { itemsBefore = 0; }
+		if(itemsAfter < 0) { itemsAfter = 0; }
+		
+		if(items.size() < 1) { return Collections.emptyList(); }
+		else {
+			Set<Item> tempSet = new HashSet<Item>();
+			for(Item item : items) {
+				Item parent = item.getParent();
+				List<Item> siblings = parent.getChildren();
+				int itemIndex = siblings.indexOf(item);
+				int first = itemIndex - itemsBefore;
+				int last = itemIndex + itemsAfter;
+				if(first < 0) { first = 0; }
+				if(last > items.size() - 1) { last = items.size() - 1; }
+				for (int i = first; i <= last; i++) {
+					tempSet.add(items.get(i));
+				}
+			}
+			List<Item> result = new ArrayList<Item>();
+			result.addAll(tempSet);
+			return SuperUtilities.getItemUtility().sortItemsByPosition(result);
+		}
 	}
 }
