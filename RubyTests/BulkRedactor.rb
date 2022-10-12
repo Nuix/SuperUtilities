@@ -7,7 +7,7 @@ java_import com.nuix.superutilities.SuperUtilities
 # Initialize super utilities
 $su = SuperUtilities.init($utilities,NUIX_VERSION)
 
-case_directory = "D:\\cases\\FakeData_1552095540_Hare\\Pearlie Morar"
+case_directory = "D:\\cases\\FakeData_1662662781"
 temp_directory = "D:\\Temp\\BulkRedactorTemp"
 markup_set_name = "Redaction_Test_#{Time.now.to_i}"
 scope_query = "kind:email"
@@ -33,6 +33,9 @@ brs.setNamedEntityTypes(entity_types)
 brs.setApplyRedactions(false)
 brs.setApplyHighLights(false)
 
+# How many concurrent threads should be ran.  Note that more is not always better!
+concurrency = 4
+
 # Create bulk redactor
 br = BulkRedactor.new
 
@@ -43,7 +46,7 @@ end
 
 # Find and markup expressions based on settings, this then returns
 # NuixImageAnnotationRegion objects for each match found
-regions = br.findAndMarkup($current_case,brs,scope_items)
+regions = br.findAndMarkup($current_case,brs,scope_items,concurrency)
 
 # Iterate each found region and print summary about it
 regions.each do |region|
