@@ -78,7 +78,7 @@ public class NuixVersion implements Comparable<NuixVersion> {
 	 * When providing a version string such as "6.2.1-preview6", "-preview6" will be trimmed off before parsing.
 	 * @param versionString The version string to parse.
 	 * @return A NuixVersion instance representing the supplied version string, if there is an error parsing the provided value will return
-	 * an instance representing 100.0.0
+	 * an instance representing 900.0.0.0
 	 */
 	public static NuixVersion parse(String versionString){
 		try {
@@ -101,8 +101,8 @@ public class NuixVersion implements Comparable<NuixVersion> {
 			}
 		}catch(Exception exc){
 			System.out.println("Error while parsing version: "+versionString);
-			System.out.println("Pretending version is 100.0.0.0");
-			return new NuixVersion(100,0,0,0);
+			System.out.println("Pretending version is 900.0.0.0");
+			return new NuixVersion(900,0,0,0);
 		}
 	}
 	
