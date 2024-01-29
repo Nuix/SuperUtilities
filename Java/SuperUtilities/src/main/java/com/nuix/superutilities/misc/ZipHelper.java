@@ -14,7 +14,6 @@ import org.apache.commons.compress.archivers.sevenz.SevenZArchiveEntry;
 import org.apache.commons.compress.archivers.sevenz.SevenZMethod;
 import org.apache.commons.compress.archivers.sevenz.SevenZOutputFile;
 import org.apache.commons.io.IOUtils;
-import org.apache.jena.ext.com.google.common.primitives.Ints;
 
 public class ZipHelper {
 	
@@ -66,11 +65,16 @@ public class ZipHelper {
 			fileOutStream = new FileOutputStream(zipFile);
 			bufferedOutStream = new BufferedOutputStream(fileOutStream);
 			zipStream = new ZipOutputStream(bufferedOutStream);
-			zipStream.setLevel(Ints.constrainToRange(compressionLevel, 0, 9));
-			compressDirectoryToZipfile(directory,directory,zipStream);	
+			zipStream.setLevel(clamp(compressionLevel, 0, 9));
+
+			compressDirectoryToZipfile(directory,directory,zipStream);
 		} finally {
 			IOUtils.closeQuietly(zipStream);
 		}
+	}
+
+	private static int clamp(int value, int min, int max){
+		return Math.max(min, Math.min(max, value));
 	}
 	
 	/***

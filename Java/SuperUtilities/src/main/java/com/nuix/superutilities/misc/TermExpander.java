@@ -137,7 +137,7 @@ public class TermExpander {
 				eti.setOriginalTerm(term);
 				eti.setMatchedTerm(termStat.getKey());
 				eti.setOcurrences(termStat.getValue());
-				eti.setSimilarity(0.0f);
+				eti.setSimilarity(0.0d);
 				result.add(eti);
 			}
 		} else if(FuzzyTermInfo.isFuzzyTerm(term)) {
@@ -171,7 +171,7 @@ public class TermExpander {
 				eti.setOriginalTerm(term);
 				eti.setMatchedTerm(termStat.getKey());
 				eti.setOcurrences(termStat.getValue());
-				eti.setSimilarity(0.0f);
+				eti.setSimilarity(0.0d);
 				result.add(eti);
 			}
 		}
@@ -191,13 +191,9 @@ public class TermExpander {
 		for(Map.Entry<String, Long> termStat : allTermStats.entrySet()) {
 			current++;
 			fireProgressUpdated(current, allTermStats.size());
-			float similarity = 0.0f;
+			Double similarity = 0.0d;
 			if(fuzzyResolutionAlgorithm == SimilarityCalculation.JaroWinkler) {
 				similarity = f.calculateJaroWinklerSimilarityTo(termStat.getKey());
-			} else if(fuzzyResolutionAlgorithm == SimilarityCalculation.LuceneLevenshstein) {
-				similarity = f.calculateLuceneLevenshteinSimilarityTo(termStat.getKey());
-			} else if(fuzzyResolutionAlgorithm == SimilarityCalculation.NGram) {
-				similarity = f.calculateNGramSimilarityTo(termStat.getKey());
 			}
 			
 			if(similarity >= f.getTargetSimilarity()) {
@@ -261,7 +257,7 @@ public class TermExpander {
 			eti.setOriginalTerm(term);
 			eti.setMatchedTerm(distinctTerm);
 			eti.setOcurrences(allTermStats.get(distinctTerm));
-			eti.setSimilarity(f.calculateLuceneLevenshteinSimilarityTo(distinctTerm));
+			eti.setSimilarity(f.calculateJaroWinklerSimilarityTo(distinctTerm));
 			result.add(eti);
 		}
 	}

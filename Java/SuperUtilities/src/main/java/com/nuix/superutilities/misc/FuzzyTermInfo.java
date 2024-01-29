@@ -1,11 +1,9 @@
 package com.nuix.superutilities.misc;
 
+import org.apache.commons.text.similarity.JaroWinklerDistance;
+
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
-
-import org.apache.lucene.search.spell.LuceneLevenshteinDistance;
-import org.apache.lucene.search.spell.JaroWinklerDistance;
-import org.apache.lucene.search.spell.NGramDistance;
 
 /***
  * Encapsulates information about a fuzzy term expression.  Used by {@link TermExpander}.
@@ -15,9 +13,9 @@ import org.apache.lucene.search.spell.NGramDistance;
 public class FuzzyTermInfo {
 	private static Pattern fuzzyPattern = Pattern.compile("(?<term>([a-z0-9]+))~(?<similarity>([0-1]\\.?[0-9]*)?)",Pattern.CASE_INSENSITIVE);
 	
-	private static LuceneLevenshteinDistance luceneLevDist = new LuceneLevenshteinDistance();
+//	private static LuceneLevenshteinDistance luceneLevDist = new LuceneLevenshteinDistance();
 	private static JaroWinklerDistance jaroDist = new JaroWinklerDistance();
-	private static NGramDistance ngramDist = new NGramDistance();
+//	private static NGramDistance ngramDist = new NGramDistance();
 	
 	public static boolean isFuzzyTerm(String term) {
 		return fuzzyPattern.matcher(term.trim()).find();
@@ -44,16 +42,8 @@ public class FuzzyTermInfo {
 		return f;
 	}
 	
-	public float calculateLuceneLevenshteinSimilarityTo(String otherTerm) {
-		return luceneLevDist.getDistance(this.term, otherTerm);
-	}
-	
-	public float calculateJaroWinklerSimilarityTo(String otherTerm) {
-		return jaroDist.getDistance(this.term, otherTerm);
-	}
-	
-	public float calculateNGramSimilarityTo(String otherTerm) {
-		return ngramDist.getDistance(this.term, otherTerm);
+	public Double calculateJaroWinklerSimilarityTo(String otherTerm) {
+		return jaroDist.apply(this.term, otherTerm);
 	}
 	
 	private String term = "";

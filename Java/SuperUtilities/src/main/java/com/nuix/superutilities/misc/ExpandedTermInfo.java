@@ -9,7 +9,7 @@ public class ExpandedTermInfo {
 	private String originalTerm = "";
 	private String matchedTerm = "";
 	private long ocurrences = 0;
-	private float similarity = 0.0f;
+	private Double similarity = 0.0d;
 	
 	public String getOriginalTerm() {
 		return originalTerm;
@@ -32,10 +32,10 @@ public class ExpandedTermInfo {
 		this.ocurrences = ocurrences;
 	}
 	
-	public float getSimilarity() {
+	public Double getSimilarity() {
 		return similarity;
 	}
-	public void setSimilarity(float similarity) {
+	public void setSimilarity(Double similarity) {
 		this.similarity = similarity;
 	}
 	

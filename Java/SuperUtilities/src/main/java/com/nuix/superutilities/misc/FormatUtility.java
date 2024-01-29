@@ -410,7 +410,7 @@ public class FormatUtility {
 		result = result.replace("‘", "\\‘");
 		result = result.replace("’", "\\’");
 		result = result.replace("“", "\\“");
-		result = result.replace("�?", "\\�?");
+		result = result.replace("�?", "\\�?");
 		return result;
 	}
 }

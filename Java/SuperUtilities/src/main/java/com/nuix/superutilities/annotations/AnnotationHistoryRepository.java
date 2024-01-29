@@ -855,7 +855,7 @@ public class AnnotationHistoryRepository implements Closeable{
 		
 		
 		String productionSetSettings = null;
-		String productionSetName = ((com.nuix.storage.stores.productionsets.ProductionSet) details.get("productionSet")).getName();
+		String productionSetName = ((ProductionSet) details.get("productionSet")).getName();
 		
 		// If this was a production set creation event, we need to record all the settings used to create the production
 		// set so it can be recreated later on
