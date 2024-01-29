@@ -1,7 +1,7 @@
 SuperUtilities
 ==============
 
-![This code was last tested in Nuix 9.0](https://img.shields.io/badge/Tested%20in%20Nuix-9.0-green.svg)
+
 
 # Overview
 
