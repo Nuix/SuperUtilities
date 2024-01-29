@@ -1,7 +1,7 @@
 SuperUtilities
 ==============
 
-![This code was last tested in Nuix 9.0](https://img.shields.io/badge/Tested%20in%20Nuix-9.0-green.svg)
+
 
 # Overview
 
@@ -13,7 +13,7 @@ View the GitHub project [here](https://github.com/Nuix/SuperUtilities) or downlo
 
 View the Java docs [here](https://nuix.github.io/SuperUtilities/).
 
-This is a small library of functionality which is a companion to the functionality already present in the Nuix API.  Over the years as I have workendon Nuix scripts, there were certain pieces of functionality I had noticed I was re-writing over and over.  With this project my aim was to codify some of that functionality in such a manner that it was reusable and hopefully generic enough that it would be applicable to other scripts down the line.  I've also since added some functionality that was needed just in a specific instance but I envisioned it may have usefulness later on as well.  Examples of the functionality include:
+This is a small library of functionality which is a companion to the functionality already present in the Nuix API.  Over the years as I have worked on Nuix scripts, there were certain pieces of functionality I had noticed I was re-writing over and over.  With this project my aim was to codify some of that functionality in such a manner that it was reusable and hopefully generic enough that it would be applicable to other scripts down the line.  I've also since added some functionality that was needed just in a specific instance but I envisioned it may have usefulness later on as well.  Examples of the functionality include:
 
 - [NuixVersion](https://nuix.github.io/SuperUtilities/com/nuix/superutilities/misc/NuixVersion.html): Provides a way to test the version of Nuix being ran, allowing you to have code which reacts differently depending on the version of Nuix in use.
 - [CaseUtility](https://nuix.github.io/SuperUtilities/com/nuix/superutilities/cases/CaseUtility.html): Provides methods for finding case directories and parsing case FBI2 files.
@@ -88,12 +88,12 @@ $current_case.close
 
 # Building From Source
 
-Load up the code in your favorite IDE and make sure you reference the `\lib\*.jar` from your Nuix install in the build path.
+Open the directory `/Java/SuperUtilities` in [IntelliJ IDEA](https://www.jetbrains.com/idea/download).  Tests in this project rely on [Nuix Java Engine Baseline](https://github.com/Nuix/Nuix-Java-Engine-Baseline) on GitHub.  For details on setting things up, see its [README.MD](https://github.com/Nuix/Nuix-Java-Engine-Baseline?tab=readme-ov-file#nuix-java-engine-baseline).
 
 # License
 
 ```
-Copyright 2021 Nuix
+Copyright 2024 Nuix
 
 Licensed under the Apache License, Version 2.0 (the "License");
 you may not use this file except in compliance with the License.

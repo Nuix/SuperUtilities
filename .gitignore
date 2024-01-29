@@ -12,6 +12,9 @@ Ignored
 .classpath
 .project
 
+TestData
+TestOutput
+
 # =============
 # Maven entries
 # =============
