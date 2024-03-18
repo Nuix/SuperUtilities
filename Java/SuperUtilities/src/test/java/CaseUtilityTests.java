@@ -55,6 +55,9 @@ public class CaseUtilityTests extends TestFoundation {
         // fbi2 file had been found much higher up.
 
         Collection<File> caseDirs = CaseUtility.getInstance().findCaseDirectories(testDir);
+        for (File caseDir : caseDirs) {
+            log.info("Found Case Directory: " + caseDir.getAbsolutePath());
+        }
         assertEquals(2, caseDirs.size());
     }
 }

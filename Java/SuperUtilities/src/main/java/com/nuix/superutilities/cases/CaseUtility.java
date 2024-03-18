@@ -61,7 +61,7 @@ public class CaseUtility {
                     }
                 }
             }
-            return result.stream().map(File::getParentFile).collect(Collectors.toList());
+            return result;//.stream().map(File::getParentFile).collect(Collectors.toList());
         }
     }
 
