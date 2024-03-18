@@ -1,0 +1,20 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<case xmlns="http://nuix.com/fbi/cases" version="2">
+  <metadata>
+    <guid>9c6ccc8fd56f42afb84ddbff4410ad21</guid>
+    <creation-date>2022-11-01T19:18:49,989Z</creation-date>
+    <name>Volkman and Sons</name>
+    <investigator>JWells01</investigator>
+    <caseType>SIMPLE</caseType>
+    <saved-by-product name="Nuix" version="100.6.0" />
+    <saved-by-app name="Nuix" version="100.6.2.71" />
+    <created-by-product version="9.10.2.252" />
+    <elasticSearchSettings />
+    <binaryStoreLocation />
+    <graphDatabaseSettings>&lt;config&gt;&lt;name&gt;92528fa5d3d6481ea6c166de81e6ea9e&lt;/name&gt;&lt;type&gt;LOCAL&lt;/type&gt;&lt;storage.local.path&gt;Stores/Graph Database/graph0779ebd6282646a1b43570f6c53ec4f3&lt;/storage.local.path&gt;&lt;/config&gt;</graphDatabaseSettings>
+    <indexId />
+    <kafkaClusterSettings>security.protocol=PLAINTEXT;validate.connection.timeout=10000;</kafkaClusterSettings>
+    <portableCaseMode />
+    <textIndexSettings>Analysis language=ENGLISH;Use stemming=false;Use stop words=false;</textIndexSettings>
+  </metadata>
+</case>

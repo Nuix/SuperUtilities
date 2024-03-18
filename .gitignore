@@ -12,7 +12,8 @@ Ignored
 .classpath
 .project
 
-TestData
+/TestData/*
+!/TestData/ExampleCase.fbi2
 TestOutput
 
 # =============
