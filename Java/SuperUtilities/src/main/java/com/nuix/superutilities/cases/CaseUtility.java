@@ -47,7 +47,7 @@ public class CaseUtility {
             for (int i = 0; i < children.length; i++) {
                 File child = children[i];
                 if(child.isFile() && child.getName().equalsIgnoreCase("case.fbi2")) {
-                    return List.of(child);
+                    return List.of(child.getParentFile());
                 }
             }
 
@@ -61,7 +61,7 @@ public class CaseUtility {
                     }
                 }
             }
-            return result;
+            return result.stream().map(File::getParentFile).collect(Collectors.toList());
         }
     }
 
