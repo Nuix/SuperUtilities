@@ -39,7 +39,7 @@ public class PrimitiveTypeParserTests extends TestFoundation {
         );
 
         for (String dateToParse : additionalDates) {
-            Object parsedDate = standardTypeParser.parse("2022-04-20T17:12:37Z");
+            Object parsedDate = standardTypeParser.parse(dateToParse);
             assertTrue(parsedDate instanceof DateTime, String.format("%s did not parse into a DateTime", dateToParse));
         }
 
