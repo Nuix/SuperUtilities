@@ -13,6 +13,7 @@ import java.util.Set;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
+import lombok.Getter;
 import org.joda.time.DateTime;
 
 import nuix.Item;
@@ -24,7 +25,14 @@ import nuix.Item;
  *
  */
 public class PlaceholderResolver {
-	private Map<String,String> placeholderData = new LinkedHashMap<String,String>();
+    /**
+     * -- GETTER --
+     *  Gets the Map containing all the current place holder data
+     *
+     * @return A Map containing all the current place holder data
+     */
+    @Getter
+    private Map<String,String> placeholderData = new LinkedHashMap<String,String>();
 	private Map<String,Pattern> placeholderPatterns = new LinkedHashMap<String,Pattern>();
 	private Set<String> placeholderPaths = new HashSet<String>();
 	
@@ -56,7 +64,7 @@ public class PlaceholderResolver {
 	 * <code>{top_level_kind}</code> - The kind (via <code>ItemType.getKind.getName</code>) of the provided item's top level item or <code style="font-weight:bold">ABOVE_TOP_LEVEL</code> for items which are above top level.<br>
 	 * <code>{original_extension}</code> - The original extension as obtained from Nuix via <code>Item.getOriginalExtension</code> or <code style="font-weight:bold">NO_ORIGINAL_EXTENSION</code> for items where Nuix does not have an original extension value.<br>
 	 * <code>{corrected_extension}</code> - The corrected extension as obtained from Nuix via <code>Item.getCorrectedExtension</code> or <code style="font-weight:bold">NO_CORRECTED_EXTENSION</code> for items where Nuix does not have a corrected extension value.<br> 
-	 * @param item The item used to set all of the item based placeholder values.
+	 * @param item The item used to set all the item based placeholder values.
 	 */
 	public void setFromItem(Item item) {
 		String guid = item.getGuid();
@@ -155,16 +163,8 @@ public class PlaceholderResolver {
 		placeholderPaths.clear();
 		placeholderPatterns.clear();
 	}
-	
-	/***
-	 * Gets the Map containing all the current place holder data
-	 * @return A Map containing all the current place holder data
-	 */
-	public Map<String,String> getPlaceholderData(){
-		return placeholderData;
-	}
-	
-	/***
+
+    /***
 	 * Resolves place holders into a string based on the currently associated values
 	 * @param template The input string containing place holders
 	 * @return The input string in which place holders have been replaced with associated values
@@ -192,7 +192,7 @@ public class PlaceholderResolver {
 	 * @return The various resulting values generated from all the combinations.
 	 */
 	public Set<String> resolveTemplateMultiValues(String template, List<NamedStringList> multiValuePlaceholders){
-		Set<String> resolvedValues = new HashSet<String>();
+		Set<String> resolvedValues = new HashSet<>();
 		resolveTemplateMultiValuesRecursive(template,multiValuePlaceholders,0,resolvedValues);
 		return resolvedValues;
 	}
@@ -214,10 +214,10 @@ public class PlaceholderResolver {
 	}
 	
 	/***
-	 * Resolves place holders into a path string based on the currently associated values.  Contains logic
+	 * Resolves placeholders into a path string based on the currently associated values.  Contains logic
 	 * to sterilize the resulting path string so that it does not contain common illegal path characters.
-	 * @param template A file/directory path string containing place holders
-	 * @return The input string in which place holders have been replaced with associated values
+	 * @param template A file/directory path string containing placeholders
+	 * @return The input string in which placeholders have been replaced with associated values
 	 */
 	public String resolveTemplatePath(String template) {
 		String result = template;
@@ -233,17 +233,17 @@ public class PlaceholderResolver {
 	}
 	
 	/***
-	 * Resolves place holders into a string based on the currently associated values and the multi-value place holders provided.  For example
+	 * Resolves placeholders into a string based on the currently associated values and the multi-value place holders provided.  For example
 	 * imagine you wish to render the template 1 time for each tag associated to an item that has 3 tags assigned.  You can call this method,
 	 * providing a {@link NamedStringList} with a name of <code>tags</code> and those 3 tags as values.  This method will then return 3 resolutions
 	 * of a template containing the placeholder <code>{tags}</code>.  Each returned result containing 1 of the 3 tags substituted.  This method allows
-	 * you to provide multiple multi-value place holders like this, but it is important to note the number of resulting values is multiplied.  So if I provide
+	 * you to provide multiple multi-value placeholders like this, but it is important to note the number of resulting values is multiplied.  So if I provide
 	 * a placeholder <code>animals</code> with 3 values, a placeholder <code>colors</code> with 5 values and a placeholder <code>names</code> with 4 values, the number
 	 * of possible resulting values is <code>3*5*4=60</code>.
 	 * This method is similar to {{@link #resolveTemplateMultiValues(String, List)} except the template is resolved using {{@link #resolveTemplatePath(String)} instead
 	 * of the method {{@link #resolveTemplate(String)} which is used by {{@link #resolveTemplateMultiValues(String, List)}. 
 	 * @param template The template to resolve
-	 * @param multiValuePlaceholders Place holders to resolve multiple times with multiple values.
+	 * @param multiValuePlaceholders placeholders to resolve multiple times with multiple values.
 	 * @return The various resulting values generated from all the combinations.
 	 */
 	public Set<String> resolveTemplatePathMultiValues(String template, List<NamedStringList> multiValuePlaceholders){
