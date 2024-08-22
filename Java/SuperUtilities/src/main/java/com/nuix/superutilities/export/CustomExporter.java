@@ -1,3 +1,8 @@
+/******************************************
+ Copyright 2024 Nuix
+ http://www.apache.org/licenses/LICENSE-2.0
+ *******************************************/
+
 package com.nuix.superutilities.export;
 
 import com.nuix.superutilities.SuperUtilities;
