@@ -10,19 +10,19 @@ public class DatLoadFileWriter extends SimpleTextFileWriter {
 		super(destinationFile);
 	}
 	
-	public void writeDatLine(String[] values) {
+	public void writeDatLine(String[] values) throws IOException {
 		writeLine(DatLoadFile.toLine(values));
 	}
 	
-	public void writeRecordValues(LinkedHashMap<String,String> record) {
+	public void writeRecordValues(LinkedHashMap<String,String> record) throws IOException {
 		writeLine(DatLoadFile.toLine(record));
 	}
 	
-	public void writeRecordKeys(LinkedHashMap<String,String> record) {
+	public void writeRecordKeys(LinkedHashMap<String,String> record) throws IOException {
 		writeLine(DatLoadFile.toHeaderLine(record));
 	}
 	
-	public void writeValues(List<String> headers) {
+	public void writeValues(List<String> headers) throws IOException {
 		writeLine(DatLoadFile.toHeaderLine(headers));
 	}
 }

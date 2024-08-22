@@ -15,6 +15,8 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import java.io.File;
+import java.io.IOException;
+import java.nio.charset.StandardCharsets;
 import java.util.*;
 import java.util.function.BiFunction;
 import java.util.function.Consumer;
@@ -147,30 +149,59 @@ public class CustomExporter {
         dynamicPlaceholders.clear();
     }
 
+    /***
+     * Enables export of natives using the provided settings.  See {@link PlaceholderResolver#setFromItem(Item)}
+     * to see what placeholders are inherently supported by <b>fileNameTemplate</b>
+     * @param fileNameTemplate A filename template that dictates the ultimate export structure.
+     * @param emailExportSettings Email native export settings as supported by <b>BatchExporter</b>
+     */
     public void exportNatives(String fileNameTemplate, Map<String, Object> emailExportSettings) {
         exportNatives = true;
         this.emailExportSettings = emailExportSettings;
         nativeFileNameTemplate = fileNameTemplate;
     }
 
+    /***
+     * Enables export of text files using the provided settings.  See {@link PlaceholderResolver#setFromItem(Item)}
+     * to see what placeholders are inherently supported by <b>fileNameTemplate</b>
+     * @param fileNameTemplate A filename template that dictates the ultimate export structure.
+     * @param textExportSettings Text file export settings as supported by <b>BatchExporter</b>
+     */
     public void exportText(String fileNameTemplate, Map<String, Object> textExportSettings) {
         exportText = true;
         this.textExportSettings = textExportSettings;
         textFileNameTemplate = fileNameTemplate;
     }
 
+    /***
+     * Enables export of PDF files using the provided settings.  See {@link PlaceholderResolver#setFromItem(Item)}
+     * to see what placeholders are inherently supported by <b>fileNameTemplate</b>
+     * @param fileNameTemplate A filename template that dictates the ultimate export structure.
+     * @param pdfExportSettings PDF export settings as supported by <b>BatchExporter</b>
+     */
     public void exportPdfs(String fileNameTemplate, Map<String, Object> pdfExportSettings) {
         exportPdfs = true;
         this.pdfExportSettings = pdfExportSettings;
         pdfFileNameTemplate = fileNameTemplate;
     }
 
+    /***
+     * Enables export of TIFF files using the provided settings.  See {@link PlaceholderResolver#setFromItem(Item)}
+     * to see what placeholders are inherently supported by <b>fileNameTemplate</b>
+     * @param fileNameTemplate A filename template that dictates the ultimate export structure.
+     * @param tiffExportSettings TIFF export settings as supported by <b>BatchExporter</b>
+     */
     public void exportTiffs(String fileNameTemplate, Map<String, Object> tiffExportSettings) {
         exportTiffs = true;
         this.tiffExportSettings = tiffExportSettings;
         tiffFileNameTemplate = fileNameTemplate;
     }
 
+    /***
+     * Enables export of JSON files using the provided settings.  See {@link PlaceholderResolver#setFromItem(Item)}
+     * to see what placeholders are inherently supported by <b>fileNameTemplate</b>
+     * @param fileNameTemplate A filename template that dictates the ultimate export structure.
+     */
     public void exportJson(String fileNameTemplate) {
         exportJson = true;
         jsonFileNameTemplate = fileNameTemplate;
@@ -210,7 +241,11 @@ public class CustomExporter {
         String message = String.format(format, params);
         System.out.println(message);
         if (generalLog != null) {
-            generalLog.writeLine(message);
+            try {
+                generalLog.writeLine(message);
+            } catch (IOException e) {
+                throw new RuntimeException(e);
+            }
         } else {
             log.info(message);
         }
@@ -220,7 +255,11 @@ public class CustomExporter {
         String message = String.format(format, params);
         System.out.println(message);
         if (errorLog != null) {
-            errorLog.writeLine(message);
+            try {
+                errorLog.writeLine(message);
+            } catch (IOException e) {
+                throw new RuntimeException(e);
+            }
         } else {
             log.error(message);
         }
@@ -340,6 +379,7 @@ public class CustomExporter {
 
         Map<String, Object> loadfileSettings = new HashMap<String, Object>();
         loadfileSettings.put("metadataProfile", exportProfile);
+        loadfileSettings.put("encoding", StandardCharsets.UTF_8.name());
         exporter.addLoadFile("concordance", loadfileSettings);
 
         if (exportText) {
@@ -430,6 +470,8 @@ public class CustomExporter {
 
             // Used to resolve naming templates to final path structure
             PlaceholderResolver resolver = new PlaceholderResolver();
+            resolver.setStandardValues();
+            resolver.setFromCase(nuixCase);
 
             // Tracks old relative path and new relative path so that OPT file can be updated
             Map<String, String> tiffRenames = new HashMap<String, String>();
@@ -474,7 +516,11 @@ public class CustomExporter {
                                 outputHeaders.add("JSONPATH");
                             }
 
-                            datWriter.writeValues(outputHeaders);
+                            try {
+                                datWriter.writeValues(outputHeaders);
+                            } catch (IOException e) {
+                                log.error("Error writing to DAT file: " + e.getMessage(), e);
+                            }
 
                             if (exportXlsx) {
                                 worksheet.appendRow(outputHeaders);
@@ -485,11 +531,18 @@ public class CustomExporter {
 
                         String guid = record.get("GUID");
 
+                        if (guid == null || guid.equalsIgnoreCase("null")) {
+                            log.error("'GUID' not found in DAT file?  Known headers are:");
+                            log.error(String.join(", ", DatLoadFile.getHeadersFromRecord(record)));
+                        }
+
                         try {
                             Item currentItem = nuixCase.search("guid:" + guid).get(0);
                             resolver.clear();
                             resolver.setPath("export_directory", exportDirectory.getAbsolutePath());
                             resolver.setFromItem(currentItem);
+                            resolver.setStandardValues();
+                            resolver.setFromCase(nuixCase);
 
                             // Restructure text files if we have them
                             if (exportText) {
@@ -574,7 +627,13 @@ public class CustomExporter {
                             record.remove(header);
                         }
 
-                        datWriter.writeRecordValues(record);
+                        try {
+                            datWriter.writeRecordValues(record);
+                        } catch (IOException e) {
+                            log.error("Error writing to DAT: " + e.getMessage(), e);
+                            throw new RuntimeException(e);
+                        }
+
                         if (exportXlsx) {
                             List<Object> recordValues = new ArrayList<Object>(record.values());
                             worksheet.appendRow(recordValues);
@@ -646,7 +705,7 @@ public class CustomExporter {
      * <a href="https://download.nuix.com/releases/desktop/stable/docs/en/scripting/api/nuix/ImagingConfigurable.html#setImagingOptions-java.util.Map-">BatchExporter.setImagingOptions</a>
      * for a list of settings accepted.
      */
-    public void setImagingOptions(Map<?, ?> settings) {
+    public void setImagingOptions(Map<String, Object> settings) {
         this.imagingSettings = settings;
     }
 
@@ -657,7 +716,7 @@ public class CustomExporter {
      * <a href="https://download.nuix.com/releases/desktop/stable/docs/en/scripting/api/nuix/StampingConfigurable.html#setStampingOptions-java.util.Map-">BatchExporter.setStampingOptions</a>
      * for a list of settings accepted.
      */
-    public void setStampingOptions(Map<?, ?> settings) {
+    public void setStampingOptions(Map<String, Object> settings) {
         this.stampingSettings = settings;
     }
 

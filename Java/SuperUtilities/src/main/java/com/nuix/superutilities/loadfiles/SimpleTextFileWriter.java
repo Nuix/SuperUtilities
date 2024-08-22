@@ -4,30 +4,29 @@ import java.io.Closeable;
 import java.io.File;
 import java.io.FileWriter;
 import java.io.IOException;
-import java.io.PrintWriter;
+import java.nio.charset.StandardCharsets;
 
 public class SimpleTextFileWriter implements Closeable {
-	protected File destinationFile;
-	protected PrintWriter pw;
-	protected FileWriter fw;
-	
-	public SimpleTextFileWriter(File destinationFile) throws IOException {
-		this.destinationFile = destinationFile;
-		fw = new FileWriter(destinationFile);
-		pw = new PrintWriter(fw);
-	}
-	
-	public void writeLine(String line) {
-		pw.println(line);
-	}
+    protected File destinationFile;
+    protected FileWriter fw;
 
-	public File getDestinationFile() {
-		return destinationFile;
-	}
-	
-	@Override
-	public void close() throws IOException {
-		if(pw != null) { pw.close(); }
-		if(fw != null) { fw.close(); }
-	}
+    public SimpleTextFileWriter(File destinationFile) throws IOException {
+        this.destinationFile = destinationFile;
+        fw = new FileWriter(destinationFile, StandardCharsets.UTF_8);
+    }
+
+    public void writeLine(String line) throws IOException {
+        fw.write(line + "\n");
+    }
+
+    public File getDestinationFile() {
+        return destinationFile;
+    }
+
+    @Override
+    public void close() throws IOException {
+        if (fw != null) {
+            fw.close();
+        }
+    }
 }

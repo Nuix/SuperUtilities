@@ -87,12 +87,16 @@ public class DatLoadFile {
 				boolean headersWrittern = false;
 				@Override
 				public void accept(LinkedHashMap<String, String> record) {
-					if(headersWrittern == false) {
-						datWriter.writeRecordKeys(record);
-						headersWrittern = true;
-					} else {
-						recordModifier.accept(record);
-						datWriter.writeRecordValues(record);
+					try {
+						if(!headersWrittern) {
+							datWriter.writeRecordKeys(record);
+							headersWrittern = true;
+						} else {
+							recordModifier.accept(record);
+							datWriter.writeRecordValues(record);
+						}
+					} catch (IOException e) {
+						throw new RuntimeException(e);
 					}
 				}
 			});
