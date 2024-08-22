@@ -134,8 +134,10 @@ public class PlaceholderResolver {
      * <code>{date_day}</code> - The datetime of invocation, as 2 digit day of the month<br>
      * <code>{nuix_version}</code> - The Nuix version as defined in <code>NUIX_VERSION</code><br>
      */
-    public void setStandardValues() {
-        DateTime now = DateTime.now();
+    public void setStandardValues(DateTime now) {
+        if(now == null) {
+            now = DateTime.now();
+        }
         set("date_short", now.toString("YYYYMMdd"));
         set("date_long", now.toString("YYYYMMdd-HHmmss"));
         set("date_year", now.toString("YYYY"));

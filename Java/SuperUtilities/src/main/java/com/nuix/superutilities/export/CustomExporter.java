@@ -16,6 +16,7 @@ import lombok.Setter;
 import nuix.*;
 import org.apache.commons.io.FileUtils;
 import org.apache.commons.io.FilenameUtils;
+import org.joda.time.DateTime;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -377,6 +378,7 @@ public class CustomExporter {
      * @throws Exception If something goes wrong
      */
     public void exportItems(Case nuixCase, File exportDirectory, List<Item> items) throws Exception {
+        DateTime exportStart = DateTime.now(); // Used by PlaceholderResolver.setStandardValues
         Utilities util = SuperUtilities.getInstance().getNuixUtilities();
         File exportTempDirectory = new File(exportDirectory, "_TEMP_");
         BatchExporter exporter = util.createBatchExporter(exportTempDirectory);
@@ -475,7 +477,7 @@ public class CustomExporter {
 
             // Used to resolve naming templates to final path structure
             PlaceholderResolver resolver = new PlaceholderResolver();
-            resolver.setStandardValues();
+            resolver.setStandardValues(exportStart);
             resolver.setFromCase(nuixCase);
 
             // Tracks old relative path and new relative path so that OPT file can be updated
@@ -546,7 +548,7 @@ public class CustomExporter {
                             resolver.clear();
                             resolver.setPath("export_directory", exportDirectory.getAbsolutePath());
                             resolver.setFromItem(currentItem);
-                            resolver.setStandardValues();
+                            resolver.setStandardValues(exportStart);
                             resolver.setFromCase(nuixCase);
 
                             // Restructure text files if we have them
