@@ -27,7 +27,7 @@
     catch(err) {
     }
 //-->
-var data = {"i0":10,"i1":10,"i2":10,"i3":10,"i4":10,"i5":10,"i6":10,"i7":10,"i8":10,"i9":10,"i10":10,"i11":10,"i12":10,"i13":10,"i14":10,"i15":10,"i16":10,"i17":10,"i18":10,"i19":10,"i20":10,"i21":10};
+var data = {"i0":10,"i1":10,"i2":10,"i3":10,"i4":10,"i5":10,"i6":10,"i7":10,"i8":10,"i9":10,"i10":10,"i11":10,"i12":10,"i13":10,"i14":10,"i15":10};
 var tabs = {65535:["t0","All Methods"],2:["t2","Instance Methods"],8:["t4","Concrete Methods"]};
 var altColor = "altColor";
 var rowColor = "rowColor";
@@ -205,7 +205,9 @@ extends java.lang.Object</pre>
 <tr id="i3" class="rowColor">
 <td class="colFirst"><code>void</code></td>
 <th class="colSecond" scope="row"><code><span class="memberNameLink"><a href="#exportJson(java.lang.String)">exportJson</a></span>&#8203;(java.lang.String&nbsp;fileNameTemplate)</code></th>
-<td class="colLast">&nbsp;</td>
+<td class="colLast">
+<div class="block">Enables export of JSON files using the provided settings.</div>
+</td>
 </tr>
 <tr id="i4" class="altColor">
 <td class="colFirst"><code>void</code></td>
@@ -217,25 +219,33 @@ extends java.lang.Object</pre>
 <td class="colFirst"><code>void</code></td>
 <th class="colSecond" scope="row"><code><span class="memberNameLink"><a href="#exportNatives(java.lang.String,java.util.Map)">exportNatives</a></span>&#8203;(java.lang.String&nbsp;fileNameTemplate,
              java.util.Map&lt;java.lang.String,&#8203;java.lang.Object&gt;&nbsp;emailExportSettings)</code></th>
-<td class="colLast">&nbsp;</td>
+<td class="colLast">
+<div class="block">Enables export of natives using the provided settings.</div>
+</td>
 </tr>
 <tr id="i6" class="altColor">
 <td class="colFirst"><code>void</code></td>
 <th class="colSecond" scope="row"><code><span class="memberNameLink"><a href="#exportPdfs(java.lang.String,java.util.Map)">exportPdfs</a></span>&#8203;(java.lang.String&nbsp;fileNameTemplate,
           java.util.Map&lt;java.lang.String,&#8203;java.lang.Object&gt;&nbsp;pdfExportSettings)</code></th>
-<td class="colLast">&nbsp;</td>
+<td class="colLast">
+<div class="block">Enables export of PDF files using the provided settings.</div>
+</td>
 </tr>
 <tr id="i7" class="rowColor">
 <td class="colFirst"><code>void</code></td>
 <th class="colSecond" scope="row"><code><span class="memberNameLink"><a href="#exportText(java.lang.String,java.util.Map)">exportText</a></span>&#8203;(java.lang.String&nbsp;fileNameTemplate,
           java.util.Map&lt;java.lang.String,&#8203;java.lang.Object&gt;&nbsp;textExportSettings)</code></th>
-<td class="colLast">&nbsp;</td>
+<td class="colLast">
+<div class="block">Enables export of text files using the provided settings.</div>
+</td>
 </tr>
 <tr id="i8" class="altColor">
 <td class="colFirst"><code>void</code></td>
 <th class="colSecond" scope="row"><code><span class="memberNameLink"><a href="#exportTiffs(java.lang.String,java.util.Map)">exportTiffs</a></span>&#8203;(java.lang.String&nbsp;fileNameTemplate,
            java.util.Map&lt;java.lang.String,&#8203;java.lang.Object&gt;&nbsp;tiffExportSettings)</code></th>
-<td class="colLast">&nbsp;</td>
+<td class="colLast">
+<div class="block">Enables export of TIFF files using the provided settings.</div>
+</td>
 </tr>
 <tr id="i9" class="rowColor">
 <td class="colFirst"><code>boolean</code></td>
@@ -252,27 +262,20 @@ extends java.lang.Object</pre>
 </td>
 </tr>
 <tr id="i11" class="rowColor">
-<td class="colFirst"><code>nuix.MetadataProfile</code></td>
-<th class="colSecond" scope="row"><code><span class="memberNameLink"><a href="#getProfile()">getProfile</a></span>()</code></th>
-<td class="colLast">
-<div class="block">Gets the metadata profile which will be used during export.</div>
-</td>
-</tr>
-<tr id="i12" class="altColor">
 <td class="colFirst"><code>void</code></td>
 <th class="colSecond" scope="row"><code><span class="memberNameLink"><a href="#removeDynamicPlaceholder(java.lang.String)">removeDynamicPlaceholder</a></span>&#8203;(java.lang.String&nbsp;placeholderName)</code></th>
 <td class="colLast">
 <div class="block">Removes a previously added dynamic placeholder.</div>
 </td>
 </tr>
-<tr id="i13" class="rowColor">
+<tr id="i12" class="altColor">
 <td class="colFirst"><code>void</code></td>
 <th class="colSecond" scope="row"><code><span class="memberNameLink"><a href="#setColumnRemovals(java.util.Collection)">setColumnRemovals</a></span>&#8203;(java.util.Collection&lt;java.lang.String&gt;&nbsp;columnHeaders)</code></th>
 <td class="colLast">
 <div class="block">Allows you to provide a list of header names to specify columns to remove.</div>
 </td>
 </tr>
-<tr id="i14" class="altColor">
+<tr id="i13" class="rowColor">
 <td class="colFirst"><code>void</code></td>
 <th class="colSecond" scope="row"><code><span class="memberNameLink"><a href="#setDynamicPlaceholder(java.lang.String,java.util.function.BiFunction)">setDynamicPlaceholder</a></span>&#8203;(java.lang.String&nbsp;placeholderName,
                      java.util.function.BiFunction&lt;nuix.Item,&#8203;java.lang.String,&#8203;java.lang.String&gt;&nbsp;function)</code></th>
@@ -280,53 +283,17 @@ extends java.lang.Object</pre>
 <div class="block">Assigns a dynamically calculated placeholder to this instance.</div>
 </td>
 </tr>
-<tr id="i15" class="rowColor">
+<tr id="i14" class="altColor">
 <td class="colFirst"><code>void</code></td>
-<th class="colSecond" scope="row"><code><span class="memberNameLink"><a href="#setExportXlsx(boolean)">setExportXlsx</a></span>&#8203;(boolean&nbsp;exportXlsx)</code></th>
-<td class="colLast">
-<div class="block">Sets whether DAT contents should additionally be exported as an XLSX spreadsheet.</div>
-</td>
-</tr>
-<tr id="i16" class="altColor">
-<td class="colFirst"><code>void</code></td>
-<th class="colSecond" scope="row"><code><span class="memberNameLink"><a href="#setHeaderRenames(java.util.Map)">setHeaderRenames</a></span>&#8203;(java.util.Map&lt;java.lang.String,&#8203;java.lang.String&gt;&nbsp;renames)</code></th>
-<td class="colLast">
-<div class="block">Allows you to provide a Map of headers to rename.</div>
-</td>
-</tr>
-<tr id="i17" class="rowColor">
-<td class="colFirst"><code>void</code></td>
-<th class="colSecond" scope="row"><code><span class="memberNameLink"><a href="#setImagingOptions(java.util.Map)">setImagingOptions</a></span>&#8203;(java.util.Map&lt;?,&#8203;?&gt;&nbsp;settings)</code></th>
+<th class="colSecond" scope="row"><code><span class="memberNameLink"><a href="#setImagingOptions(java.util.Map)">setImagingOptions</a></span>&#8203;(java.util.Map&lt;java.lang.String,&#8203;java.lang.Object&gt;&nbsp;settings)</code></th>
 <td class="colLast">
 <div class="block">Sets the Map of settings which will be passed to <code>BatchExporter.setImagingOptions(Map)</code> when performing
  the temporary export before restructuring.</div>
 </td>
 </tr>
-<tr id="i18" class="altColor">
+<tr id="i15" class="rowColor">
 <td class="colFirst"><code>void</code></td>
-<th class="colSecond" scope="row"><code><span class="memberNameLink"><a href="#setKeepOriginalDat(boolean)">setKeepOriginalDat</a></span>&#8203;(boolean&nbsp;keepOriginalDat)</code></th>
-<td class="colLast">
-<div class="block">Sets whether final DAT will be kept by moving it to final export directory/</div>
-</td>
-</tr>
-<tr id="i19" class="rowColor">
-<td class="colFirst"><code>void</code></td>
-<th class="colSecond" scope="row"><code><span class="memberNameLink"><a href="#setParallelProcessingSettings(java.util.Map)">setParallelProcessingSettings</a></span>&#8203;(java.util.Map&lt;?,&#8203;?&gt;&nbsp;settings)</code></th>
-<td class="colLast">
-<div class="block">Sets the Map of settings which will be passed to <code>BatchExporter.setParallelProcessingSettings(Map)</code> when performing
- the temporary export before restructuring.</div>
-</td>
-</tr>
-<tr id="i20" class="altColor">
-<td class="colFirst"><code>void</code></td>
-<th class="colSecond" scope="row"><code><span class="memberNameLink"><a href="#setProfile(nuix.MetadataProfile)">setProfile</a></span>&#8203;(nuix.MetadataProfile&nbsp;profile)</code></th>
-<td class="colLast">
-<div class="block">Sets the metadata profile used during export.</div>
-</td>
-</tr>
-<tr id="i21" class="rowColor">
-<td class="colFirst"><code>void</code></td>
-<th class="colSecond" scope="row"><code><span class="memberNameLink"><a href="#setStampingOptions(java.util.Map)">setStampingOptions</a></span>&#8203;(java.util.Map&lt;?,&#8203;?&gt;&nbsp;settings)</code></th>
+<th class="colSecond" scope="row"><code><span class="memberNameLink"><a href="#setStampingOptions(java.util.Map)">setStampingOptions</a></span>&#8203;(java.util.Map&lt;java.lang.String,&#8203;java.lang.Object&gt;&nbsp;settings)</code></th>
 <td class="colLast">
 <div class="block">Sets the Map of settings which will be passed to <code>BatchExporter.setStampingOptions(Map)</code> when performing
  the temporary export before restructuring.</div>
@@ -375,39 +342,6 @@ extends java.lang.Object</pre>
 <!--   -->
 </a>
 <h3>Method Detail</h3>
-<a id="getProfile()">
-<!--   -->
-</a>
-<ul class="blockList">
-<li class="blockList">
-<h4>getProfile</h4>
-<pre class="methodSignature">public&nbsp;nuix.MetadataProfile&nbsp;getProfile()</pre>
-<div class="block">Gets the metadata profile which will be used during export.  May be null.</div>
-<dl>
-<dt><span class="returnLabel">Returns:</span></dt>
-<dd>The metadata profile used during export.</dd>
-</dl>
-</li>
-</ul>
-<a id="setProfile(nuix.MetadataProfile)">
-<!--   -->
-</a>
-<ul class="blockList">
-<li class="blockList">
-<h4>setProfile</h4>
-<pre class="methodSignature">public&nbsp;void&nbsp;setProfile&#8203;(nuix.MetadataProfile&nbsp;profile)</pre>
-<div class="block">Sets the metadata profile used during export.  May be null, in which case a metadata profile
- containing only the column "GUID" will be created.  Note that if a metadata profile is provided
- that does not contain the column "GUID", then a copy of the submit metadata profile is made and
- the "GUID" column is added to it.  This is done because the GUID is needed during the restructuring
- phase to find the relevant item in the case corresponding to a given record in the temporary export's
- Concordance DAT file.</div>
-<dl>
-<dt><span class="paramLabel">Parameters:</span></dt>
-<dd><code>profile</code> - The profile to use when generating metadata loadfiles.</dd>
-</dl>
-</li>
-</ul>
 <a id="setDynamicPlaceholder(java.lang.String,java.util.function.BiFunction)">
 <!--   -->
 </a>
@@ -458,6 +392,13 @@ extends java.lang.Object</pre>
 <h4>exportNatives</h4>
 <pre class="methodSignature">public&nbsp;void&nbsp;exportNatives&#8203;(java.lang.String&nbsp;fileNameTemplate,
                           java.util.Map&lt;java.lang.String,&#8203;java.lang.Object&gt;&nbsp;emailExportSettings)</pre>
+<div class="block">Enables export of natives using the provided settings.  See <a href="../misc/PlaceholderResolver.html#setFromItem(nuix.Item)"><code>PlaceholderResolver.setFromItem(Item)</code></a>
+ to see what placeholders are inherently supported by <b>fileNameTemplate</b></div>
+<dl>
+<dt><span class="paramLabel">Parameters:</span></dt>
+<dd><code>fileNameTemplate</code> - A filename template that dictates the ultimate export structure.</dd>
+<dd><code>emailExportSettings</code> - Email native export settings as supported by <b>BatchExporter</b></dd>
+</dl>
 </li>
 </ul>
 <a id="exportText(java.lang.String,java.util.Map)">
@@ -468,6 +409,13 @@ extends java.lang.Object</pre>
 <h4>exportText</h4>
 <pre class="methodSignature">public&nbsp;void&nbsp;exportText&#8203;(java.lang.String&nbsp;fileNameTemplate,
                        java.util.Map&lt;java.lang.String,&#8203;java.lang.Object&gt;&nbsp;textExportSettings)</pre>
+<div class="block">Enables export of text files using the provided settings.  See <a href="../misc/PlaceholderResolver.html#setFromItem(nuix.Item)"><code>PlaceholderResolver.setFromItem(Item)</code></a>
+ to see what placeholders are inherently supported by <b>fileNameTemplate</b></div>
+<dl>
+<dt><span class="paramLabel">Parameters:</span></dt>
+<dd><code>fileNameTemplate</code> - A filename template that dictates the ultimate export structure.</dd>
+<dd><code>textExportSettings</code> - Text file export settings as supported by <b>BatchExporter</b></dd>
+</dl>
 </li>
 </ul>
 <a id="exportPdfs(java.lang.String,java.util.Map)">
@@ -478,6 +426,13 @@ extends java.lang.Object</pre>
 <h4>exportPdfs</h4>
 <pre class="methodSignature">public&nbsp;void&nbsp;exportPdfs&#8203;(java.lang.String&nbsp;fileNameTemplate,
                        java.util.Map&lt;java.lang.String,&#8203;java.lang.Object&gt;&nbsp;pdfExportSettings)</pre>
+<div class="block">Enables export of PDF files using the provided settings.  See <a href="../misc/PlaceholderResolver.html#setFromItem(nuix.Item)"><code>PlaceholderResolver.setFromItem(Item)</code></a>
+ to see what placeholders are inherently supported by <b>fileNameTemplate</b></div>
+<dl>
+<dt><span class="paramLabel">Parameters:</span></dt>
+<dd><code>fileNameTemplate</code> - A filename template that dictates the ultimate export structure.</dd>
+<dd><code>pdfExportSettings</code> - PDF export settings as supported by <b>BatchExporter</b></dd>
+</dl>
 </li>
 </ul>
 <a id="exportTiffs(java.lang.String,java.util.Map)">
@@ -488,6 +443,13 @@ extends java.lang.Object</pre>
 <h4>exportTiffs</h4>
 <pre class="methodSignature">public&nbsp;void&nbsp;exportTiffs&#8203;(java.lang.String&nbsp;fileNameTemplate,
                         java.util.Map&lt;java.lang.String,&#8203;java.lang.Object&gt;&nbsp;tiffExportSettings)</pre>
+<div class="block">Enables export of TIFF files using the provided settings.  See <a href="../misc/PlaceholderResolver.html#setFromItem(nuix.Item)"><code>PlaceholderResolver.setFromItem(Item)</code></a>
+ to see what placeholders are inherently supported by <b>fileNameTemplate</b></div>
+<dl>
+<dt><span class="paramLabel">Parameters:</span></dt>
+<dd><code>fileNameTemplate</code> - A filename template that dictates the ultimate export structure.</dd>
+<dd><code>tiffExportSettings</code> - TIFF export settings as supported by <b>BatchExporter</b></dd>
+</dl>
 </li>
 </ul>
 <a id="exportJson(java.lang.String)">
@@ -497,6 +459,12 @@ extends java.lang.Object</pre>
 <li class="blockList">
 <h4>exportJson</h4>
 <pre class="methodSignature">public&nbsp;void&nbsp;exportJson&#8203;(java.lang.String&nbsp;fileNameTemplate)</pre>
+<div class="block">Enables export of JSON files using the provided settings.  See <a href="../misc/PlaceholderResolver.html#setFromItem(nuix.Item)"><code>PlaceholderResolver.setFromItem(Item)</code></a>
+ to see what placeholders are inherently supported by <b>fileNameTemplate</b></div>
+<dl>
+<dt><span class="paramLabel">Parameters:</span></dt>
+<dd><code>fileNameTemplate</code> - A filename template that dictates the ultimate export structure.</dd>
+</dl>
 </li>
 </ul>
 <a id="exportJson(java.lang.String,com.nuix.superutilities.export.JsonExporter)">
@@ -507,33 +475,6 @@ extends java.lang.Object</pre>
 <h4>exportJson</h4>
 <pre class="methodSignature">public&nbsp;void&nbsp;exportJson&#8203;(java.lang.String&nbsp;fileNameTemplate,
                        <a href="JsonExporter.html" title="class in com.nuix.superutilities.export">JsonExporter</a>&nbsp;jsonExporter)</pre>
-</li>
-</ul>
-<a id="setHeaderRenames(java.util.Map)">
-<!--   -->
-</a>
-<ul class="blockList">
-<li class="blockList">
-<h4>setHeaderRenames</h4>
-<pre class="methodSignature">public&nbsp;void&nbsp;setHeaderRenames&#8203;(java.util.Map&lt;java.lang.String,&#8203;java.lang.String&gt;&nbsp;renames)</pre>
-<div class="block">Allows you to provide a Map of headers to rename.  Intended to provide a way to rename headers that Nuix automatically adds
- to DAT files it generates:<br>
- <code>DOCID</code><br>
- <code>PARENT_DOCID</code><br>
- <code>ATTACH_DOCID</code><br>
- <code>BEGINBATES</code><br>
- <code>ENDBATES</code><br>
- <code>BEGINGROUP</code><br>
- <code>ENDGROUP</code><br>
- <code>PAGECOUNT</code><br>
- <code>ITEMPATH</code> (when exporting natives)<br>
- <code>TEXTPATH</code> (when exporting text)<br>
- <code>PDFPATH</code> (when exporting PDFs)<br>
- <code>TIFFPATH</code> (when exporting TIFFs)<br></div>
-<dl>
-<dt><span class="paramLabel">Parameters:</span></dt>
-<dd><code>renames</code> - A Map with the map key being the header name before and the map value being what you want that header renamed to.  Map key is case sensitive!</dd>
-</dl>
 </li>
 </ul>
 <a id="setColumnRemovals(java.util.Collection)">
@@ -611,30 +552,13 @@ extends java.lang.Object</pre>
 </dl>
 </li>
 </ul>
-<a id="setParallelProcessingSettings(java.util.Map)">
-<!--   -->
-</a>
-<ul class="blockList">
-<li class="blockList">
-<h4>setParallelProcessingSettings</h4>
-<pre class="methodSignature">public&nbsp;void&nbsp;setParallelProcessingSettings&#8203;(java.util.Map&lt;?,&#8203;?&gt;&nbsp;settings)</pre>
-<div class="block">Sets the Map of settings which will be passed to <code>BatchExporter.setParallelProcessingSettings(Map)</code> when performing
- the temporary export before restructuring.</div>
-<dl>
-<dt><span class="paramLabel">Parameters:</span></dt>
-<dd><code>settings</code> - A map of settings, see API documentation for
- <a href="https://download.nuix.com/releases/desktop/stable/docs/en/scripting/api/nuix/ParallelProcessingConfigurable.html#setParallelProcessingSettings-java.util.Map-">BatchExporter.setParallelProcessingSettings</a>
- for a list of settings accepted.</dd>
-</dl>
-</li>
-</ul>
 <a id="setImagingOptions(java.util.Map)">
 <!--   -->
 </a>
 <ul class="blockList">
 <li class="blockList">
 <h4>setImagingOptions</h4>
-<pre class="methodSignature">public&nbsp;void&nbsp;setImagingOptions&#8203;(java.util.Map&lt;?,&#8203;?&gt;&nbsp;settings)</pre>
+<pre class="methodSignature">public&nbsp;void&nbsp;setImagingOptions&#8203;(java.util.Map&lt;java.lang.String,&#8203;java.lang.Object&gt;&nbsp;settings)</pre>
 <div class="block">Sets the Map of settings which will be passed to <code>BatchExporter.setImagingOptions(Map)</code> when performing
  the temporary export before restructuring.</div>
 <dl>
@@ -651,7 +575,7 @@ extends java.lang.Object</pre>
 <ul class="blockList">
 <li class="blockList">
 <h4>setStampingOptions</h4>
-<pre class="methodSignature">public&nbsp;void&nbsp;setStampingOptions&#8203;(java.util.Map&lt;?,&#8203;?&gt;&nbsp;settings)</pre>
+<pre class="methodSignature">public&nbsp;void&nbsp;setStampingOptions&#8203;(java.util.Map&lt;java.lang.String,&#8203;java.lang.Object&gt;&nbsp;settings)</pre>
 <div class="block">Sets the Map of settings which will be passed to <code>BatchExporter.setStampingOptions(Map)</code> when performing
  the temporary export before restructuring.</div>
 <dl>
@@ -676,24 +600,10 @@ extends java.lang.Object</pre>
 </dl>
 </li>
 </ul>
-<a id="setExportXlsx(boolean)">
-<!--   -->
-</a>
-<ul class="blockList">
-<li class="blockList">
-<h4>setExportXlsx</h4>
-<pre class="methodSignature">public&nbsp;void&nbsp;setExportXlsx&#8203;(boolean&nbsp;exportXlsx)</pre>
-<div class="block">Sets whether DAT contents should additionally be exported as an XLSX spreadsheet.</div>
-<dl>
-<dt><span class="paramLabel">Parameters:</span></dt>
-<dd><code>exportXlsx</code> - Whether DAT contents should additionally be exported as an XLSX spreadsheet.</dd>
-</dl>
-</li>
-</ul>
 <a id="getKeepOriginalDat()">
 <!--   -->
 </a>
-<ul class="blockList">
+<ul class="blockListLast">
 <li class="blockList">
 <h4>getKeepOriginalDat</h4>
 <pre class="methodSignature">public&nbsp;boolean&nbsp;getKeepOriginalDat()</pre>
@@ -701,20 +611,6 @@ extends java.lang.Object</pre>
 <dl>
 <dt><span class="returnLabel">Returns:</span></dt>
 <dd>True if final DAT will be kept</dd>
-</dl>
-</li>
-</ul>
-<a id="setKeepOriginalDat(boolean)">
-<!--   -->
-</a>
-<ul class="blockListLast">
-<li class="blockList">
-<h4>setKeepOriginalDat</h4>
-<pre class="methodSignature">public&nbsp;void&nbsp;setKeepOriginalDat&#8203;(boolean&nbsp;keepOriginalDat)</pre>
-<div class="block">Sets whether final DAT will be kept by moving it to final export directory/</div>
-<dl>
-<dt><span class="paramLabel">Parameters:</span></dt>
-<dd><code>keepOriginalDat</code> - True if final DAT should be kept</dd>
 </dl>
 </li>
 </ul>

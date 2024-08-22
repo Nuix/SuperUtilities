@@ -27,7 +27,7 @@
     catch(err) {
     }
 //-->
-var data = {"i0":9,"i1":10,"i2":10,"i3":10,"i4":10,"i5":10,"i6":10,"i7":10,"i8":10,"i9":10,"i10":10};
+var data = {"i0":9,"i1":10,"i2":10,"i3":10,"i4":10,"i5":10,"i6":10,"i7":10,"i8":10,"i9":10,"i10":10,"i11":10};
 var tabs = {65535:["t0","All Methods"],1:["t1","Static Methods"],2:["t2","Instance Methods"],8:["t4","Concrete Methods"]};
 var altColor = "altColor";
 var rowColor = "rowColor";
@@ -198,20 +198,13 @@ extends java.lang.Object</pre>
 </td>
 </tr>
 <tr id="i3" class="rowColor">
-<td class="colFirst"><code>java.util.Map&lt;java.lang.String,&#8203;java.lang.String&gt;</code></td>
-<th class="colSecond" scope="row"><code><span class="memberNameLink"><a href="#getPlaceholderData()">getPlaceholderData</a></span>()</code></th>
-<td class="colLast">
-<div class="block">Gets the Map containing all the current place holder data</div>
-</td>
-</tr>
-<tr id="i4" class="altColor">
 <td class="colFirst"><code>java.lang.String</code></td>
 <th class="colSecond" scope="row"><code><span class="memberNameLink"><a href="#resolveTemplate(java.lang.String)">resolveTemplate</a></span>&#8203;(java.lang.String&nbsp;template)</code></th>
 <td class="colLast">
 <div class="block">Resolves place holders into a string based on the currently associated values</div>
 </td>
 </tr>
-<tr id="i5" class="rowColor">
+<tr id="i4" class="altColor">
 <td class="colFirst"><code>java.util.Set&lt;java.lang.String&gt;</code></td>
 <th class="colSecond" scope="row"><code><span class="memberNameLink"><a href="#resolveTemplateMultiValues(java.lang.String,java.util.List)">resolveTemplateMultiValues</a></span>&#8203;(java.lang.String&nbsp;template,
                           java.util.List&lt;<a href="NamedStringList.html" title="class in com.nuix.superutilities.misc">NamedStringList</a>&gt;&nbsp;multiValuePlaceholders)</code></th>
@@ -219,27 +212,37 @@ extends java.lang.Object</pre>
 <div class="block">Resolves place holders into a string based on the currently associated values and the multi-value place holders provided.</div>
 </td>
 </tr>
-<tr id="i6" class="altColor">
+<tr id="i5" class="rowColor">
 <td class="colFirst"><code>java.lang.String</code></td>
 <th class="colSecond" scope="row"><code><span class="memberNameLink"><a href="#resolveTemplatePath(java.lang.String)">resolveTemplatePath</a></span>&#8203;(java.lang.String&nbsp;template)</code></th>
 <td class="colLast">
-<div class="block">Resolves place holders into a path string based on the currently associated values.</div>
+<div class="block">Resolves placeholders into a path string based on the currently associated values.</div>
 </td>
 </tr>
-<tr id="i7" class="rowColor">
+<tr id="i6" class="altColor">
 <td class="colFirst"><code>java.util.Set&lt;java.lang.String&gt;</code></td>
 <th class="colSecond" scope="row"><code><span class="memberNameLink"><a href="#resolveTemplatePathMultiValues(java.lang.String,java.util.List)">resolveTemplatePathMultiValues</a></span>&#8203;(java.lang.String&nbsp;template,
                               java.util.List&lt;<a href="NamedStringList.html" title="class in com.nuix.superutilities.misc">NamedStringList</a>&gt;&nbsp;multiValuePlaceholders)</code></th>
 <td class="colLast">
-<div class="block">Resolves place holders into a string based on the currently associated values and the multi-value place holders provided.</div>
+<div class="block">Resolves placeholders into a string based on the currently associated values and the multi-value place holders provided.</div>
 </td>
 </tr>
-<tr id="i8" class="altColor">
+<tr id="i7" class="rowColor">
 <td class="colFirst"><code>void</code></td>
 <th class="colSecond" scope="row"><code><span class="memberNameLink"><a href="#set(java.lang.String,java.lang.String)">set</a></span>&#8203;(java.lang.String&nbsp;key,
    java.lang.String&nbsp;value)</code></th>
 <td class="colLast">
 <div class="block">Set they value for a given placeholder</div>
+</td>
+</tr>
+<tr id="i8" class="altColor">
+<td class="colFirst"><code>void</code></td>
+<th class="colSecond" scope="row"><code><span class="memberNameLink"><a href="#setFromCase(nuix.Case)">setFromCase</a></span>&#8203;(nuix.Case&nbsp;nuixCase)</code></th>
+<td class="colLast">
+<div class="block">Convenience method for setting various values of a Nuix case:<br><br>
+ <code>{case_name}</code> - The name assigned to the case, as obtained by calling <code>Case.getName</code><br>
+ <code>{case_guid}</code> - The GUID assigned to the case, as obtained by calling <code>Case.getGuid</code><br>
+ <code>{investigator}</code> - The investigator associated to the case, as obtained by calling <code>Case.getInvestigator</code><br></div>
 </td>
 </tr>
 <tr id="i9" class="rowColor">
@@ -255,6 +258,19 @@ extends java.lang.Object</pre>
        java.lang.String&nbsp;value)</code></th>
 <td class="colLast">
 <div class="block">Similar to the <a href="#set(java.lang.String,java.lang.String)"><code>set(java.lang.String, java.lang.String)</code></a> method except this has logic to appropriately handle file paths.</div>
+</td>
+</tr>
+<tr id="i11" class="rowColor">
+<td class="colFirst"><code>void</code></td>
+<th class="colSecond" scope="row"><code><span class="memberNameLink"><a href="#setStandardValues()">setStandardValues</a></span>()</code></th>
+<td class="colLast">
+<div class="block">Convenience method for setting various standard values:<br><br>
+ <code>{date_short}</code> - The datetime of invocation, formatted <code>YYYYMMDD</code><br>
+ <code>{date_long}</code> - The datetime of invocation, formatted <code>YYYYMMdd-HHmmss</code><br>
+ <code>{date_year}</code> - The datetime of invocation, as 4 digit year<br>
+ <code>{date_month}</code> - The datetime of invocation, as 2 digit month<br>
+ <code>{date_day}</code> - The datetime of invocation, as 2 digit day of the month<br>
+ <code>{nuix_version}</code> - The Nuix version as defined in <code>NUIX_VERSION</code><br></div>
 </td>
 </tr>
 </table>
@@ -330,7 +346,40 @@ extends java.lang.Object</pre>
  <code>{corrected_extension}</code> - The corrected extension as obtained from Nuix via <code>Item.getCorrectedExtension</code> or <code style="font-weight:bold">NO_CORRECTED_EXTENSION</code> for items where Nuix does not have a corrected extension value.<br></div>
 <dl>
 <dt><span class="paramLabel">Parameters:</span></dt>
-<dd><code>item</code> - The item used to set all of the item based placeholder values.</dd>
+<dd><code>item</code> - The item used to set all the item based placeholder values.</dd>
+</dl>
+</li>
+</ul>
+<a id="setStandardValues()">
+<!--   -->
+</a>
+<ul class="blockList">
+<li class="blockList">
+<h4>setStandardValues</h4>
+<pre class="methodSignature">public&nbsp;void&nbsp;setStandardValues()</pre>
+<div class="block">Convenience method for setting various standard values:<br><br>
+ <code>{date_short}</code> - The datetime of invocation, formatted <code>YYYYMMDD</code><br>
+ <code>{date_long}</code> - The datetime of invocation, formatted <code>YYYYMMdd-HHmmss</code><br>
+ <code>{date_year}</code> - The datetime of invocation, as 4 digit year<br>
+ <code>{date_month}</code> - The datetime of invocation, as 2 digit month<br>
+ <code>{date_day}</code> - The datetime of invocation, as 2 digit day of the month<br>
+ <code>{nuix_version}</code> - The Nuix version as defined in <code>NUIX_VERSION</code><br></div>
+</li>
+</ul>
+<a id="setFromCase(nuix.Case)">
+<!--   -->
+</a>
+<ul class="blockList">
+<li class="blockList">
+<h4>setFromCase</h4>
+<pre class="methodSignature">public&nbsp;void&nbsp;setFromCase&#8203;(nuix.Case&nbsp;nuixCase)</pre>
+<div class="block">Convenience method for setting various values of a Nuix case:<br><br>
+ <code>{case_name}</code> - The name assigned to the case, as obtained by calling <code>Case.getName</code><br>
+ <code>{case_guid}</code> - The GUID assigned to the case, as obtained by calling <code>Case.getGuid</code><br>
+ <code>{investigator}</code> - The investigator associated to the case, as obtained by calling <code>Case.getInvestigator</code><br></div>
+<dl>
+<dt><span class="paramLabel">Parameters:</span></dt>
+<dd><code>nuixCase</code> - The case to assign values from</dd>
 </dl>
 </li>
 </ul>
@@ -392,20 +441,6 @@ extends java.lang.Object</pre>
 <div class="block">Clears all currently associated place holders (keys and values)</div>
 </li>
 </ul>
-<a id="getPlaceholderData()">
-<!--   -->
-</a>
-<ul class="blockList">
-<li class="blockList">
-<h4>getPlaceholderData</h4>
-<pre class="methodSignature">public&nbsp;java.util.Map&lt;java.lang.String,&#8203;java.lang.String&gt;&nbsp;getPlaceholderData()</pre>
-<div class="block">Gets the Map containing all the current place holder data</div>
-<dl>
-<dt><span class="returnLabel">Returns:</span></dt>
-<dd>A Map containing all the current place holder data</dd>
-</dl>
-</li>
-</ul>
 <a id="resolveTemplate(java.lang.String)">
 <!--   -->
 </a>
@@ -453,13 +488,13 @@ extends java.lang.Object</pre>
 <li class="blockList">
 <h4>resolveTemplatePath</h4>
 <pre class="methodSignature">public&nbsp;java.lang.String&nbsp;resolveTemplatePath&#8203;(java.lang.String&nbsp;template)</pre>
-<div class="block">Resolves place holders into a path string based on the currently associated values.  Contains logic
+<div class="block">Resolves placeholders into a path string based on the currently associated values.  Contains logic
  to sterilize the resulting path string so that it does not contain common illegal path characters.</div>
 <dl>
 <dt><span class="paramLabel">Parameters:</span></dt>
-<dd><code>template</code> - A file/directory path string containing place holders</dd>
+<dd><code>template</code> - A file/directory path string containing placeholders</dd>
 <dt><span class="returnLabel">Returns:</span></dt>
-<dd>The input string in which place holders have been replaced with associated values</dd>
+<dd>The input string in which placeholders have been replaced with associated values</dd>
 </dl>
 </li>
 </ul>
@@ -471,11 +506,11 @@ extends java.lang.Object</pre>
 <h4>resolveTemplatePathMultiValues</h4>
 <pre class="methodSignature">public&nbsp;java.util.Set&lt;java.lang.String&gt;&nbsp;resolveTemplatePathMultiValues&#8203;(java.lang.String&nbsp;template,
                                                                       java.util.List&lt;<a href="NamedStringList.html" title="class in com.nuix.superutilities.misc">NamedStringList</a>&gt;&nbsp;multiValuePlaceholders)</pre>
-<div class="block">Resolves place holders into a string based on the currently associated values and the multi-value place holders provided.  For example
+<div class="block">Resolves placeholders into a string based on the currently associated values and the multi-value place holders provided.  For example
  imagine you wish to render the template 1 time for each tag associated to an item that has 3 tags assigned.  You can call this method,
  providing a <a href="NamedStringList.html" title="class in com.nuix.superutilities.misc"><code>NamedStringList</code></a> with a name of <code>tags</code> and those 3 tags as values.  This method will then return 3 resolutions
  of a template containing the placeholder <code>{tags}</code>.  Each returned result containing 1 of the 3 tags substituted.  This method allows
- you to provide multiple multi-value place holders like this, but it is important to note the number of resulting values is multiplied.  So if I provide
+ you to provide multiple multi-value placeholders like this, but it is important to note the number of resulting values is multiplied.  So if I provide
  a placeholder <code>animals</code> with 3 values, a placeholder <code>colors</code> with 5 values and a placeholder <code>names</code> with 4 values, the number
  of possible resulting values is <code>3*5*4=60</code>.
  This method is similar to {<a href="#resolveTemplateMultiValues(java.lang.String,java.util.List)"><code>resolveTemplateMultiValues(String, List)</code></a> except the template is resolved using {<a href="#resolveTemplatePath(java.lang.String)"><code>resolveTemplatePath(String)</code></a> instead
@@ -483,7 +518,7 @@ extends java.lang.Object</pre>
 <dl>
 <dt><span class="paramLabel">Parameters:</span></dt>
 <dd><code>template</code> - The template to resolve</dd>
-<dd><code>multiValuePlaceholders</code> - Place holders to resolve multiple times with multiple values.</dd>
+<dd><code>multiValuePlaceholders</code> - placeholders to resolve multiple times with multiple values.</dd>
 <dt><span class="returnLabel">Returns:</span></dt>
 <dd>The various resulting values generated from all the combinations.</dd>
 </dl>
