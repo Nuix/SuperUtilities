@@ -135,7 +135,7 @@ public class PlaceholderResolver {
      * <code>{nuix_version}</code> - The Nuix version as defined in <code>NUIX_VERSION</code><br>
      */
     public void setStandardValues(DateTime now) {
-        if(now == null) {
+        if (now == null) {
             now = DateTime.now();
         }
         set("date_short", now.toString("YYYYMMdd"));
@@ -191,7 +191,7 @@ public class PlaceholderResolver {
     }
 
     /***
-     * Clears all currently associated place holders (keys and values)
+     * Clears all currently associated placeholders (keys and values)
      */
     public void clear() {
         placeholderData.clear();
@@ -264,6 +264,11 @@ public class PlaceholderResolver {
             }
             result = p.matcher(result).replaceAll(value);
         }
+
+        // Attempt to prevent double assigned extension.  Happens in scenario where item name already
+        // contains the extension and therefore {extension} in template effectively adds it a second time
+        result = result.replaceAll("([a-zA-Z0-9]+)\\.\\1$", "$1");
+
         return result;
     }
 
