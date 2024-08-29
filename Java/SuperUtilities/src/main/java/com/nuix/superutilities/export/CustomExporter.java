@@ -7,7 +7,9 @@ package com.nuix.superutilities.export;
 
 import com.nuix.superutilities.SuperUtilities;
 import com.nuix.superutilities.loadfiles.*;
+import com.nuix.superutilities.misc.BoundedProgressInfo;
 import com.nuix.superutilities.misc.FormatUtility;
+import com.nuix.superutilities.misc.PeriodicGatedConsumer;
 import com.nuix.superutilities.misc.PlaceholderResolver;
 import com.nuix.superutilities.reporting.SimpleWorksheet;
 import com.nuix.superutilities.reporting.SimpleXlsx;
@@ -57,24 +59,27 @@ public class CustomExporter {
     private SimpleTextFileWriter errorLog = null;
 
     private boolean exportText = false;
-    private Map<String, Object> textExportSettings = new HashMap<String, Object>();
+    private Map<String, Object> textExportSettings = new HashMap<>();
     private String textFileNameTemplate = "{export_directory}\\TEXT\\{guid}.txt";
 
     private boolean exportNatives = false;
-    private Map<String, Object> emailExportSettings = new HashMap<String, Object>();
+    private Map<String, Object> emailExportSettings = new HashMap<>();
     private String nativeFileNameTemplate = "{export_directory}\\NATIVES\\{guid}.{extension}";
 
     private boolean exportPdfs = false;
-    private Map<String, Object> pdfExportSettings = new HashMap<String, Object>();
+    private Map<String, Object> pdfExportSettings = new HashMap<>();
     private String pdfFileNameTemplate = "{export_directory}\\PDF\\{guid}.pdf";
 
     private boolean exportTiffs = false;
-    private Map<String, Object> tiffExportSettings = new HashMap<String, Object>();
+    private Map<String, Object> tiffExportSettings = new HashMap<>();
     private String tiffFileNameTemplate = "{export_directory}\\IMAGE\\{guid}.{extension}";
 
     private boolean exportJson = false;
     private String jsonFileNameTemplate = "{export_directory}\\JSON\\{guid}.json";
     private JsonExporter jsonExporter = null;
+
+    private Consumer<String> messageLoggedCallback = null;
+    private PeriodicGatedConsumer<BoundedProgressInfo> progressCallback = null;
 
     /**
      * -- SETTER --
@@ -82,12 +87,19 @@ public class CustomExporter {
      */
     @Setter
     private boolean exportXlsx = false;
+
     /**
      * -- SETTER --
      * Sets whether final DAT will be kept by moving it to final export directory/
      */
     @Setter
     private boolean keepOriginalDat = false;
+
+    /**
+     * Whether to skip export of natives for slip-sheeted items.
+     */
+    @Setter
+    private boolean skipNativesSlipsheetedItems = false;
 
     /**
      * -- SETTER --
@@ -127,6 +139,31 @@ public class CustomExporter {
     private final Map<String, BiFunction<Item, String, String>> dynamicPlaceholders = new LinkedHashMap<String, BiFunction<Item, String, String>>();
 
     public CustomExporter() {
+    }
+
+    /***
+     * Provides a callback to be invoked when progress is made during initial batch export or during
+     * restructuring phase.  Will be wrapped in a {@link PeriodicGatedConsumer} with an interval of 5 seconds
+     * if not already an instance of {@link PeriodicGatedConsumer}.
+     * @param progressCallback The progress info consumer.
+     */
+    public void whenProgressEventOccurs(Consumer<BoundedProgressInfo> progressCallback) {
+        if (progressCallback instanceof PeriodicGatedConsumer) {
+            this.progressCallback = (PeriodicGatedConsumer<BoundedProgressInfo>) progressCallback;
+        } else {
+            this.progressCallback = new PeriodicGatedConsumer<>(progressCallback, 5000);
+        }
+    }
+
+    private void fireProgressEvent(String stage, long current, long total) {
+        BoundedProgressInfo info = new BoundedProgressInfo(stage, current, total);
+        if (progressCallback != null) {
+            progressCallback.accept(info);
+        }
+    }
+
+    public void whenMessageLogged(Consumer<String> messageLoggedCallback) {
+        this.messageLoggedCallback = messageLoggedCallback;
     }
 
     /***
@@ -245,7 +282,13 @@ public class CustomExporter {
 
     private void logInfo(String format, Object... params) {
         String message = String.format(format, params);
-        System.out.println(message);
+
+        if (messageLoggedCallback != null) {
+            messageLoggedCallback.accept(message);
+        } else {
+            System.out.println(message);
+        }
+
         if (generalLog != null) {
             try {
                 generalLog.writeLine(message);
@@ -259,7 +302,13 @@ public class CustomExporter {
 
     private void logError(String format, Object... params) {
         String message = String.format(format, params);
-        System.out.println(message);
+
+        if (messageLoggedCallback != null) {
+            messageLoggedCallback.accept("ERROR: " + message);
+        } else {
+            System.err.println(message);
+        }
+
         if (errorLog != null) {
             try {
                 errorLog.writeLine(message);
@@ -298,12 +347,7 @@ public class CustomExporter {
                 }
             }
             if (!hasGuid) {
-                exportProfile = exportProfile.addMetadata("GUID", new ItemExpression<String>() {
-                    @Override
-                    public String evaluate(Item item) {
-                        return item.getGuid();
-                    }
-                });
+                exportProfile = exportProfile.addMetadata("GUID", Item::getGuid);
             }
         }
         return exportProfile;
@@ -421,7 +465,6 @@ public class CustomExporter {
             exporter.addProduct("tiff", productSettings);
         }
 
-
         exportDirectory.mkdirs();
         File tempDatFile = new File(exportTempDirectory, "loadfile.dat");
         File finalDatFile = new File(exportDirectory, "loadfile.dat");
@@ -448,6 +491,8 @@ public class CustomExporter {
                         logError("BatchExporter reports error while exporting item with GUID '%s':\n%s",
                                 info.getItem().getGuid(), FormatUtility.debugString(info.getFailure()));
                     }
+
+                    fireProgressEvent("BatchExport: " + info.getStage(), info.getStageCount(), items.size());
                 }
             });
 
@@ -468,6 +513,9 @@ public class CustomExporter {
                 logInfo("Providing stamping settings...");
                 exporter.setStampingOptions(stampingSettings);
             }
+
+            // Forward setting regarding natives slipsheet generation
+            exporter.setSkipNativesSlipsheetedItems(skipNativesSlipsheetedItems);
 
             logInfo("Beginning temp export using BatchExporter...");
             exporter.exportItems(items);
@@ -495,6 +543,8 @@ public class CustomExporter {
 
                     @Override
                     public void accept(LinkedHashMap<String, String> record) {
+                        fireProgressEvent("Export Restructure", recordsProcessed, items.size());
+
                         // Periodically log progress
                         long diffMillis = System.currentTimeMillis() - restructureStartMillis;
                         if (diffMillis > 2 * 1000 || recordsProcessed % 100 == 0) {
