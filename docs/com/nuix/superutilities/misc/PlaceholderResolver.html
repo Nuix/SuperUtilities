@@ -187,7 +187,7 @@ extends java.lang.Object</pre>
 <td class="colFirst"><code>void</code></td>
 <th class="colSecond" scope="row"><code><span class="memberNameLink"><a href="#clear()">clear</a></span>()</code></th>
 <td class="colLast">
-<div class="block">Clears all currently associated place holders (keys and values)</div>
+<div class="block">Clears all currently associated placeholders (keys and values)</div>
 </td>
 </tr>
 <tr id="i2" class="altColor">
@@ -262,7 +262,7 @@ extends java.lang.Object</pre>
 </tr>
 <tr id="i11" class="rowColor">
 <td class="colFirst"><code>void</code></td>
-<th class="colSecond" scope="row"><code><span class="memberNameLink"><a href="#setStandardValues()">setStandardValues</a></span>()</code></th>
+<th class="colSecond" scope="row"><code><span class="memberNameLink"><a href="#setStandardValues(org.joda.time.DateTime)">setStandardValues</a></span>&#8203;(org.joda.time.DateTime&nbsp;now)</code></th>
 <td class="colLast">
 <div class="block">Convenience method for setting various standard values:<br><br>
  <code>{date_short}</code> - The datetime of invocation, formatted <code>YYYYMMDD</code><br>
@@ -350,13 +350,13 @@ extends java.lang.Object</pre>
 </dl>
 </li>
 </ul>
-<a id="setStandardValues()">
+<a id="setStandardValues(org.joda.time.DateTime)">
 <!--   -->
 </a>
 <ul class="blockList">
 <li class="blockList">
 <h4>setStandardValues</h4>
-<pre class="methodSignature">public&nbsp;void&nbsp;setStandardValues()</pre>
+<pre class="methodSignature">public&nbsp;void&nbsp;setStandardValues&#8203;(org.joda.time.DateTime&nbsp;now)</pre>
 <div class="block">Convenience method for setting various standard values:<br><br>
  <code>{date_short}</code> - The datetime of invocation, formatted <code>YYYYMMDD</code><br>
  <code>{date_long}</code> - The datetime of invocation, formatted <code>YYYYMMdd-HHmmss</code><br>
@@ -364,6 +364,11 @@ extends java.lang.Object</pre>
  <code>{date_month}</code> - The datetime of invocation, as 2 digit month<br>
  <code>{date_day}</code> - The datetime of invocation, as 2 digit day of the month<br>
  <code>{nuix_version}</code> - The Nuix version as defined in <code>NUIX_VERSION</code><br></div>
+<dl>
+<dt><span class="paramLabel">Parameters:</span></dt>
+<dd><code>now</code> - DateTime instance to use for all placeholders, likely you would want to provide a moment in time
+            such as when an export started.</dd>
+</dl>
 </li>
 </ul>
 <a id="setFromCase(nuix.Case)">
@@ -438,7 +443,7 @@ extends java.lang.Object</pre>
 <li class="blockList">
 <h4>clear</h4>
 <pre class="methodSignature">public&nbsp;void&nbsp;clear()</pre>
-<div class="block">Clears all currently associated place holders (keys and values)</div>
+<div class="block">Clears all currently associated placeholders (keys and values)</div>
 </li>
 </ul>
 <a id="resolveTemplate(java.lang.String)">

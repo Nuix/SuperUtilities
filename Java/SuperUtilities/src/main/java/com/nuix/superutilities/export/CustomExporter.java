@@ -81,6 +81,24 @@ public class CustomExporter {
     private Consumer<String> messageLoggedCallback = null;
     private PeriodicGatedConsumer<BoundedProgressInfo> progressCallback = null;
 
+    /***
+     * Whether to include zero byte text files produced by Nuix in the restructure.  Enable this to handle a situation where
+     * you do not want text files produced if they are zero byte (possible due to a downstream tool's handling of them).<p></p>
+     * When true, during the restructuring phase, if the produce "text" was exported (see {@link #exportText(String, Map)})
+     * then logic is added that checks the size of the text file Nuix exported for each item.  If the exported text file
+     * is zero bytes, then it will NOT be copied into the final restructuring and the <b>TEXTPATH</b> column for that
+     * item (if it is being included in final DAT) will have a blank value.  It is important to note this has no effect
+     * on zero byte native text files, just the text files that are produced by Nuix.  Note that to even get zero byte
+     * text files for items with no text content, you may need to use the following arguments to Nuix as it will otherwise
+     * put message in the text files like "item had no text" which will defeat the zero byte detection:<br>
+     * <ul>
+     *     <li><code>-Dnuix.export.text.outputMetadataWhenNoText=FALSE</code></li>
+     *     <li><code>-Dnuix.processing.itemPlaceholders.documentHasNoText=""</code></li>
+     * </ul>
+     */
+    @Setter
+    private boolean dropZeroByteTextFiles = false;
+
     /**
      * -- SETTER --
      * Sets whether DAT contents should additionally be exported as an XLSX spreadsheet.
@@ -100,6 +118,13 @@ public class CustomExporter {
      */
     @Setter
     private boolean skipNativesSlipsheetedItems = false;
+
+    /***
+     * When true, a pre-filtering step is performed on input items which tests reachability of binary for each item,
+     * filtering out items in which a binary seems to not be available.
+     */
+    @Setter
+    private boolean onlyItemsWhereBinaryIsReachable = false;
 
     /**
      * -- SETTER --
@@ -168,10 +193,11 @@ public class CustomExporter {
 
     /***
      * Assigns a dynamically calculated placeholder to this instance.
-     * @param placeholderName Placeholder name with "{" or "}".  For example "my_value".  Placeholder in templates can then be referred to using "{my_value}". It is
-     * preferred that you use only lower case characters and no whitespace characters.  Letters, numbers and underscores only is recommended.
-     * @param function A function which accepts as arguments an item and String with product type.  Expected to return a String value.  If function yields a null
-     * then placeholder will resolve to "NO_VALUE" when resolving the template.
+     * @param placeholderName Placeholder name with "{" or "}".  For example "my_value".  Placeholder in templates can
+     *                        then be referred to using "{my_value}". It is preferred that you use only lower case
+     *                        characters and no whitespace characters.  Letters, numbers and underscores only is recommended.
+     * @param function A function which accepts as arguments an item and String with product type.  Expected to return a
+     *                String value.  If function yields a null then placeholder will resolve to "NO_VALUE" when resolving the template.
      */
     public void setDynamicPlaceholder(String placeholderName, BiFunction<Item, String, String> function) {
         dynamicPlaceholders.put(placeholderName, function);
@@ -196,6 +222,7 @@ public class CustomExporter {
      * Enables export of natives using the provided settings.  See {@link PlaceholderResolver#setFromItem(Item)}
      * to see what placeholders are inherently supported by <b>fileNameTemplate</b>
      * @param fileNameTemplate A filename template that dictates the ultimate export structure.
+     *                         See {@link PlaceholderResolver#setFromItem(Item)} for a baseline set of built-in per-item placeholders.
      * @param emailExportSettings Email native export settings as supported by <b>BatchExporter</b>
      */
     public void exportNatives(String fileNameTemplate, Map<String, Object> emailExportSettings) {
@@ -208,6 +235,7 @@ public class CustomExporter {
      * Enables export of text files using the provided settings.  See {@link PlaceholderResolver#setFromItem(Item)}
      * to see what placeholders are inherently supported by <b>fileNameTemplate</b>
      * @param fileNameTemplate A filename template that dictates the ultimate export structure.
+     *                         See {@link PlaceholderResolver#setFromItem(Item)} for a baseline set of built-in per-item placeholders.
      * @param textExportSettings Text file export settings as supported by <b>BatchExporter</b>
      */
     public void exportText(String fileNameTemplate, Map<String, Object> textExportSettings) {
@@ -220,6 +248,7 @@ public class CustomExporter {
      * Enables export of PDF files using the provided settings.  See {@link PlaceholderResolver#setFromItem(Item)}
      * to see what placeholders are inherently supported by <b>fileNameTemplate</b>
      * @param fileNameTemplate A filename template that dictates the ultimate export structure.
+     *                         See {@link PlaceholderResolver#setFromItem(Item)} for a baseline set of built-in per-item placeholders.
      * @param pdfExportSettings PDF export settings as supported by <b>BatchExporter</b>
      */
     public void exportPdfs(String fileNameTemplate, Map<String, Object> pdfExportSettings) {
@@ -232,6 +261,7 @@ public class CustomExporter {
      * Enables export of TIFF files using the provided settings.  See {@link PlaceholderResolver#setFromItem(Item)}
      * to see what placeholders are inherently supported by <b>fileNameTemplate</b>
      * @param fileNameTemplate A filename template that dictates the ultimate export structure.
+     *                         See {@link PlaceholderResolver#setFromItem(Item)} for a baseline set of built-in per-item placeholders.
      * @param tiffExportSettings TIFF export settings as supported by <b>BatchExporter</b>
      */
     public void exportTiffs(String fileNameTemplate, Map<String, Object> tiffExportSettings) {
@@ -244,6 +274,7 @@ public class CustomExporter {
      * Enables export of JSON files using the provided settings.  See {@link PlaceholderResolver#setFromItem(Item)}
      * to see what placeholders are inherently supported by <b>fileNameTemplate</b>
      * @param fileNameTemplate A filename template that dictates the ultimate export structure.
+     *                         See {@link PlaceholderResolver#setFromItem(Item)} for a baseline set of built-in per-item placeholders.
      */
     public void exportJson(String fileNameTemplate) {
         exportJson = true;
@@ -251,6 +282,13 @@ public class CustomExporter {
         jsonExporter = new JsonExporter();
     }
 
+    /***
+     * Enables export of JSON files using the provided settings.  See {@link PlaceholderResolver#setFromItem(Item)}
+     * to see what placeholders are inherently supported by <b>fileNameTemplate</b>
+     * @param fileNameTemplate A filename template that dictates the ultimate export structure.
+     *                         See {@link PlaceholderResolver#setFromItem(Item)} for a baseline set of built-in per-item placeholders.
+     * @param jsonExporter A {@link JsonExporter} instance in case you wish to customize serialization.
+     */
     public void exportJson(String fileNameTemplate, JsonExporter jsonExporter) {
         exportJson = true;
         jsonFileNameTemplate = fileNameTemplate;
@@ -318,6 +356,7 @@ public class CustomExporter {
         } else {
             log.error(message);
         }
+        logInfo("ERROR: %s", message);
     }
 
     /***
@@ -428,6 +467,53 @@ public class CustomExporter {
         BatchExporter exporter = util.createBatchExporter(exportTempDirectory);
         MetadataProfile exportProfile = ensureProfileWithGuid(profile);
 
+        // Initialize our logging
+        File generalLogFile;
+        File errorLogFile;
+        try {
+            exportDirectory.mkdirs();
+            generalLogFile = new File(exportDirectory, "CustomExporter.log");
+            errorLogFile = new File(exportDirectory, "CustomExporterErrors.log");
+            generalLog = new SimpleTextFileWriter(generalLogFile);
+            errorLog = new SimpleTextFileWriter(errorLogFile);
+        } catch (Exception exc) {
+            logError("Error during export:\n%s", FormatUtility.debugString(exc));
+            throw exc;
+        }
+
+        logInfo("Provided with %s items", items.size());
+
+        // When true, we do a pass asking Nuix to perform operation to get length of binary, if it can access then
+        // binary data it will succeed, but if it cannot, then will throw exception, which we then use to determine
+        // whether binary of the given item is actually reachable.
+        if (onlyItemsWhereBinaryIsReachable) {
+            int countBefore = items.size();
+            logInfo("Filtering out items in which binary is not reachable...");
+            List<Item> filteredItems = new ArrayList<>();
+            for (int i = 0; i < items.size(); i++) {
+                fireProgressEvent("Binary Reachability Filtering", i + 1, items.size());
+                Item item = items.get(i);
+                try {
+                    Binary binary = item.getBinary();
+                    BinaryData binaryData = binary.getBinaryData();
+                    binaryData.getLength();
+                    filteredItems.add(item);
+                } catch (Exception exc) {
+                    // ignore, just tells us not to include in export
+                    logError("Unable to reach binary of item named '%s' with GUID '%s', skipping export of this item",
+                            item.getName(), item.getGuid()
+                    );
+                }
+            }
+            items = filteredItems;
+            logInfo("%s items out of original %s (%s were removed) were found to have reachable binary and will be exported",
+                    items.size(), countBefore, countBefore - filteredItems.size()
+            );
+        }
+
+        // Lock em in
+        items = Collections.unmodifiableList(items);
+
         Map<String, Object> loadfileSettings = new HashMap<String, Object>();
         loadfileSettings.put("metadataProfile", exportProfile);
         loadfileSettings.put("encoding", StandardCharsets.UTF_8.name());
@@ -439,6 +525,7 @@ public class CustomExporter {
             productSettings.put("path", "TEXT");
             logInfo("Configuring BatchExporter for Text Export:\n%s", FormatUtility.debugString(productSettings));
             exporter.addProduct("text", productSettings);
+            logInfo("Drop Zero Byte Exported Text Files: %s", dropZeroByteTextFiles);
         }
 
         if (exportNatives) {
@@ -465,16 +552,11 @@ public class CustomExporter {
             exporter.addProduct("tiff", productSettings);
         }
 
-        exportDirectory.mkdirs();
         File tempDatFile = new File(exportTempDirectory, "loadfile.dat");
         File finalDatFile = new File(exportDirectory, "loadfile.dat");
-        File generalLogFile = new File(exportDirectory, "CustomExporter.log");
-        File errorLogFile = new File(exportDirectory, "CustomExporterErrors.log");
 
         try {
-            generalLog = new SimpleTextFileWriter(generalLogFile);
-            errorLog = new SimpleTextFileWriter(errorLogFile);
-
+            List<Item> finalItems = items;
             exporter.whenItemEventOccurs(new ItemEventCallback() {
                 long batchExportStartMillis = System.currentTimeMillis();
 
@@ -492,7 +574,7 @@ public class CustomExporter {
                                 info.getItem().getGuid(), FormatUtility.debugString(info.getFailure()));
                     }
 
-                    fireProgressEvent("BatchExport: " + info.getStage(), info.getStageCount(), items.size());
+                    fireProgressEvent("BatchExport: " + info.getStage(), info.getStageCount(), finalItems.size());
                 }
             });
 
@@ -543,7 +625,7 @@ public class CustomExporter {
 
                     @Override
                     public void accept(LinkedHashMap<String, String> record) {
-                        fireProgressEvent("Export Restructure", recordsProcessed, items.size());
+                        fireProgressEvent("Export Restructure", recordsProcessed, finalItems.size());
 
                         // Periodically log progress
                         long diffMillis = System.currentTimeMillis() - restructureStartMillis;
@@ -604,14 +686,28 @@ public class CustomExporter {
                             // Restructure text files if we have them
                             if (exportText) {
                                 File source = new File(exportTempDirectory, record.get("TEXTPATH"));
-                                resolver.set("extension", FilenameUtils.getExtension(record.get("TEXTPATH")));
-                                resolveDynamicPlaceholders(resolver, currentItem, "TEXT");
-                                File dest = new File(resolver.resolveTemplatePath(textFileNameTemplate));
-                                dest = resolveNameCollisions(dest);
-                                dest.getParentFile().mkdirs();
-                                source.renameTo(dest);
-                                if (!columnRemovals.contains("TEXTPATH")) {
-                                    record.put("TEXTPATH", getRelativePath(exportDirectory, dest));
+                                if (!source.exists()) {
+                                    logError("Unable to resolve text file: GUID=%s, TEXTPATH=%s, ABSOLUTE=%S",
+                                            guid, record.get("TEXTPATH"), source.getAbsolutePath());
+                                } else if (source.length() == 0 && dropZeroByteTextFiles) {
+                                    logInfo(
+                                            "Dropping zero byte text file with GUID=%s, Exported Path=%s",
+                                            currentItem.getGuid(), record.get("TEXTPATH")
+                                    );
+                                    if (!columnRemovals.contains("TEXTPATH")) {
+                                        record.put("TEXTPATH", "");
+                                    }
+                                } else {
+                                    resolver.set("extension", FilenameUtils.getExtension(record.get("TEXTPATH")));
+                                    resolveDynamicPlaceholders(resolver, currentItem, "TEXT");
+                                    File dest = new File(resolver.resolveTemplatePath(textFileNameTemplate));
+                                    dest = resolveNameCollisions(dest);
+                                    dest.getParentFile().mkdirs();
+                                    source.renameTo(dest);
+
+                                    if (!columnRemovals.contains("TEXTPATH")) {
+                                        record.put("TEXTPATH", getRelativePath(exportDirectory, dest));
+                                    }
                                 }
                             }
 

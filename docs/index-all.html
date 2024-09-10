@@ -120,8 +120,16 @@ $('.navPadding').css('padding-top', $('.fixedNav').css("height"));
 <div class="block">When running a scan by providing a Consumer callback, this will signal
  that further scanning should be aborted.</div>
 </dd>
+<dt><span class="memberNameLink"><a href="com/nuix/superutilities/misc/PeriodicGatedConsumer.html#accept(T)">accept(T)</a></span> - Method in class com.nuix.superutilities.misc.<a href="com/nuix/superutilities/misc/PeriodicGatedConsumer.html" title="class in com.nuix.superutilities.misc">PeriodicGatedConsumer</a></dt>
+<dd>
+<div class="block">Will periodically forward call to wrapped Consumer and then reset current interval</div>
+</dd>
 <dt><span class="memberNameLink"><a href="com/nuix/superutilities/cases/CaseConsumer.html#acceptCase(nuix.Case,com.nuix.superutilities.cases.CaseInfo,int,int)">acceptCase(Case, CaseInfo, int, int)</a></span> - Method in interface com.nuix.superutilities.cases.<a href="com/nuix/superutilities/cases/CaseConsumer.html" title="interface in com.nuix.superutilities.cases">CaseConsumer</a></dt>
 <dd>&nbsp;</dd>
+<dt><span class="memberNameLink"><a href="com/nuix/superutilities/misc/PeriodicGatedConsumer.html#acceptImmediately(T)">acceptImmediately(T)</a></span> - Method in class com.nuix.superutilities.misc.<a href="com/nuix/superutilities/misc/PeriodicGatedConsumer.html" title="class in com.nuix.superutilities.misc">PeriodicGatedConsumer</a></dt>
+<dd>
+<div class="block">Will immediately forward call to wrapped Consumer and then reset current interval</div>
+</dd>
 <dt><span class="memberNameLink"><a href="com/nuix/superutilities/misc/NamedStringList.html#add(int,java.lang.String)">add(int, String)</a></span> - Method in class com.nuix.superutilities.misc.<a href="com/nuix/superutilities/misc/NamedStringList.html" title="class in com.nuix.superutilities.misc">NamedStringList</a></dt>
 <dd>&nbsp;</dd>
 <dt><span class="memberNameLink"><a href="com/nuix/superutilities/misc/NamedStringList.html#add(java.lang.String)">add(String)</a></span> - Method in class com.nuix.superutilities.misc.<a href="com/nuix/superutilities/misc/NamedStringList.html" title="class in com.nuix.superutilities.misc">NamedStringList</a></dt>
@@ -331,6 +339,13 @@ $('.navPadding').css('padding-top', $('.fixedNav').css("height"));
 <dd>&nbsp;</dd>
 <dt><span class="memberNameLink"><a href="com/nuix/superutilities/misc/PrimitiveTypeParser.html#booleanParser">booleanParser</a></span> - Static variable in class com.nuix.superutilities.misc.<a href="com/nuix/superutilities/misc/PrimitiveTypeParser.html" title="class in com.nuix.superutilities.misc">PrimitiveTypeParser</a></dt>
 <dd>&nbsp;</dd>
+<dt><a href="com/nuix/superutilities/misc/BoundedProgressInfo.html" title="class in com.nuix.superutilities.misc"><span class="typeNameLink">BoundedProgressInfo</span></a> - Class in <a href="com/nuix/superutilities/misc/package-summary.html">com.nuix.superutilities.misc</a></dt>
+<dd>
+<div class="block">Represents progress of an operation which has a bounded value, that is, we known what progress
+ value is considered maximum/done.</div>
+</dd>
+<dt><span class="memberNameLink"><a href="com/nuix/superutilities/misc/BoundedProgressInfo.html#%3Cinit%3E(java.lang.String,long,long)">BoundedProgressInfo(String, long, long)</a></span> - Constructor for class com.nuix.superutilities.misc.<a href="com/nuix/superutilities/misc/BoundedProgressInfo.html" title="class in com.nuix.superutilities.misc">BoundedProgressInfo</a></dt>
+<dd>&nbsp;</dd>
 <dt><span class="memberNameLink"><a href="com/nuix/superutilities/annotations/AnnotationSyncSettings.html#buildSettingsSummary()">buildSettingsSummary()</a></span> - Method in class com.nuix.superutilities.annotations.<a href="com/nuix/superutilities/annotations/AnnotationSyncSettings.html" title="class in com.nuix.superutilities.annotations">AnnotationSyncSettings</a></dt>
 <dd>&nbsp;</dd>
 <dt><span class="memberNameLink"><a href="com/nuix/superutilities/misc/PrimitiveTypeParser.html#buildStandardCopy()">buildStandardCopy()</a></span> - Static method in class com.nuix.superutilities.misc.<a href="com/nuix/superutilities/misc/PrimitiveTypeParser.html" title="class in com.nuix.superutilities.misc">PrimitiveTypeParser</a></dt>
@@ -483,7 +498,7 @@ $('.navPadding').css('padding-top', $('.fixedNav').css("height"));
 <dd>&nbsp;</dd>
 <dt><span class="memberNameLink"><a href="com/nuix/superutilities/misc/PlaceholderResolver.html#clear()">clear()</a></span> - Method in class com.nuix.superutilities.misc.<a href="com/nuix/superutilities/misc/PlaceholderResolver.html" title="class in com.nuix.superutilities.misc">PlaceholderResolver</a></dt>
 <dd>
-<div class="block">Clears all currently associated place holders (keys and values)</div>
+<div class="block">Clears all currently associated placeholders (keys and values)</div>
 </dd>
 <dt><span class="memberNameLink"><a href="com/nuix/superutilities/export/CustomExporter.html#clearAllDynamicPlaholders()">clearAllDynamicPlaholders()</a></span> - Method in class com.nuix.superutilities.export.<a href="com/nuix/superutilities/export/CustomExporter.html" title="class in com.nuix.superutilities.export">CustomExporter</a></dt>
 <dd>
@@ -633,6 +648,10 @@ $('.navPadding').css('padding-top', $('.fixedNav').css("height"));
 <dt><span class="memberNameLink"><a href="com/nuix/superutilities/misc/PdfUtility.html#createWaterMarkedPdf(java.lang.String,java.lang.String,java.lang.String,int,float,float)">createWaterMarkedPdf(String, String, String, int, float, float)</a></span> - Static method in class com.nuix.superutilities.misc.<a href="com/nuix/superutilities/misc/PdfUtility.html" title="class in com.nuix.superutilities.misc">PdfUtility</a></dt>
 <dd>
 <div class="block">Takes a given source PDF file, creates a copy output PDF file in which a watermark has been applied.</div>
+</dd>
+<dt><span class="memberNameLink"><a href="com/nuix/superutilities/misc/ProgressInfo.html#current">current</a></span> - Variable in class com.nuix.superutilities.misc.<a href="com/nuix/superutilities/misc/ProgressInfo.html" title="class in com.nuix.superutilities.misc">ProgressInfo</a></dt>
+<dd>
+<div class="block">The current progress value</div>
 </dd>
 <dt><a href="com/nuix/superutilities/annotations/CustodianEvent.html" title="class in com.nuix.superutilities.annotations"><span class="typeNameLink">CustodianEvent</span></a> - Class in <a href="com/nuix/superutilities/annotations/package-summary.html">com.nuix.superutilities.annotations</a></dt>
 <dd>&nbsp;</dd>
@@ -890,7 +909,9 @@ $('.navPadding').css('padding-top', $('.fixedNav').css("height"));
 <div class="block">Enables export of JSON files using the provided settings.</div>
 </dd>
 <dt><span class="memberNameLink"><a href="com/nuix/superutilities/export/CustomExporter.html#exportJson(java.lang.String,com.nuix.superutilities.export.JsonExporter)">exportJson(String, JsonExporter)</a></span> - Method in class com.nuix.superutilities.export.<a href="com/nuix/superutilities/export/CustomExporter.html" title="class in com.nuix.superutilities.export">CustomExporter</a></dt>
-<dd>&nbsp;</dd>
+<dd>
+<div class="block">Enables export of JSON files using the provided settings.</div>
+</dd>
 <dt><span class="memberNameLink"><a href="com/nuix/superutilities/export/CustomExporter.html#exportNatives(java.lang.String,java.util.Map)">exportNatives(String, Map&lt;String, Object&gt;)</a></span> - Method in class com.nuix.superutilities.export.<a href="com/nuix/superutilities/export/CustomExporter.html" title="class in com.nuix.superutilities.export">CustomExporter</a></dt>
 <dd>
 <div class="block">Enables export of natives using the provided settings.</div>
@@ -2109,6 +2130,10 @@ $('.navPadding').css('padding-top', $('.fixedNav').css("height"));
 </dd>
 <dt><span class="memberNameLink"><a href="com/nuix/superutilities/query/QueryHelper.html#markupSetQuery(nuix.MarkupSet)">markupSetQuery(MarkupSet)</a></span> - Static method in class com.nuix.superutilities.query.<a href="com/nuix/superutilities/query/QueryHelper.html" title="class in com.nuix.superutilities.query">QueryHelper</a></dt>
 <dd>&nbsp;</dd>
+<dt><span class="memberNameLink"><a href="com/nuix/superutilities/misc/BoundedProgressInfo.html#maximum">maximum</a></span> - Variable in class com.nuix.superutilities.misc.<a href="com/nuix/superutilities/misc/BoundedProgressInfo.html" title="class in com.nuix.superutilities.misc">BoundedProgressInfo</a></dt>
+<dd>
+<div class="block">The maximum progress value</div>
+</dd>
 <dt><span class="memberNameLink"><a href="com/nuix/superutilities/annotations/AnnotationMatchingMethod.html#MD5">MD5</a></span> - com.nuix.superutilities.annotations.<a href="com/nuix/superutilities/annotations/AnnotationMatchingMethod.html" title="enum in com.nuix.superutilities.annotations">AnnotationMatchingMethod</a></dt>
 <dd>&nbsp;</dd>
 <dt><span class="memberNameLink"><a href="com/nuix/superutilities/reporting/SimpleWorksheet.html#mergeCols(int,int,int)">mergeCols(int, int, int)</a></span> - Method in class com.nuix.superutilities.reporting.<a href="com/nuix/superutilities/reporting/SimpleWorksheet.html" title="class in com.nuix.superutilities.reporting">SimpleWorksheet</a></dt>
@@ -2311,6 +2336,20 @@ $('.navPadding').css('padding-top', $('.fixedNav').css("height"));
 <dd>
 <div class="block">Creates a new instance</div>
 </dd>
+<dt><span class="memberNameLink"><a href="com/nuix/superutilities/misc/BoundedProgressInfo.html#percentageComplete()">percentageComplete()</a></span> - Method in class com.nuix.superutilities.misc.<a href="com/nuix/superutilities/misc/BoundedProgressInfo.html" title="class in com.nuix.superutilities.misc">BoundedProgressInfo</a></dt>
+<dd>
+<div class="block">Provides a percentage completed value by dividing double value of current by
+ double value of maximum.</div>
+</dd>
+<dt><a href="com/nuix/superutilities/misc/PeriodicGatedConsumer.html" title="class in com.nuix.superutilities.misc"><span class="typeNameLink">PeriodicGatedConsumer</span></a>&lt;<a href="com/nuix/superutilities/misc/PeriodicGatedConsumer.html" title="type parameter in PeriodicGatedConsumer">T</a>&gt; - Class in <a href="com/nuix/superutilities/misc/package-summary.html">com.nuix.superutilities.misc</a></dt>
+<dd>
+<div class="block">A wrapper for a <code>Consumer</code> instance which will only periodically forward call to <code>accept</code>
+ method of wrapped instance.</div>
+</dd>
+<dt><span class="memberNameLink"><a href="com/nuix/superutilities/misc/PeriodicGatedConsumer.html#%3Cinit%3E(java.util.function.Consumer)">PeriodicGatedConsumer(Consumer&lt;T&gt;)</a></span> - Constructor for class com.nuix.superutilities.misc.<a href="com/nuix/superutilities/misc/PeriodicGatedConsumer.html" title="class in com.nuix.superutilities.misc">PeriodicGatedConsumer</a></dt>
+<dd>&nbsp;</dd>
+<dt><span class="memberNameLink"><a href="com/nuix/superutilities/misc/PeriodicGatedConsumer.html#%3Cinit%3E(java.util.function.Consumer,long)">PeriodicGatedConsumer(Consumer&lt;T&gt;, long)</a></span> - Constructor for class com.nuix.superutilities.misc.<a href="com/nuix/superutilities/misc/PeriodicGatedConsumer.html" title="class in com.nuix.superutilities.misc">PeriodicGatedConsumer</a></dt>
+<dd>&nbsp;</dd>
 <dt><span class="memberNameLink"><a href="com/nuix/superutilities/annotations/BulkRedactorSettings.html#phraseToExpression(java.lang.String)">phraseToExpression(String)</a></span> - Static method in class com.nuix.superutilities.annotations.<a href="com/nuix/superutilities/annotations/BulkRedactorSettings.html" title="class in com.nuix.superutilities.annotations">BulkRedactorSettings</a></dt>
 <dd>
 <div class="block">Converts a phrase (string with potentially multiple terms) into a regular expression for used searching for text to redact in a PDF.</div>
@@ -2337,6 +2376,13 @@ $('.navPadding').css('padding-top', $('.fixedNav').css("height"));
 <dt><span class="memberNameLink"><a href="com/nuix/superutilities/misc/ProfileDigester.html#%3Cinit%3E()">ProfileDigester()</a></span> - Constructor for class com.nuix.superutilities.misc.<a href="com/nuix/superutilities/misc/ProfileDigester.html" title="class in com.nuix.superutilities.misc">ProfileDigester</a></dt>
 <dd>&nbsp;</dd>
 <dt><span class="memberNameLink"><a href="com/nuix/superutilities/misc/ProfileDigester.html#%3Cinit%3E(nuix.MetadataProfile)">ProfileDigester(MetadataProfile)</a></span> - Constructor for class com.nuix.superutilities.misc.<a href="com/nuix/superutilities/misc/ProfileDigester.html" title="class in com.nuix.superutilities.misc">ProfileDigester</a></dt>
+<dd>&nbsp;</dd>
+<dt><a href="com/nuix/superutilities/misc/ProgressInfo.html" title="class in com.nuix.superutilities.misc"><span class="typeNameLink">ProgressInfo</span></a> - Class in <a href="com/nuix/superutilities/misc/package-summary.html">com.nuix.superutilities.misc</a></dt>
+<dd>
+<div class="block">Represents progress of an indeterminate operation where the maximum progress value
+ is not known until completion.</div>
+</dd>
+<dt><span class="memberNameLink"><a href="com/nuix/superutilities/misc/ProgressInfo.html#%3Cinit%3E(java.lang.String,long)">ProgressInfo(String, long)</a></span> - Constructor for class com.nuix.superutilities.misc.<a href="com/nuix/superutilities/misc/ProgressInfo.html" title="class in com.nuix.superutilities.misc">ProgressInfo</a></dt>
 <dd>&nbsp;</dd>
 <dt><span class="memberNameLink"><a href="com/nuix/superutilities/reporting/IntersectionReportProgressCallback.html#progressUpdated(int,int)">progressUpdated(int, int)</a></span> - Method in interface com.nuix.superutilities.reporting.<a href="com/nuix/superutilities/reporting/IntersectionReportProgressCallback.html" title="interface in com.nuix.superutilities.reporting">IntersectionReportProgressCallback</a></dt>
 <dd>&nbsp;</dd>
@@ -2755,6 +2801,14 @@ $('.navPadding').css('padding-top', $('.fixedNav').css("height"));
 </dd>
 <dt><span class="memberNameLink"><a href="com/nuix/superutilities/annotations/AnnotationHistoryRepository.html#setIntegerInfo(java.lang.String,java.lang.Long)">setIntegerInfo(String, Long)</a></span> - Method in class com.nuix.superutilities.annotations.<a href="com/nuix/superutilities/annotations/AnnotationHistoryRepository.html" title="class in com.nuix.superutilities.annotations">AnnotationHistoryRepository</a></dt>
 <dd>&nbsp;</dd>
+<dt><span class="memberNameLink"><a href="com/nuix/superutilities/misc/PeriodicGatedConsumer.html#setIntervalMinutes(long)">setIntervalMinutes(long)</a></span> - Method in class com.nuix.superutilities.misc.<a href="com/nuix/superutilities/misc/PeriodicGatedConsumer.html" title="class in com.nuix.superutilities.misc">PeriodicGatedConsumer</a></dt>
+<dd>
+<div class="block">Convenience method for setting millis interval to a certain number of minutes</div>
+</dd>
+<dt><span class="memberNameLink"><a href="com/nuix/superutilities/misc/PeriodicGatedConsumer.html#setIntervalSeconds(long)">setIntervalSeconds(long)</a></span> - Method in class com.nuix.superutilities.misc.<a href="com/nuix/superutilities/misc/PeriodicGatedConsumer.html" title="class in com.nuix.superutilities.misc">PeriodicGatedConsumer</a></dt>
+<dd>
+<div class="block">Convenience method for setting millis interval to a certain number of seconds</div>
+</dd>
 <dt><span class="memberNameLink"><a href="com/nuix/superutilities/annotations/NuixImageAnnotationRegion.html#setItem(nuix.Item)">setItem(Item)</a></span> - Method in class com.nuix.superutilities.annotations.<a href="com/nuix/superutilities/annotations/NuixImageAnnotationRegion.html" title="class in com.nuix.superutilities.annotations">NuixImageAnnotationRegion</a></dt>
 <dd>&nbsp;</dd>
 <dt><span class="memberNameLink"><a href="com/nuix/superutilities/reporting/ColumnValueGenerator.html#setLabel(java.lang.String)">setLabel(String)</a></span> - Method in class com.nuix.superutilities.reporting.<a href="com/nuix/superutilities/reporting/ColumnValueGenerator.html" title="class in com.nuix.superutilities.reporting">ColumnValueGenerator</a></dt>
@@ -2911,7 +2965,7 @@ $('.navPadding').css('padding-top', $('.fixedNav').css("height"));
 <div class="block">Sets the Map of settings which will be passed to <code>BatchExporter.setStampingOptions(Map)</code> when performing
  the temporary export before restructuring.</div>
 </dd>
-<dt><span class="memberNameLink"><a href="com/nuix/superutilities/misc/PlaceholderResolver.html#setStandardValues()">setStandardValues()</a></span> - Method in class com.nuix.superutilities.misc.<a href="com/nuix/superutilities/misc/PlaceholderResolver.html" title="class in com.nuix.superutilities.misc">PlaceholderResolver</a></dt>
+<dt><span class="memberNameLink"><a href="com/nuix/superutilities/misc/PlaceholderResolver.html#setStandardValues(org.joda.time.DateTime)">setStandardValues(DateTime)</a></span> - Method in class com.nuix.superutilities.misc.<a href="com/nuix/superutilities/misc/PlaceholderResolver.html" title="class in com.nuix.superutilities.misc">PlaceholderResolver</a></dt>
 <dd>
 <div class="block">Convenience method for setting various standard values:<br><br>
  <code>{date_short}</code> - The datetime of invocation, formatted <code>YYYYMMDD</code><br>
@@ -3063,6 +3117,11 @@ $('.navPadding').css('padding-top', $('.fixedNav').css("height"));
 </dd>
 <dt><span class="memberNameLink"><a href="com/nuix/superutilities/misc/SQLiteBacked.html#%3Cinit%3E(java.io.File)">SQLiteBacked(File)</a></span> - Constructor for class com.nuix.superutilities.misc.<a href="com/nuix/superutilities/misc/SQLiteBacked.html" title="class in com.nuix.superutilities.misc">SQLiteBacked</a></dt>
 <dd>&nbsp;</dd>
+<dt><span class="memberNameLink"><a href="com/nuix/superutilities/misc/ProgressInfo.html#stage">stage</a></span> - Variable in class com.nuix.superutilities.misc.<a href="com/nuix/superutilities/misc/ProgressInfo.html" title="class in com.nuix.superutilities.misc">ProgressInfo</a></dt>
+<dd>
+<div class="block">A title representing the current stage, may be null or blank if progress
+ publisher does not populate it!</div>
+</dd>
 <dt><span class="memberNameLink"><a href="com/nuix/superutilities/annotations/AnnotationRepository.html#storeAllMarkupSets(nuix.Case)">storeAllMarkupSets(Case)</a></span> - Method in class com.nuix.superutilities.annotations.<a href="com/nuix/superutilities/annotations/AnnotationRepository.html" title="class in com.nuix.superutilities.annotations">AnnotationRepository</a></dt>
 <dd>
 <div class="block">Stores all markup sets found in the provided case to the SQLite DB file.</div>
@@ -3185,6 +3244,8 @@ $('.navPadding').css('padding-top', $('.fixedNav').css("height"));
 </dd>
 <dt><span class="memberNameLink"><a href="com/nuix/superutilities/cases/CaseLockInfo.html#toString()">toString()</a></span> - Method in class com.nuix.superutilities.cases.<a href="com/nuix/superutilities/cases/CaseLockInfo.html" title="class in com.nuix.superutilities.cases">CaseLockInfo</a></dt>
 <dd>&nbsp;</dd>
+<dt><span class="memberNameLink"><a href="com/nuix/superutilities/misc/BoundedProgressInfo.html#toString()">toString()</a></span> - Method in class com.nuix.superutilities.misc.<a href="com/nuix/superutilities/misc/BoundedProgressInfo.html" title="class in com.nuix.superutilities.misc">BoundedProgressInfo</a></dt>
+<dd>&nbsp;</dd>
 <dt><span class="memberNameLink"><a href="com/nuix/superutilities/misc/DriveSpaceInfo.html#toString()">toString()</a></span> - Method in class com.nuix.superutilities.misc.<a href="com/nuix/superutilities/misc/DriveSpaceInfo.html" title="class in com.nuix.superutilities.misc">DriveSpaceInfo</a></dt>
 <dd>&nbsp;</dd>
 <dt><span class="memberNameLink"><a href="com/nuix/superutilities/misc/ExpandedTermInfo.html#toString()">toString()</a></span> - Method in class com.nuix.superutilities.misc.<a href="com/nuix/superutilities/misc/ExpandedTermInfo.html" title="class in com.nuix.superutilities.misc">ExpandedTermInfo</a></dt>
@@ -3193,6 +3254,8 @@ $('.navPadding').css('padding-top', $('.fixedNav').css("height"));
 <dd>
 <div class="block">Converts this instance back to a version string from its components, such as: "7.8.0.10"</div>
 </dd>
+<dt><span class="memberNameLink"><a href="com/nuix/superutilities/misc/ProgressInfo.html#toString()">toString()</a></span> - Method in class com.nuix.superutilities.misc.<a href="com/nuix/superutilities/misc/ProgressInfo.html" title="class in com.nuix.superutilities.misc">ProgressInfo</a></dt>
+<dd>&nbsp;</dd>
 <dt><span class="memberNameLink"><a href="com/nuix/superutilities/namedentities/NamedEntityRedactionResults.html#toString()">toString()</a></span> - Method in class com.nuix.superutilities.namedentities.<a href="com/nuix/superutilities/namedentities/NamedEntityRedactionResults.html" title="class in com.nuix.superutilities.namedentities">NamedEntityRedactionResults</a></dt>
 <dd>
 <div class="block">Generates a string with a handy summary of the results represented by this instance.</div>
@@ -3294,9 +3357,16 @@ the order they are declared.</div>
 <dd>
 <div class="block">Allows you to provide a callback which will be invoked when this instance emits a log message.</div>
 </dd>
+<dt><span class="memberNameLink"><a href="com/nuix/superutilities/export/CustomExporter.html#whenMessageLogged(java.util.function.Consumer)">whenMessageLogged(Consumer&lt;String&gt;)</a></span> - Method in class com.nuix.superutilities.export.<a href="com/nuix/superutilities/export/CustomExporter.html" title="class in com.nuix.superutilities.export">CustomExporter</a></dt>
+<dd>&nbsp;</dd>
 <dt><span class="memberNameLink"><a href="com/nuix/superutilities/misc/ProfileDigester.html#whenMessageLogged(java.util.function.Consumer)">whenMessageLogged(Consumer&lt;String&gt;)</a></span> - Method in class com.nuix.superutilities.misc.<a href="com/nuix/superutilities/misc/ProfileDigester.html" title="class in com.nuix.superutilities.misc">ProfileDigester</a></dt>
 <dd>
 <div class="block">Invoked when a message is logged by <a href="com/nuix/superutilities/misc/ProfileDigester.html#addItemsToItemSet(nuix.Case,java.lang.String,java.lang.String,java.util.Collection)"><code>ProfileDigester.addItemsToItemSet(Case, String, String, Collection)</code></a>.</div>
+</dd>
+<dt><span class="memberNameLink"><a href="com/nuix/superutilities/export/CustomExporter.html#whenProgressEventOccurs(java.util.function.Consumer)">whenProgressEventOccurs(Consumer&lt;BoundedProgressInfo&gt;)</a></span> - Method in class com.nuix.superutilities.export.<a href="com/nuix/superutilities/export/CustomExporter.html" title="class in com.nuix.superutilities.export">CustomExporter</a></dt>
+<dd>
+<div class="block">Provides a callback to be invoked when progress is made during initial batch export or during
+ restructuring phase.</div>
 </dd>
 <dt><span class="memberNameLink"><a href="com/nuix/superutilities/namedentities/NamedEntityUtility.html#whenProgressUpdated(com.nuix.superutilities.namedentities.NamedEntityRedactionProgressCallback)">whenProgressUpdated(NamedEntityRedactionProgressCallback)</a></span> - Method in class com.nuix.superutilities.namedentities.<a href="com/nuix/superutilities/namedentities/NamedEntityUtility.html" title="class in com.nuix.superutilities.namedentities">NamedEntityUtility</a></dt>
 <dd>
