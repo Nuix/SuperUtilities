@@ -88,7 +88,13 @@ public class CustomExporter {
      * then logic is added that checks the size of the text file Nuix exported for each item.  If the exported text file
      * is zero bytes, then it will NOT be copied into the final restructuring and the <b>TEXTPATH</b> column for that
      * item (if it is being included in final DAT) will have a blank value.  It is important to note this has no effect
-     * on zero byte native text files, just the text files that are produced by Nuix.
+     * on zero byte native text files, just the text files that are produced by Nuix.  Note that to even get zero byte
+     * text files for items with no text content, you may need to use the following arguments to Nuix as it will otherwise
+     * put message in the text files like "item had no text" which will defeat the zero byte detection:<br>
+     * <ul>
+     *     <li><code>-Dnuix.export.text.outputMetadataWhenNoText=FALSE</code></li>
+     *     <li><code>-Dnuix.processing.itemPlaceholders.documentHasNoText=""</code></li>
+     * </ul>
      */
     @Setter
     private boolean dropZeroByteTextFiles = false;
