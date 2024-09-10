@@ -133,6 +133,8 @@ public class PlaceholderResolver {
      * <code>{date_month}</code> - The datetime of invocation, as 2 digit month<br>
      * <code>{date_day}</code> - The datetime of invocation, as 2 digit day of the month<br>
      * <code>{nuix_version}</code> - The Nuix version as defined in <code>NUIX_VERSION</code><br>
+     * @param now DateTime instance to use for all placeholders, likely you would want to provide a moment in time
+     *            such as when an export started.
      */
     public void setStandardValues(DateTime now) {
         if (now == null) {

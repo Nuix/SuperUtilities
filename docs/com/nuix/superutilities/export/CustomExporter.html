@@ -27,7 +27,7 @@
     catch(err) {
     }
 //-->
-var data = {"i0":10,"i1":10,"i2":10,"i3":10,"i4":10,"i5":10,"i6":10,"i7":10,"i8":10,"i9":10,"i10":10,"i11":10,"i12":10,"i13":10,"i14":10,"i15":10};
+var data = {"i0":10,"i1":10,"i2":10,"i3":10,"i4":10,"i5":10,"i6":10,"i7":10,"i8":10,"i9":10,"i10":10,"i11":10,"i12":10,"i13":10,"i14":10,"i15":10,"i16":10,"i17":10};
 var tabs = {65535:["t0","All Methods"],2:["t2","Instance Methods"],8:["t4","Concrete Methods"]};
 var altColor = "altColor";
 var rowColor = "rowColor";
@@ -213,7 +213,9 @@ extends java.lang.Object</pre>
 <td class="colFirst"><code>void</code></td>
 <th class="colSecond" scope="row"><code><span class="memberNameLink"><a href="#exportJson(java.lang.String,com.nuix.superutilities.export.JsonExporter)">exportJson</a></span>&#8203;(java.lang.String&nbsp;fileNameTemplate,
           <a href="JsonExporter.html" title="class in com.nuix.superutilities.export">JsonExporter</a>&nbsp;jsonExporter)</code></th>
-<td class="colLast">&nbsp;</td>
+<td class="colLast">
+<div class="block">Enables export of JSON files using the provided settings.</div>
+</td>
 </tr>
 <tr id="i5" class="rowColor">
 <td class="colFirst"><code>void</code></td>
@@ -299,6 +301,19 @@ extends java.lang.Object</pre>
  the temporary export before restructuring.</div>
 </td>
 </tr>
+<tr id="i16" class="altColor">
+<td class="colFirst"><code>void</code></td>
+<th class="colSecond" scope="row"><code><span class="memberNameLink"><a href="#whenMessageLogged(java.util.function.Consumer)">whenMessageLogged</a></span>&#8203;(java.util.function.Consumer&lt;java.lang.String&gt;&nbsp;messageLoggedCallback)</code></th>
+<td class="colLast">&nbsp;</td>
+</tr>
+<tr id="i17" class="rowColor">
+<td class="colFirst"><code>void</code></td>
+<th class="colSecond" scope="row"><code><span class="memberNameLink"><a href="#whenProgressEventOccurs(java.util.function.Consumer)">whenProgressEventOccurs</a></span>&#8203;(java.util.function.Consumer&lt;<a href="../misc/BoundedProgressInfo.html" title="class in com.nuix.superutilities.misc">BoundedProgressInfo</a>&gt;&nbsp;progressCallback)</code></th>
+<td class="colLast">
+<div class="block">Provides a callback to be invoked when progress is made during initial batch export or during
+ restructuring phase.</div>
+</td>
+</tr>
 </table>
 <ul class="blockList">
 <li class="blockList"><a id="methods.inherited.from.class.java.lang.Object">
@@ -342,6 +357,31 @@ extends java.lang.Object</pre>
 <!--   -->
 </a>
 <h3>Method Detail</h3>
+<a id="whenProgressEventOccurs(java.util.function.Consumer)">
+<!--   -->
+</a>
+<ul class="blockList">
+<li class="blockList">
+<h4>whenProgressEventOccurs</h4>
+<pre class="methodSignature">public&nbsp;void&nbsp;whenProgressEventOccurs&#8203;(java.util.function.Consumer&lt;<a href="../misc/BoundedProgressInfo.html" title="class in com.nuix.superutilities.misc">BoundedProgressInfo</a>&gt;&nbsp;progressCallback)</pre>
+<div class="block">Provides a callback to be invoked when progress is made during initial batch export or during
+ restructuring phase.  Will be wrapped in a <a href="../misc/PeriodicGatedConsumer.html" title="class in com.nuix.superutilities.misc"><code>PeriodicGatedConsumer</code></a> with an interval of 5 seconds
+ if not already an instance of <a href="../misc/PeriodicGatedConsumer.html" title="class in com.nuix.superutilities.misc"><code>PeriodicGatedConsumer</code></a>.</div>
+<dl>
+<dt><span class="paramLabel">Parameters:</span></dt>
+<dd><code>progressCallback</code> - The progress info consumer.</dd>
+</dl>
+</li>
+</ul>
+<a id="whenMessageLogged(java.util.function.Consumer)">
+<!--   -->
+</a>
+<ul class="blockList">
+<li class="blockList">
+<h4>whenMessageLogged</h4>
+<pre class="methodSignature">public&nbsp;void&nbsp;whenMessageLogged&#8203;(java.util.function.Consumer&lt;java.lang.String&gt;&nbsp;messageLoggedCallback)</pre>
+</li>
+</ul>
 <a id="setDynamicPlaceholder(java.lang.String,java.util.function.BiFunction)">
 <!--   -->
 </a>
@@ -353,10 +393,11 @@ extends java.lang.Object</pre>
 <div class="block">Assigns a dynamically calculated placeholder to this instance.</div>
 <dl>
 <dt><span class="paramLabel">Parameters:</span></dt>
-<dd><code>placeholderName</code> - Placeholder name with "{" or "}".  For example "my_value".  Placeholder in templates can then be referred to using "{my_value}". It is
- preferred that you use only lower case characters and no whitespace characters.  Letters, numbers and underscores only is recommended.</dd>
-<dd><code>function</code> - A function which accepts as arguments an item and String with product type.  Expected to return a String value.  If function yields a null
- then placeholder will resolve to "NO_VALUE" when resolving the template.</dd>
+<dd><code>placeholderName</code> - Placeholder name with "{" or "}".  For example "my_value".  Placeholder in templates can
+                        then be referred to using "{my_value}". It is preferred that you use only lower case
+                        characters and no whitespace characters.  Letters, numbers and underscores only is recommended.</dd>
+<dd><code>function</code> - A function which accepts as arguments an item and String with product type.  Expected to return a
+                String value.  If function yields a null then placeholder will resolve to "NO_VALUE" when resolving the template.</dd>
 </dl>
 </li>
 </ul>
@@ -396,7 +437,8 @@ extends java.lang.Object</pre>
  to see what placeholders are inherently supported by <b>fileNameTemplate</b></div>
 <dl>
 <dt><span class="paramLabel">Parameters:</span></dt>
-<dd><code>fileNameTemplate</code> - A filename template that dictates the ultimate export structure.</dd>
+<dd><code>fileNameTemplate</code> - A filename template that dictates the ultimate export structure.
+                         See <a href="../misc/PlaceholderResolver.html#setFromItem(nuix.Item)"><code>PlaceholderResolver.setFromItem(Item)</code></a> for a baseline set of built-in per-item placeholders.</dd>
 <dd><code>emailExportSettings</code> - Email native export settings as supported by <b>BatchExporter</b></dd>
 </dl>
 </li>
@@ -413,7 +455,8 @@ extends java.lang.Object</pre>
  to see what placeholders are inherently supported by <b>fileNameTemplate</b></div>
 <dl>
 <dt><span class="paramLabel">Parameters:</span></dt>
-<dd><code>fileNameTemplate</code> - A filename template that dictates the ultimate export structure.</dd>
+<dd><code>fileNameTemplate</code> - A filename template that dictates the ultimate export structure.
+                         See <a href="../misc/PlaceholderResolver.html#setFromItem(nuix.Item)"><code>PlaceholderResolver.setFromItem(Item)</code></a> for a baseline set of built-in per-item placeholders.</dd>
 <dd><code>textExportSettings</code> - Text file export settings as supported by <b>BatchExporter</b></dd>
 </dl>
 </li>
@@ -430,7 +473,8 @@ extends java.lang.Object</pre>
  to see what placeholders are inherently supported by <b>fileNameTemplate</b></div>
 <dl>
 <dt><span class="paramLabel">Parameters:</span></dt>
-<dd><code>fileNameTemplate</code> - A filename template that dictates the ultimate export structure.</dd>
+<dd><code>fileNameTemplate</code> - A filename template that dictates the ultimate export structure.
+                         See <a href="../misc/PlaceholderResolver.html#setFromItem(nuix.Item)"><code>PlaceholderResolver.setFromItem(Item)</code></a> for a baseline set of built-in per-item placeholders.</dd>
 <dd><code>pdfExportSettings</code> - PDF export settings as supported by <b>BatchExporter</b></dd>
 </dl>
 </li>
@@ -447,7 +491,8 @@ extends java.lang.Object</pre>
  to see what placeholders are inherently supported by <b>fileNameTemplate</b></div>
 <dl>
 <dt><span class="paramLabel">Parameters:</span></dt>
-<dd><code>fileNameTemplate</code> - A filename template that dictates the ultimate export structure.</dd>
+<dd><code>fileNameTemplate</code> - A filename template that dictates the ultimate export structure.
+                         See <a href="../misc/PlaceholderResolver.html#setFromItem(nuix.Item)"><code>PlaceholderResolver.setFromItem(Item)</code></a> for a baseline set of built-in per-item placeholders.</dd>
 <dd><code>tiffExportSettings</code> - TIFF export settings as supported by <b>BatchExporter</b></dd>
 </dl>
 </li>
@@ -463,7 +508,8 @@ extends java.lang.Object</pre>
  to see what placeholders are inherently supported by <b>fileNameTemplate</b></div>
 <dl>
 <dt><span class="paramLabel">Parameters:</span></dt>
-<dd><code>fileNameTemplate</code> - A filename template that dictates the ultimate export structure.</dd>
+<dd><code>fileNameTemplate</code> - A filename template that dictates the ultimate export structure.
+                         See <a href="../misc/PlaceholderResolver.html#setFromItem(nuix.Item)"><code>PlaceholderResolver.setFromItem(Item)</code></a> for a baseline set of built-in per-item placeholders.</dd>
 </dl>
 </li>
 </ul>
@@ -475,6 +521,14 @@ extends java.lang.Object</pre>
 <h4>exportJson</h4>
 <pre class="methodSignature">public&nbsp;void&nbsp;exportJson&#8203;(java.lang.String&nbsp;fileNameTemplate,
                        <a href="JsonExporter.html" title="class in com.nuix.superutilities.export">JsonExporter</a>&nbsp;jsonExporter)</pre>
+<div class="block">Enables export of JSON files using the provided settings.  See <a href="../misc/PlaceholderResolver.html#setFromItem(nuix.Item)"><code>PlaceholderResolver.setFromItem(Item)</code></a>
+ to see what placeholders are inherently supported by <b>fileNameTemplate</b></div>
+<dl>
+<dt><span class="paramLabel">Parameters:</span></dt>
+<dd><code>fileNameTemplate</code> - A filename template that dictates the ultimate export structure.
+                         See <a href="../misc/PlaceholderResolver.html#setFromItem(nuix.Item)"><code>PlaceholderResolver.setFromItem(Item)</code></a> for a baseline set of built-in per-item placeholders.</dd>
+<dd><code>jsonExporter</code> - A <a href="JsonExporter.html" title="class in com.nuix.superutilities.export"><code>JsonExporter</code></a> instance in case you wish to customize serialization.</dd>
+</dl>
 </li>
 </ul>
 <a id="setColumnRemovals(java.util.Collection)">
