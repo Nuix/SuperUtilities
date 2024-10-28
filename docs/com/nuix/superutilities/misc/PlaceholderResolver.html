@@ -27,7 +27,7 @@
     catch(err) {
     }
 //-->
-var data = {"i0":9,"i1":10,"i2":10,"i3":10,"i4":10,"i5":10,"i6":10,"i7":10,"i8":10,"i9":10,"i10":10,"i11":10};
+var data = {"i0":10,"i1":9,"i2":10,"i3":10,"i4":10,"i5":10,"i6":10,"i7":10,"i8":10,"i9":10,"i10":10,"i11":10,"i12":10};
 var tabs = {65535:["t0","All Methods"],1:["t1","Static Methods"],2:["t2","Instance Methods"],8:["t4","Concrete Methods"]};
 var altColor = "altColor";
 var rowColor = "rowColor";
@@ -177,34 +177,41 @@ extends java.lang.Object</pre>
 <th class="colLast" scope="col">Description</th>
 </tr>
 <tr id="i0" class="altColor">
+<td class="colFirst"><code>void</code></td>
+<th class="colSecond" scope="row"><code><span class="memberNameLink"><a href="#addCommonFieldsOfRelatedItem(nuix.Item,java.lang.String,java.lang.String)">addCommonFieldsOfRelatedItem</a></span>&#8203;(nuix.Item&nbsp;relatedItem,
+                            java.lang.String&nbsp;prefix,
+                            java.lang.String&nbsp;valueIfItemNull)</code></th>
+<td class="colLast">&nbsp;</td>
+</tr>
+<tr id="i1" class="rowColor">
 <td class="colFirst"><code>static java.lang.String</code></td>
 <th class="colSecond" scope="row"><code><span class="memberNameLink"><a href="#cleanPathString(java.lang.String)">cleanPathString</a></span>&#8203;(java.lang.String&nbsp;input)</code></th>
 <td class="colLast">
 <div class="block">Helper method to strip common illegal path characters from a string</div>
 </td>
 </tr>
-<tr id="i1" class="rowColor">
+<tr id="i2" class="altColor">
 <td class="colFirst"><code>void</code></td>
 <th class="colSecond" scope="row"><code><span class="memberNameLink"><a href="#clear()">clear</a></span>()</code></th>
 <td class="colLast">
 <div class="block">Clears all currently associated placeholders (keys and values)</div>
 </td>
 </tr>
-<tr id="i2" class="altColor">
+<tr id="i3" class="rowColor">
 <td class="colFirst"><code>java.lang.String</code></td>
 <th class="colSecond" scope="row"><code><span class="memberNameLink"><a href="#get(java.lang.String)">get</a></span>&#8203;(java.lang.String&nbsp;key)</code></th>
 <td class="colLast">
 <div class="block">Get the value currently associated for a given placeholder</div>
 </td>
 </tr>
-<tr id="i3" class="rowColor">
+<tr id="i4" class="altColor">
 <td class="colFirst"><code>java.lang.String</code></td>
 <th class="colSecond" scope="row"><code><span class="memberNameLink"><a href="#resolveTemplate(java.lang.String)">resolveTemplate</a></span>&#8203;(java.lang.String&nbsp;template)</code></th>
 <td class="colLast">
 <div class="block">Resolves place holders into a string based on the currently associated values</div>
 </td>
 </tr>
-<tr id="i4" class="altColor">
+<tr id="i5" class="rowColor">
 <td class="colFirst"><code>java.util.Set&lt;java.lang.String&gt;</code></td>
 <th class="colSecond" scope="row"><code><span class="memberNameLink"><a href="#resolveTemplateMultiValues(java.lang.String,java.util.List)">resolveTemplateMultiValues</a></span>&#8203;(java.lang.String&nbsp;template,
                           java.util.List&lt;<a href="NamedStringList.html" title="class in com.nuix.superutilities.misc">NamedStringList</a>&gt;&nbsp;multiValuePlaceholders)</code></th>
@@ -212,14 +219,14 @@ extends java.lang.Object</pre>
 <div class="block">Resolves place holders into a string based on the currently associated values and the multi-value place holders provided.</div>
 </td>
 </tr>
-<tr id="i5" class="rowColor">
+<tr id="i6" class="altColor">
 <td class="colFirst"><code>java.lang.String</code></td>
 <th class="colSecond" scope="row"><code><span class="memberNameLink"><a href="#resolveTemplatePath(java.lang.String)">resolveTemplatePath</a></span>&#8203;(java.lang.String&nbsp;template)</code></th>
 <td class="colLast">
 <div class="block">Resolves placeholders into a path string based on the currently associated values.</div>
 </td>
 </tr>
-<tr id="i6" class="altColor">
+<tr id="i7" class="rowColor">
 <td class="colFirst"><code>java.util.Set&lt;java.lang.String&gt;</code></td>
 <th class="colSecond" scope="row"><code><span class="memberNameLink"><a href="#resolveTemplatePathMultiValues(java.lang.String,java.util.List)">resolveTemplatePathMultiValues</a></span>&#8203;(java.lang.String&nbsp;template,
                               java.util.List&lt;<a href="NamedStringList.html" title="class in com.nuix.superutilities.misc">NamedStringList</a>&gt;&nbsp;multiValuePlaceholders)</code></th>
@@ -227,7 +234,7 @@ extends java.lang.Object</pre>
 <div class="block">Resolves placeholders into a string based on the currently associated values and the multi-value place holders provided.</div>
 </td>
 </tr>
-<tr id="i7" class="rowColor">
+<tr id="i8" class="altColor">
 <td class="colFirst"><code>void</code></td>
 <th class="colSecond" scope="row"><code><span class="memberNameLink"><a href="#set(java.lang.String,java.lang.String)">set</a></span>&#8203;(java.lang.String&nbsp;key,
    java.lang.String&nbsp;value)</code></th>
@@ -235,7 +242,7 @@ extends java.lang.Object</pre>
 <div class="block">Set they value for a given placeholder</div>
 </td>
 </tr>
-<tr id="i8" class="altColor">
+<tr id="i9" class="rowColor">
 <td class="colFirst"><code>void</code></td>
 <th class="colSecond" scope="row"><code><span class="memberNameLink"><a href="#setFromCase(nuix.Case)">setFromCase</a></span>&#8203;(nuix.Case&nbsp;nuixCase)</code></th>
 <td class="colLast">
@@ -245,14 +252,14 @@ extends java.lang.Object</pre>
  <code>{investigator}</code> - The investigator associated to the case, as obtained by calling <code>Case.getInvestigator</code><br></div>
 </td>
 </tr>
-<tr id="i9" class="rowColor">
+<tr id="i10" class="altColor">
 <td class="colFirst"><code>void</code></td>
 <th class="colSecond" scope="row"><code><span class="memberNameLink"><a href="#setFromItem(nuix.Item)">setFromItem</a></span>&#8203;(nuix.Item&nbsp;item)</code></th>
 <td class="colLast">
 <div class="block">Automatically sets various place holders based on the provided item.</div>
 </td>
 </tr>
-<tr id="i10" class="altColor">
+<tr id="i11" class="rowColor">
 <td class="colFirst"><code>void</code></td>
 <th class="colSecond" scope="row"><code><span class="memberNameLink"><a href="#setPath(java.lang.String,java.lang.String)">setPath</a></span>&#8203;(java.lang.String&nbsp;key,
        java.lang.String&nbsp;value)</code></th>
@@ -260,7 +267,7 @@ extends java.lang.Object</pre>
 <div class="block">Similar to the <a href="#set(java.lang.String,java.lang.String)"><code>set(java.lang.String, java.lang.String)</code></a> method except this has logic to appropriately handle file paths.</div>
 </td>
 </tr>
-<tr id="i11" class="rowColor">
+<tr id="i12" class="altColor">
 <td class="colFirst"><code>void</code></td>
 <th class="colSecond" scope="row"><code><span class="memberNameLink"><a href="#setStandardValues(org.joda.time.DateTime)">setStandardValues</a></span>&#8203;(org.joda.time.DateTime&nbsp;now)</code></th>
 <td class="colLast">
@@ -336,18 +343,60 @@ extends java.lang.Object</pre>
  <code>{evidence_name}</code> - The name of the evidence the item belongs to.<br>
  <code>{item_date_short}</code> - The item's item date formatted <code>YYYYMMDD</code> or <code style="font-weight:bold">NO_DATE</code> for items without an item date.<br>
  <code>{item_date_long}</code> - The item's item date formatted <code>YYYYMMdd-HHmmss</code> or <code style="font-weight:bold">NO_DATE</code> for items without an item date.<br>
- <code>{item_date_year}</code> - The item's item date 4 digit year or <code style="font-weight:bold">NO_DATE</code> for items without an item date.<br>
- <code>{item_date_month}</code> - The item's item date 2 digit month or <code style="font-weight:bold">NO_DATE</code> for items without an item date.<br>
- <code>{item_date_day}</code> - The item's item date 2 digit day of the month or <code style="font-weight:bold">NO_DATE</code> for items without an item date.<br>
- <code>{top_level_guid}</code> - The GUID of the provided item's top level item or <code style="font-weight:bold">ABOVE_TOP_LEVEL</code> for items which are above top level.<br>
- <code>{top_level_name}</code> - The name (via <code>Item.getLocalisedName</code>) of the provided item's top level item or <code style="font-weight:bold">ABOVE_TOP_LEVEL</code> for items which are above top level.<br>
- <code>{top_level_kind}</code> - The kind (via <code>ItemType.getKind.getName</code>) of the provided item's top level item or <code style="font-weight:bold">ABOVE_TOP_LEVEL</code> for items which are above top level.<br>
+ <code>{item_date_year}</code> - The item's item date 4-digit year or <code style="font-weight:bold">NO_DATE</code> for items without an item date.<br>
+ <code>{item_date_month}</code> - The item's item date 2-digit month or <code style="font-weight:bold">NO_DATE</code> for items without an item date.<br>
+ <code>{item_date_day}</code> - The item's item date 2-digit day of the month or <code style="font-weight:bold">NO_DATE</code> for items without an item date.<br>
+
+ <code>{top_level_guid}</code> - The GUID of the associated top level item<br>
+ <code>{top_level_name}</code> - The name (via <code>Item.getLocalisedName</code>) of the associated top level item<br>
+ <code>{top_level_kind}</code> - The kind (via <code>ItemType.getKind.getName</code>) of the associated top level item<br>
+ <code>{top_level_type}</code> - The localised (human friendly) name of the mime type attributed to the associated top level item.<br>
+ <code>{top_level_mimetype}</code> - The mime type of the associated top level item.<br>
+ <code>{top_level_short_date}</code> - The short format (YYYYMMDD) item date of the associated top level item.<br>
+ <code>{top_level_long_date}</code> - The long format (YYYYMMDD-HHMMSS) item date of the associated top level item.<br>
+ <code>{top_level_year}</code> - The item date year (YYYY) of the associated top level item.<br>
+ <code>{top_level_month}</code> - The item date month (MM) of the associated top level item.<br>
+ <code>{top_level_day}</code> - The item date day (DD) of the associated top level item.<br>
+
+ <code>{parent_guid}</code> - The GUID of the associated parent item<br>
+ <code>{parent_name}</code> - The name (via <code>Item.getLocalisedName</code>) of the associated parent item<br>
+ <code>{parent_kind}</code> - The kind (via <code>ItemType.getKind.getName</code>) of the associated parent item<br>
+ <code>{parent_type}</code> - The localised (human friendly) name of the mime type attributed to the associated parent item.<br>
+ <code>{parent_mimetype}</code> - The mime type of the associated parent item.<br>
+ <code>{parent_short_date}</code> - The short format (YYYYMMDD) item date of the associated parent item.<br>
+ <code>{parent_long_date}</code> - The long format (YYYYMMDD-HHMMSS) item date of the associated parent item.<br>
+ <code>{parent_year}</code> - The item date year (YYYY) of the associated parent item.<br>
+ <code>{parent_month}</code> - The item date month (MM) of the associated parent item.<br>
+ <code>{parent_day}</code> - The item date day (DD) of the associated parent item.<br>
+
+ <code>{container_guid}</code> - The GUID of the associated nearest ancestor container item<br>
+ <code>{container_name}</code> - The name (via <code>Item.getLocalisedName</code>) of the associated nearest ancestor container item<br>
+ <code>{container_kind}</code> - The kind (via <code>ItemType.getKind.getName</code>) of the associated nearest ancestor container item<br>
+ <code>{container_type}</code> - The localised (human friendly) name of the mime type attributed to the associated nearest ancestor container item.<br>
+ <code>{container_mimetype}</code> - The mime type of the associated nearest ancestor container item.<br>
+ <code>{container_short_date}</code> - The short format (YYYYMMDD) item date of the associated nearest ancestor container item.<br>
+ <code>{container_long_date}</code> - The long format (YYYYMMDD-HHMMSS) item date of the associated nearest ancestor container item.<br>
+ <code>{container_year}</code> - The item date year (YYYY) of the associated nearest ancestor container item.<br>
+ <code>{container_month}</code> - The item date month (MM) of the associated nearest ancestor container item.<br>
+ <code>{container_day}</code> - The item date day (DD) of the associated nearest ancestor container item.<br>
+ 
  <code>{original_extension}</code> - The original extension as obtained from Nuix via <code>Item.getOriginalExtension</code> or <code style="font-weight:bold">NO_ORIGINAL_EXTENSION</code> for items where Nuix does not have an original extension value.<br>
  <code>{corrected_extension}</code> - The corrected extension as obtained from Nuix via <code>Item.getCorrectedExtension</code> or <code style="font-weight:bold">NO_CORRECTED_EXTENSION</code> for items where Nuix does not have a corrected extension value.<br></div>
 <dl>
 <dt><span class="paramLabel">Parameters:</span></dt>
 <dd><code>item</code> - The item used to set all the item based placeholder values.</dd>
 </dl>
+</li>
+</ul>
+<a id="addCommonFieldsOfRelatedItem(nuix.Item,java.lang.String,java.lang.String)">
+<!--   -->
+</a>
+<ul class="blockList">
+<li class="blockList">
+<h4>addCommonFieldsOfRelatedItem</h4>
+<pre class="methodSignature">public&nbsp;void&nbsp;addCommonFieldsOfRelatedItem&#8203;(nuix.Item&nbsp;relatedItem,
+                                         java.lang.String&nbsp;prefix,
+                                         java.lang.String&nbsp;valueIfItemNull)</pre>
 </li>
 </ul>
 <a id="setStandardValues(org.joda.time.DateTime)">

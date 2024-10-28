@@ -161,6 +161,8 @@ $('.navPadding').css('padding-top', $('.fixedNav').css("height"));
 </dd>
 <dt><span class="memberNameLink"><a href="com/nuix/superutilities/reporting/ColorRing.html#addColor(int,int,int)">addColor(int, int, int)</a></span> - Method in class com.nuix.superutilities.reporting.<a href="com/nuix/superutilities/reporting/ColorRing.html" title="class in com.nuix.superutilities.reporting">ColorRing</a></dt>
 <dd>&nbsp;</dd>
+<dt><span class="memberNameLink"><a href="com/nuix/superutilities/misc/PlaceholderResolver.html#addCommonFieldsOfRelatedItem(nuix.Item,java.lang.String,java.lang.String)">addCommonFieldsOfRelatedItem(Item, String, String)</a></span> - Method in class com.nuix.superutilities.misc.<a href="com/nuix/superutilities/misc/PlaceholderResolver.html" title="class in com.nuix.superutilities.misc">PlaceholderResolver</a></dt>
+<dd>&nbsp;</dd>
 <dt><span class="memberNameLink"><a href="com/nuix/superutilities/namedentities/NamedEntityRedactionSettings.html#addEntityNames(java.util.Collection)">addEntityNames(Collection&lt;String&gt;)</a></span> - Method in class com.nuix.superutilities.namedentities.<a href="com/nuix/superutilities/namedentities/NamedEntityRedactionSettings.html" title="class in com.nuix.superutilities.namedentities">NamedEntityRedactionSettings</a></dt>
 <dd>
 <div class="block">Adds entity names to this instance.</div>
@@ -341,7 +343,7 @@ $('.navPadding').css('padding-top', $('.fixedNav').css("height"));
 <dd>&nbsp;</dd>
 <dt><a href="com/nuix/superutilities/misc/BoundedProgressInfo.html" title="class in com.nuix.superutilities.misc"><span class="typeNameLink">BoundedProgressInfo</span></a> - Class in <a href="com/nuix/superutilities/misc/package-summary.html">com.nuix.superutilities.misc</a></dt>
 <dd>
-<div class="block">Represents progress of an operation which has a bounded value, that is, we known what progress
+<div class="block">Represents progress of an operation which has a bounded value, that is, we know what progress
  value is considered maximum/done.</div>
 </dd>
 <dt><span class="memberNameLink"><a href="com/nuix/superutilities/misc/BoundedProgressInfo.html#%3Cinit%3E(java.lang.String,long,long)">BoundedProgressInfo(String, long, long)</a></span> - Constructor for class com.nuix.superutilities.misc.<a href="com/nuix/superutilities/misc/BoundedProgressInfo.html" title="class in com.nuix.superutilities.misc">BoundedProgressInfo</a></dt>
@@ -944,6 +946,11 @@ $('.navPadding').css('padding-top', $('.fixedNav').css("height"));
 </a>
 <h2 class="title">F</h2>
 <dl>
+<dt><span class="memberNameLink"><a href="com/nuix/superutilities/items/SuperItemUtility.html#findAncestor(nuix.Item,java.util.function.Predicate)">findAncestor(Item, Predicate&lt;Item&gt;)</a></span> - Method in class com.nuix.superutilities.items.<a href="com/nuix/superutilities/items/SuperItemUtility.html" title="class in com.nuix.superutilities.items">SuperItemUtility</a></dt>
+<dd>
+<div class="block">Traverses an item's ancestors bottom up, until the first item for which the predicate yields true
+ or null if no ancestor matches the predicate.</div>
+</dd>
 <dt><span class="memberNameLink"><a href="com/nuix/superutilities/annotations/BulkRedactor.html#findAndMarkup(nuix.Case,com.nuix.superutilities.annotations.BulkRedactorSettings,java.util.Collection,int)">findAndMarkup(Case, BulkRedactorSettings, Collection&lt;Item&gt;, int)</a></span> - Method in class com.nuix.superutilities.annotations.<a href="com/nuix/superutilities/annotations/BulkRedactor.html" title="class in com.nuix.superutilities.annotations">BulkRedactor</a></dt>
 <dd>
 <div class="block">Finds text in PDFs of given items.</div>
@@ -995,6 +1002,11 @@ $('.navPadding').css('padding-top', $('.fixedNav').css("height"));
 </dd>
 <dt><span class="memberNameLink"><a href="com/nuix/superutilities/items/SuperItemUtility.html#findFamiliesWithoutItemsResponsiveToQuery(nuix.Case,java.util.Collection,java.lang.String)">findFamiliesWithoutItemsResponsiveToQuery(Case, Collection&lt;Item&gt;, String)</a></span> - Method in class com.nuix.superutilities.items.<a href="com/nuix/superutilities/items/SuperItemUtility.html" title="class in com.nuix.superutilities.items">SuperItemUtility</a></dt>
 <dd>&nbsp;</dd>
+<dt><span class="memberNameLink"><a href="com/nuix/superutilities/items/SuperItemUtility.html#findItemsAndParents(java.util.Collection)">findItemsAndParents(Collection&lt;Item&gt;)</a></span> - Method in class com.nuix.superutilities.items.<a href="com/nuix/superutilities/items/SuperItemUtility.html" title="class in com.nuix.superutilities.items">SuperItemUtility</a></dt>
+<dd>
+<div class="block">Resolves input collection of items to a set which includes both parents of
+ input items and the input items themselves.</div>
+</dd>
 <dt><span class="memberNameLink"><a href="com/nuix/superutilities/misc/DigestList.html#findMatchingItems(nuix.Case)">findMatchingItems(Case)</a></span> - Method in class com.nuix.superutilities.misc.<a href="com/nuix/superutilities/misc/DigestList.html" title="class in com.nuix.superutilities.misc">DigestList</a></dt>
 <dd>
 <div class="block">Finds items in given case which have MD5s matching those found in this instance.</div>
@@ -1002,6 +1014,10 @@ $('.navPadding').css('padding-top', $('.fixedNav').css("height"));
 <dt><span class="memberNameLink"><a href="com/nuix/superutilities/misc/DigestList.html#findMatchingItems(nuix.Case,int)">findMatchingItems(Case, int)</a></span> - Method in class com.nuix.superutilities.misc.<a href="com/nuix/superutilities/misc/DigestList.html" title="class in com.nuix.superutilities.misc">DigestList</a></dt>
 <dd>
 <div class="block">Finds items in given case which have MD5s matching those found in this instance.</div>
+</dd>
+<dt><span class="memberNameLink"><a href="com/nuix/superutilities/items/SuperItemUtility.html#findParents(java.util.Collection)">findParents(Collection&lt;Item&gt;)</a></span> - Method in class com.nuix.superutilities.items.<a href="com/nuix/superutilities/items/SuperItemUtility.html" title="class in com.nuix.superutilities.items">SuperItemUtility</a></dt>
+<dd>
+<div class="block">Resolves input collection of items to parent items.</div>
 </dd>
 <dt><span class="memberNameLink"><a href="com/nuix/superutilities/items/SuperItemUtility.html#findPhysicalFileAncestor(nuix.Item)">findPhysicalFileAncestor(Item)</a></span> - Method in class com.nuix.superutilities.items.<a href="com/nuix/superutilities/items/SuperItemUtility.html" title="class in com.nuix.superutilities.items">SuperItemUtility</a></dt>
 <dd>

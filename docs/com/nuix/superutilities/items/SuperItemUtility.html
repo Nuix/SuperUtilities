@@ -27,7 +27,7 @@
     catch(err) {
     }
 //-->
-var data = {"i0":10,"i1":10,"i2":10,"i3":10,"i4":10,"i5":10,"i6":9,"i7":10,"i8":10,"i9":10,"i10":10,"i11":10,"i12":10};
+var data = {"i0":10,"i1":10,"i2":10,"i3":10,"i4":10,"i5":10,"i6":10,"i7":10,"i8":10,"i9":9,"i10":10,"i11":10,"i12":10,"i13":10,"i14":10,"i15":10};
 var tabs = {65535:["t0","All Methods"],1:["t1","Static Methods"],2:["t2","Instance Methods"],8:["t4","Concrete Methods"]};
 var altColor = "altColor";
 var rowColor = "rowColor";
@@ -188,13 +188,22 @@ extends java.lang.Object</pre>
 </tr>
 <tr id="i1" class="rowColor">
 <td class="colFirst"><code>nuix.Item</code></td>
+<th class="colSecond" scope="row"><code><span class="memberNameLink"><a href="#findAncestor(nuix.Item,java.util.function.Predicate)">findAncestor</a></span>&#8203;(@NotNull nuix.Item&nbsp;item,
+            @NotNull java.util.function.Predicate&lt;nuix.Item&gt;&nbsp;ancestorPredicate)</code></th>
+<td class="colLast">
+<div class="block">Traverses an item's ancestors bottom up, until the first item for which the predicate yields true
+ or null if no ancestor matches the predicate.</div>
+</td>
+</tr>
+<tr id="i2" class="altColor">
+<td class="colFirst"><code>nuix.Item</code></td>
 <th class="colSecond" scope="row"><code><span class="memberNameLink"><a href="#findContainerAncestor(nuix.Item)">findContainerAncestor</a></span>&#8203;(nuix.Item&nbsp;item)</code></th>
 <td class="colLast">
 <div class="block">Traverses up an item's path to locate the nearest ancestor container item (kind:container) or
  null if there is no container ancestor item.</div>
 </td>
 </tr>
-<tr id="i2" class="altColor">
+<tr id="i3" class="rowColor">
 <td class="colFirst"><code>java.util.Set&lt;nuix.Item&gt;</code></td>
 <th class="colSecond" scope="row"><code><span class="memberNameLink"><a href="#findContainerAncestors(java.util.Collection)">findContainerAncestors</a></span>&#8203;(java.util.Collection&lt;nuix.Item&gt;&nbsp;items)</code></th>
 <td class="colLast">
@@ -202,14 +211,29 @@ extends java.lang.Object</pre>
  for multiple items at once.</div>
 </td>
 </tr>
-<tr id="i3" class="rowColor">
+<tr id="i4" class="altColor">
 <td class="colFirst"><code>java.util.Set&lt;nuix.Item&gt;</code></td>
 <th class="colSecond" scope="row"><code><span class="memberNameLink"><a href="#findFamiliesWithoutItemsResponsiveToQuery(nuix.Case,java.util.Collection,java.lang.String)">findFamiliesWithoutItemsResponsiveToQuery</a></span>&#8203;(nuix.Case&nbsp;nuixCase,
                                          java.util.Collection&lt;nuix.Item&gt;&nbsp;inputItems,
                                          java.lang.String&nbsp;itemsToRemoveQuery)</code></th>
 <td class="colLast">&nbsp;</td>
 </tr>
-<tr id="i4" class="altColor">
+<tr id="i5" class="rowColor">
+<td class="colFirst"><code>java.util.Set&lt;nuix.Item&gt;</code></td>
+<th class="colSecond" scope="row"><code><span class="memberNameLink"><a href="#findItemsAndParents(java.util.Collection)">findItemsAndParents</a></span>&#8203;(java.util.Collection&lt;nuix.Item&gt;&nbsp;items)</code></th>
+<td class="colLast">
+<div class="block">Resolves input collection of items to a set which includes both parents of
+ input items and the input items themselves.</div>
+</td>
+</tr>
+<tr id="i6" class="altColor">
+<td class="colFirst"><code>java.util.Set&lt;nuix.Item&gt;</code></td>
+<th class="colSecond" scope="row"><code><span class="memberNameLink"><a href="#findParents(java.util.Collection)">findParents</a></span>&#8203;(java.util.Collection&lt;nuix.Item&gt;&nbsp;items)</code></th>
+<td class="colLast">
+<div class="block">Resolves input collection of items to parent items.</div>
+</td>
+</tr>
+<tr id="i7" class="rowColor">
 <td class="colFirst"><code>nuix.Item</code></td>
 <th class="colSecond" scope="row"><code><span class="memberNameLink"><a href="#findPhysicalFileAncestor(nuix.Item)">findPhysicalFileAncestor</a></span>&#8203;(nuix.Item&nbsp;item)</code></th>
 <td class="colLast">
@@ -217,7 +241,7 @@ extends java.lang.Object</pre>
  null if there is no physical file ancestor item.</div>
 </td>
 </tr>
-<tr id="i5" class="rowColor">
+<tr id="i8" class="altColor">
 <td class="colFirst"><code>java.util.Set&lt;nuix.Item&gt;</code></td>
 <th class="colSecond" scope="row"><code><span class="memberNameLink"><a href="#findPhysicalFileAncestors(java.util.Collection)">findPhysicalFileAncestors</a></span>&#8203;(java.util.Collection&lt;nuix.Item&gt;&nbsp;items)</code></th>
 <td class="colLast">
@@ -225,12 +249,12 @@ extends java.lang.Object</pre>
  for multiple items at once.</div>
 </td>
 </tr>
-<tr id="i6" class="altColor">
+<tr id="i9" class="rowColor">
 <td class="colFirst"><code>static <a href="SuperItemUtility.html" title="class in com.nuix.superutilities.items">SuperItemUtility</a></code></td>
 <th class="colSecond" scope="row"><code><span class="memberNameLink"><a href="#getInstance()">getInstance</a></span>()</code></th>
 <td class="colLast">&nbsp;</td>
 </tr>
-<tr id="i7" class="rowColor">
+<tr id="i10" class="altColor">
 <td class="colFirst"><code>java.util.List&lt;nuix.Item&gt;</code></td>
 <th class="colSecond" scope="row"><code><span class="memberNameLink"><a href="#getItemsAndNeighboringSiblings(java.util.List,int,int)">getItemsAndNeighboringSiblings</a></span>&#8203;(java.util.List&lt;nuix.Item&gt;&nbsp;items,
                               int&nbsp;itemsBefore,
@@ -239,14 +263,14 @@ extends java.lang.Object</pre>
 <div class="block">Gets items and sibling items within a certain ordinal distance.</div>
 </td>
 </tr>
-<tr id="i8" class="altColor">
+<tr id="i11" class="rowColor">
 <td class="colFirst"><code>java.lang.String</code></td>
 <th class="colSecond" scope="row"><code><span class="memberNameLink"><a href="#getPhysicalAncestorPath(nuix.Item)">getPhysicalAncestorPath</a></span>&#8203;(nuix.Item&nbsp;item)</code></th>
 <td class="colLast">
 <div class="block">Returns the file system path of an item's physical file ancestor.</div>
 </td>
 </tr>
-<tr id="i9" class="rowColor">
+<tr id="i12" class="altColor">
 <td class="colFirst"><code>boolean</code></td>
 <th class="colSecond" scope="row"><code><span class="memberNameLink"><a href="#itemsAreSiblings(nuix.Item,nuix.Item)">itemsAreSiblings</a></span>&#8203;(nuix.Item&nbsp;a,
                 nuix.Item&nbsp;b)</code></th>
@@ -254,7 +278,7 @@ extends java.lang.Object</pre>
 <div class="block">Tests whether 2 items have the same parent by comparing their tree position values</div>
 </td>
 </tr>
-<tr id="i10" class="altColor">
+<tr id="i13" class="rowColor">
 <td class="colFirst"><code>java.util.Set&lt;nuix.Item&gt;</code></td>
 <th class="colSecond" scope="row"><code><span class="memberNameLink"><a href="#removeItemsResponsiveToQuery(nuix.Case,java.util.Collection,java.lang.String)">removeItemsResponsiveToQuery</a></span>&#8203;(nuix.Case&nbsp;nuixCase,
                             java.util.Collection&lt;nuix.Item&gt;&nbsp;inputItems,
@@ -263,7 +287,7 @@ extends java.lang.Object</pre>
 <div class="block">Convenience method for removing items responsive to a query from another collection of items.</div>
 </td>
 </tr>
-<tr id="i11" class="rowColor">
+<tr id="i14" class="altColor">
 <td class="colFirst"><code>void</code></td>
 <th class="colSecond" scope="row"><code><span class="memberNameLink"><a href="#splitAndMaintainFamilies(java.util.Collection,int,java.util.function.Consumer)">splitAndMaintainFamilies</a></span>&#8203;(java.util.Collection&lt;nuix.Item&gt;&nbsp;items,
                         int&nbsp;targetChunkSize,
@@ -272,7 +296,7 @@ extends java.lang.Object</pre>
 <div class="block">Splits a collection of items into a target chunk size, while maintaining families.</div>
 </td>
 </tr>
-<tr id="i12" class="altColor">
+<tr id="i15" class="rowColor">
 <td class="colFirst"><code>java.util.Set&lt;nuix.Item&gt;</code></td>
 <th class="colSecond" scope="row"><code><span class="memberNameLink"><a href="#unionMany(java.util.List)">unionMany</a></span>&#8203;(java.util.List&lt;java.util.Collection&lt;nuix.Item&gt;&gt;&nbsp;itemCollections)</code></th>
 <td class="colLast">
@@ -364,6 +388,27 @@ extends java.lang.Object</pre>
 </dl>
 </li>
 </ul>
+<a id="findAncestor(nuix.Item,java.util.function.Predicate)">
+<!--   -->
+</a>
+<ul class="blockList">
+<li class="blockList">
+<h4>findAncestor</h4>
+<pre class="methodSignature">public&nbsp;nuix.Item&nbsp;findAncestor&#8203;(@NotNull
+                              @NotNull nuix.Item&nbsp;item,
+                              @NotNull
+                              @NotNull java.util.function.Predicate&lt;nuix.Item&gt;&nbsp;ancestorPredicate)</pre>
+<div class="block">Traverses an item's ancestors bottom up, until the first item for which the predicate yields true
+ or null if no ancestor matches the predicate.</div>
+<dl>
+<dt><span class="paramLabel">Parameters:</span></dt>
+<dd><code>item</code> - The item whose ancestors will be inspected</dd>
+<dd><code>ancestorPredicate</code> - A predicate for matching the target ancestor</dd>
+<dt><span class="returnLabel">Returns:</span></dt>
+<dd>The first ancestor matched walking bottom up or null if none matched the predicate</dd>
+</dl>
+</li>
+</ul>
 <a id="findPhysicalFileAncestors(java.util.Collection)">
 <!--   -->
 </a>
@@ -412,6 +457,39 @@ extends java.lang.Object</pre>
 <dd><code>items</code> - The items to resolve the nearest container ancestors of.</dd>
 <dt><span class="returnLabel">Returns:</span></dt>
 <dd>The nearest container ancestors of the input items.</dd>
+</dl>
+</li>
+</ul>
+<a id="findParents(java.util.Collection)">
+<!--   -->
+</a>
+<ul class="blockList">
+<li class="blockList">
+<h4>findParents</h4>
+<pre class="methodSignature">public&nbsp;java.util.Set&lt;nuix.Item&gt;&nbsp;findParents&#8203;(java.util.Collection&lt;nuix.Item&gt;&nbsp;items)</pre>
+<div class="block">Resolves input collection of items to parent items.</div>
+<dl>
+<dt><span class="paramLabel">Parameters:</span></dt>
+<dd><code>items</code> - The items to resolve to parent items</dd>
+<dt><span class="returnLabel">Returns:</span></dt>
+<dd>The parent items of the provide input items</dd>
+</dl>
+</li>
+</ul>
+<a id="findItemsAndParents(java.util.Collection)">
+<!--   -->
+</a>
+<ul class="blockList">
+<li class="blockList">
+<h4>findItemsAndParents</h4>
+<pre class="methodSignature">public&nbsp;java.util.Set&lt;nuix.Item&gt;&nbsp;findItemsAndParents&#8203;(java.util.Collection&lt;nuix.Item&gt;&nbsp;items)</pre>
+<div class="block">Resolves input collection of items to a set which includes both parents of
+ input items and the input items themselves.</div>
+<dl>
+<dt><span class="paramLabel">Parameters:</span></dt>
+<dd><code>items</code> - The items to resolve the parents of</dd>
+<dt><span class="returnLabel">Returns:</span></dt>
+<dd>The input items and their parent items</dd>
 </dl>
 </li>
 </ul>
