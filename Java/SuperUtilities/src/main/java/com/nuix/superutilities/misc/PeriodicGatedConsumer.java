@@ -8,7 +8,7 @@ import java.util.function.Consumer;
 
 /***
  * A wrapper for a {@link Consumer} instance which will only periodically forward call to <code>accept</code>
- * method of wrapped instance.  Created for taking per item events that Nuix publishes and turning them
+ * method of wrapped instance.  Created for taking frequent events that are published and turning them
  * into periodic progress reporters.
  * @param <T> The type of the {@link Consumer} being wrapped
  */
