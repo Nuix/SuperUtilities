@@ -3,7 +3,7 @@ package com.nuix.superutilities.misc;
 import lombok.Getter;
 
 /***
- * Represents progress of an operation which has a bounded value, that is, we known what progress
+ * Represents progress of an operation which has a bounded value, that is, we know what progress
  * value is considered maximum/done.
  */
 @Getter

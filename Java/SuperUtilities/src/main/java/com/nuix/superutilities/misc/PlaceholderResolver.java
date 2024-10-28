@@ -5,6 +5,7 @@
 
 package com.nuix.superutilities.misc;
 
+import com.nuix.superutilities.items.SuperItemUtility;
 import lombok.Getter;
 import nuix.Case;
 import nuix.Item;
@@ -52,12 +53,43 @@ public class PlaceholderResolver {
      * <code>{evidence_name}</code> - The name of the evidence the item belongs to.<br>
      * <code>{item_date_short}</code> - The item's item date formatted <code>YYYYMMDD</code> or <code style="font-weight:bold">NO_DATE</code> for items without an item date.<br>
      * <code>{item_date_long}</code> - The item's item date formatted <code>YYYYMMdd-HHmmss</code> or <code style="font-weight:bold">NO_DATE</code> for items without an item date.<br>
-     * <code>{item_date_year}</code> - The item's item date 4 digit year or <code style="font-weight:bold">NO_DATE</code> for items without an item date.<br>
-     * <code>{item_date_month}</code> - The item's item date 2 digit month or <code style="font-weight:bold">NO_DATE</code> for items without an item date.<br>
-     * <code>{item_date_day}</code> - The item's item date 2 digit day of the month or <code style="font-weight:bold">NO_DATE</code> for items without an item date.<br>
-     * <code>{top_level_guid}</code> - The GUID of the provided item's top level item or <code style="font-weight:bold">ABOVE_TOP_LEVEL</code> for items which are above top level.<br>
-     * <code>{top_level_name}</code> - The name (via <code>Item.getLocalisedName</code>) of the provided item's top level item or <code style="font-weight:bold">ABOVE_TOP_LEVEL</code> for items which are above top level.<br>
-     * <code>{top_level_kind}</code> - The kind (via <code>ItemType.getKind.getName</code>) of the provided item's top level item or <code style="font-weight:bold">ABOVE_TOP_LEVEL</code> for items which are above top level.<br>
+     * <code>{item_date_year}</code> - The item's item date 4-digit year or <code style="font-weight:bold">NO_DATE</code> for items without an item date.<br>
+     * <code>{item_date_month}</code> - The item's item date 2-digit month or <code style="font-weight:bold">NO_DATE</code> for items without an item date.<br>
+     * <code>{item_date_day}</code> - The item's item date 2-digit day of the month or <code style="font-weight:bold">NO_DATE</code> for items without an item date.<br>
+     *
+     * <code>{top_level_guid}</code> - The GUID of the associated top level item<br>
+     * <code>{top_level_name}</code> - The name (via <code>Item.getLocalisedName</code>) of the associated top level item<br>
+     * <code>{top_level_kind}</code> - The kind (via <code>ItemType.getKind.getName</code>) of the associated top level item<br>
+     * <code>{top_level_type}</code> - The localised (human friendly) name of the mime type attributed to the associated top level item.<br>
+     * <code>{top_level_mimetype}</code> - The mime type of the associated top level item.<br>
+     * <code>{top_level_short_date}</code> - The short format (YYYYMMDD) item date of the associated top level item.<br>
+     * <code>{top_level_long_date}</code> - The long format (YYYYMMDD-HHMMSS) item date of the associated top level item.<br>
+     * <code>{top_level_year}</code> - The item date year (YYYY) of the associated top level item.<br>
+     * <code>{top_level_month}</code> - The item date month (MM) of the associated top level item.<br>
+     * <code>{top_level_day}</code> - The item date day (DD) of the associated top level item.<br>
+     *
+     * <code>{parent_guid}</code> - The GUID of the associated parent item<br>
+     * <code>{parent_name}</code> - The name (via <code>Item.getLocalisedName</code>) of the associated parent item<br>
+     * <code>{parent_kind}</code> - The kind (via <code>ItemType.getKind.getName</code>) of the associated parent item<br>
+     * <code>{parent_type}</code> - The localised (human friendly) name of the mime type attributed to the associated parent item.<br>
+     * <code>{parent_mimetype}</code> - The mime type of the associated parent item.<br>
+     * <code>{parent_short_date}</code> - The short format (YYYYMMDD) item date of the associated parent item.<br>
+     * <code>{parent_long_date}</code> - The long format (YYYYMMDD-HHMMSS) item date of the associated parent item.<br>
+     * <code>{parent_year}</code> - The item date year (YYYY) of the associated parent item.<br>
+     * <code>{parent_month}</code> - The item date month (MM) of the associated parent item.<br>
+     * <code>{parent_day}</code> - The item date day (DD) of the associated parent item.<br>
+     *
+     * <code>{container_guid}</code> - The GUID of the associated nearest ancestor container item<br>
+     * <code>{container_name}</code> - The name (via <code>Item.getLocalisedName</code>) of the associated nearest ancestor container item<br>
+     * <code>{container_kind}</code> - The kind (via <code>ItemType.getKind.getName</code>) of the associated nearest ancestor container item<br>
+     * <code>{container_type}</code> - The localised (human friendly) name of the mime type attributed to the associated nearest ancestor container item.<br>
+     * <code>{container_mimetype}</code> - The mime type of the associated nearest ancestor container item.<br>
+     * <code>{container_short_date}</code> - The short format (YYYYMMDD) item date of the associated nearest ancestor container item.<br>
+     * <code>{container_long_date}</code> - The long format (YYYYMMDD-HHMMSS) item date of the associated nearest ancestor container item.<br>
+     * <code>{container_year}</code> - The item date year (YYYY) of the associated nearest ancestor container item.<br>
+     * <code>{container_month}</code> - The item date month (MM) of the associated nearest ancestor container item.<br>
+     * <code>{container_day}</code> - The item date day (DD) of the associated nearest ancestor container item.<br>
+     * 
      * <code>{original_extension}</code> - The original extension as obtained from Nuix via <code>Item.getOriginalExtension</code> or <code style="font-weight:bold">NO_ORIGINAL_EXTENSION</code> for items where Nuix does not have an original extension value.<br>
      * <code>{corrected_extension}</code> - The corrected extension as obtained from Nuix via <code>Item.getCorrectedExtension</code> or <code style="font-weight:bold">NO_CORRECTED_EXTENSION</code> for items where Nuix does not have a corrected extension value.<br>
      * @param item The item used to set all the item based placeholder values.
@@ -101,16 +133,9 @@ public class PlaceholderResolver {
             set("item_date_day", itemDate.toString("dd"));
         }
 
-        Item topLevelItem = item.getTopLevelItem();
-        if (topLevelItem == null) {
-            set("top_level_guid", "ABOVE_TOP_LEVEL");
-            set("top_level_name", "ABOVE_TOP_LEVEL");
-            set("top_level_kind", "ABOVE_TOP_LEVEL");
-        } else {
-            set("top_level_guid", topLevelItem.getGuid());
-            set("top_level_name", topLevelItem.getLocalisedName());
-            set("top_level_kind", topLevelItem.getType().getKind().getName());
-        }
+        addCommonFieldsOfRelatedItem(item.getTopLevelItem(), "top_level", "ABOVE_TOP_LEVEL");
+        addCommonFieldsOfRelatedItem(item.getParent(), "parent", "HAS_NO_PARENT");
+        addCommonFieldsOfRelatedItem(SuperItemUtility.getInstance().findContainerAncestor(item), "container", "NO_ANCESTOR_CONTAINER");
 
         String originalExtension = item.getOriginalExtension();
         if (originalExtension == null || originalExtension.trim().isEmpty()) {
@@ -123,6 +148,38 @@ public class PlaceholderResolver {
             correctedExtension = "NO_CORRECTED_EXTENSION";
         }
         set("corrected_extension", correctedExtension);
+    }
+
+    public void addCommonFieldsOfRelatedItem(Item relatedItem, String prefix, String valueIfItemNull) {
+        set(prefix + "_guid", relatedItem == null ? valueIfItemNull : relatedItem.getGuid());
+        set(prefix + "_name", relatedItem == null ? valueIfItemNull : relatedItem.getLocalisedName());
+        set(prefix + "_kind", relatedItem == null ? valueIfItemNull : relatedItem.getType().getKind().getName());
+        set(prefix + "_type", relatedItem == null ? valueIfItemNull : relatedItem.getType().getLocalisedName());
+        set(prefix + "_mimetype", relatedItem == null ? valueIfItemNull : relatedItem.getType().getName());
+
+        // Date values of related items
+        if (relatedItem != null) {
+            DateTime itemDate = relatedItem.getDate();
+            if (itemDate == null) {
+                set(prefix + "_short_date", "000000");
+                set(prefix + "_long_date", "000000-000000");
+                set(prefix + "_year", "0000");
+                set(prefix + "_month", "00");
+                set(prefix + "_day", "00");
+            } else {
+                set(prefix + "_short_date", itemDate.toString("YYYYMMdd"));
+                set(prefix + "_long_date", itemDate.toString("YYYYMMdd-HHmmss"));
+                set(prefix + "_year", itemDate.toString("YYYY"));
+                set(prefix + "_month", itemDate.toString("MM"));
+                set(prefix + "_day", itemDate.toString("dd"));
+            }
+        } else {
+            set(prefix + "_short_date", valueIfItemNull);
+            set(prefix + "_long_date", valueIfItemNull);
+            set(prefix + "_year", valueIfItemNull);
+            set(prefix + "_month", valueIfItemNull);
+            set(prefix + "_day", valueIfItemNull);
+        }
     }
 
     /***
