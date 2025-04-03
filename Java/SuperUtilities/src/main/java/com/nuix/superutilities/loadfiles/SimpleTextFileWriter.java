@@ -12,7 +12,7 @@ public class SimpleTextFileWriter implements Closeable {
 
     public SimpleTextFileWriter(File destinationFile) throws IOException {
         this.destinationFile = destinationFile;
-        fw = new FileWriter(destinationFile, StandardCharsets.UTF_8);
+        fw = new FileWriter(destinationFile, false);
     }
 
     public void writeLine(String line) throws IOException {

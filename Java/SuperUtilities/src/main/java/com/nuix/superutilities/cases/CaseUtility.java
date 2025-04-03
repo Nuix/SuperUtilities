@@ -40,13 +40,15 @@ public class CaseUtility {
         logger.info("Searching for cases in: " + rootSearchDirectory.getPath());
         if (!rootSearchDirectory.exists()) {
             logger.info("Directory does not exist: " + rootSearchDirectory.getPath());
-            return List.of();
+            return new ArrayList<>();
         } else {
             File[] children = rootSearchDirectory.listFiles();
             for (int i = 0; i < children.length; i++) {
                 File child = children[i];
                 if(child.isFile() && child.getName().equalsIgnoreCase("case.fbi2")) {
-                    return List.of(child.getParentFile());
+                    List<File> result = new ArrayList<>();
+                    result.add(child.getParentFile());
+                    return result;
                 }
             }
 
